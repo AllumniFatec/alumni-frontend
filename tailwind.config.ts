@@ -61,6 +61,10 @@ const config: Config = {
       },
     },
     extend: {
+      fontFamily: {
+        "roboto-slab": ["var(--font-roboto-slab)", "serif"],
+        roboto: ["var(--font-roboto)", "sans-serif"],
+      },
       borderRadius: {
         lg: "0.5rem",
         md: "0.375rem",

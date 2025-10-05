@@ -9,7 +9,8 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold">Alumni FATEC Sorocaba</h1>
           <p className="opacity-80 mt-2">
-            Sistema de gerenciamento de ex-alunos
+            Sistema de big monsters bodybuilders da turma 2313 e ex-alunos da
+            FATEC Sorocaba
           </p>
         </div>
       </header>

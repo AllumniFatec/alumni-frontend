@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* Cores customizadas da FATEC Sorocaba */
 :root {
   --color-primary: #ae0c0d;
   --color-secondary: #44555d;
@@ -13,6 +14,22 @@
   body {
     background-color: #f2f2f2;
     color: #44555d;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-roboto-slab), serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-roboto-slab), serif;
+    font-weight: 600;
+  }
+
+  p,
+  span,
+  div {
+    font-family: var(--font-roboto), sans-serif;
   }
 }

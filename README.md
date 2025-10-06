@@ -1,36 +1,276 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sistema Alumni FATEC Sorocaba
 
-## Getting Started
+Sistema de gerenciamento de ex-alunos da FATEC Sorocaba desenvolvido como Trabalho de Conclusão de Curso (TCC).
 
-First, run the development server:
+## Índice
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- [Sobre o Projeto](#sobre-o-projeto)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Configuração e Instalação](#configuração-e-instalação)
+- [Comandos de Desenvolvimento](#comandos-de-desenvolvimento)
+- [Funcionalidades](#funcionalidades)
+- [Autores](#autores)
+
+## Sobre o Projeto
+
+O Sistema Alumni FATEC Sorocaba é um projeto desenvolvido como Trabalho de Conclusão de Curso pelos alunos [Leonardo Silva](https://linkedin.com/in/leonardo-silva), [Gabriel Bellato](https://linkedin.com/in/gabriel-bellato) e [Nicolas Ferro](https://linkedin.com/in/nicolas-ferro), sob orientação do Professor Jarbas.
+
+O objetivo é criar uma plataforma para conectar alunos e ex-alunos da FATEC Sorocaba, facilitando o networking, oportunidades de carreira e manutenção do vínculo com a instituição.
+
+## Tecnologias Utilizadas
+
+- **[Next.js 15.5.4](https://nextjs.org)** - Framework React com Turbopack para builds otimizados
+- **[React 19.1.0](https://reactjs.org)** - Biblioteca para construção de interfaces
+- **[TypeScript](https://www.typescriptlang.org)** - Tipagem estática para JavaScript
+- **[Tailwind CSS v4](https://tailwindcss.com)** - Framework CSS utilitário
+
+## Estrutura do Projeto
+
+```
+alumni-frontend/
+├── src/
+│   ├── app/
+│   │   ├── globals.css      # Estilos globais e variáveis de cor
+│   │   ├── layout.tsx       # Layout principal da aplicação
+│   │   └── page.tsx         # Página inicial
+│   └── ...
+├── public/                  # Arquivos estáticos
+├── tailwind.config.ts       # Configuração do Tailwind CSS
+├── next.config.ts          # Configuração do Next.js
+├── package.json            # Dependências e scripts
+└── README.md               # Este arquivo
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Configuração e Instalação
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Pré-requisitos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Node.js** (versão 18 ou superior)
+- **npm** (vem com o Node.js)
 
-## Learn More
+### Passos para Instalação
 
-To learn more about Next.js, take a look at the following resources:
+1. **Clone o repositório:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   git clone https://github.com/NicolasAFerro/alumni-frontend.git
+   cd alumni-frontend
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Instale as dependências:**
 
-## Deploy on Vercel
+   ```bash
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Inicie o servidor de desenvolvimento:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm run dev
+   ```
+
+4. **Acesse a aplicação:**
+   Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
+
+## Comandos de Desenvolvimento
+
+```bash
+# Instalar dependências
+npm install
+
+# Iniciar servidor de desenvolvimento
+npm run dev
+
+# Criar build de produção
+npm run build
+
+# Iniciar servidor de produção (após build)
+npm start
+
+# Executar linting
+npx next lint
+```
+
+## Funcionalidades
+
+### Implementadas
+
+- ✅ Configuração do tema com cores oficiais da FATEC Sorocaba
+- ✅ Tipografia personalizada (Roboto Slab + Roboto)
+- ✅ Estrutura base do projeto Next.js
+- ✅ Configuração do Tailwind CSS personalizado
+- ✅ Página de demonstração do sistema de cores
+
+### Em Desenvolvimento
+
+- 🔄 Sistema de autenticação de usuários
+- 🔄 Cadastro e perfil de ex-alunos
+- 🔄 Gerenciamento de eventos
+- 🔄 Portal de vagas de emprego
+- 🔄 Sistema de usuários
+- 🔄 Painel administrativo
+- 🔄 Sistema de chat (menor prioridade)
+
+### Planejadas
+
+## Autores
+
+Desenvolvido como Trabalho de Conclusão de Curso na FATEC Sorocaba.
+
+**Desenvolvedores:**
+
+- [Leonardo Silva](https://linkedin.com/in/leonardo-silva)
+- [Gabriel Bellato](https://linkedin.com/in/gabriel-bellato)
+- [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+
+**Orientador:**
+
+- Professor Jarbas
+
+**Instituição:**
+
+- [FATEC Sorocaba](https://fatecsorocaba.cps.sp.gov.br/)
+
+---
+
+# Alumni FATEC Sorocaba System
+
+Alumni management system for FATEC Sorocaba developed as a Final Course Project (TCC).
+
+## Table of Contents
+
+- [About the Project](#about-the-project)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Setup and Installation](#setup-and-installation)
+- [Development Commands](#development-commands)
+- [Features](#features)
+- [Authors](#authors)
+
+## About the Project
+
+The Alumni FATEC Sorocaba System is a project developed as a Final Course Project by students [Leonardo Silva](https://linkedin.com/in/leonardo-silva), [Gabriel Bellato](https://linkedin.com/in/gabriel-bellato), and [Nicolas Ferro](https://linkedin.com/in/nicolas-ferro), under the guidance of Professor Jarbas.
+
+The goal is to create a platform to connect and manage FATEC Sorocaba alumni, facilitating networking, career opportunities, and maintaining ties with the institution.
+
+## Technologies Used
+
+- **[Next.js 15.5.4](https://nextjs.org)** - React framework with Turbopack for optimized builds
+- **[React 19.1.0](https://reactjs.org)** - Library for building user interfaces
+- **[TypeScript](https://www.typescriptlang.org)** - Static typing for JavaScript
+- **[Tailwind CSS v4](https://tailwindcss.com)** - Utility-first CSS framework
+
+## Project Structure
+
+```
+alumni-frontend/
+├── src/
+│   ├── app/
+│   │   ├── globals.css      # Global styles and color variables
+│   │   ├── layout.tsx       # Main application layout
+│   │   └── page.tsx         # Home page
+│   └── ...
+├── public/                  # Static files
+├── tailwind.config.ts       # Tailwind CSS configuration
+├── next.config.ts          # Next.js configuration
+├── package.json            # Dependencies and scripts
+└── README.md               # This file
+```
+
+## Setup and Installation
+
+### Prerequisites
+
+- **Node.js** (version 18 or higher)
+- **npm** (comes with Node.js)
+
+### Installation Steps
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/NicolasAFerro/alumni-frontend.git
+   cd alumni-frontend
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Access the application:**
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Development Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Create production build
+npm run build
+
+# Start production server (after build)
+npm start
+
+# Run linting
+npx next lint
+```
+
+## Features
+
+### Implemented
+
+- ✅ Theme configuration with official FATEC Sorocaba colors
+- ✅ Custom typography (Roboto Slab + Roboto)
+- ✅ Next.js project base structure
+- ✅ Custom Tailwind CSS configuration
+- ✅ Color system demonstration page
+
+### In Development
+
+- 🔄 User authentication system
+- 🔄 Alumni registration and profiles
+- 🔄 Event management system
+- 🔄 Job portal
+- 🔄 User management system
+- 🔄 Administrative dashboard
+- 🔄 Chat system (lower priority)
+
+### Planned
+
+- 📋 Administrative dashboard
+- 📋 Messaging system
+- 📋 Social media integration
+- 📋 Reports and statistics
+- 📋 Notification system
+- 📋 Mobile application
+
+## Authors
+
+Developed as a Final Course Project at FATEC Sorocaba.
+
+**Developers:**
+
+- [Leonardo Silva](https://linkedin.com/in/leonardo-silva)
+- [Gabriel Bellato](https://linkedin.com/in/gabriel-bellato)
+- [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+
+**Advisor:**
+
+- Professor Jarbas
+
+**Institution:**
+
+- [FATEC Sorocaba](https://fatecsorocaba.cps.sp.gov.br/)

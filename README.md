@@ -36,7 +36,6 @@ alumni-frontend/
 │   │   └── page.tsx         # Página inicial
 │   └── ...
 ├── public/                  # Arquivos estáticos
-├── tailwind.config.ts       # Configuração do Tailwind CSS
 ├── next.config.ts          # Configuração do Next.js
 ├── package.json            # Dependências e scripts
 └── README.md               # Este arquivo
@@ -172,7 +171,6 @@ alumni-frontend/
 │   │   └── page.tsx         # Home page
 │   └── ...
 ├── public/                  # Static files
-├── tailwind.config.ts       # Tailwind CSS configuration
 ├── next.config.ts          # Next.js configuration
 ├── package.json            # Dependencies and scripts
 └── README.md               # This file

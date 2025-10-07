@@ -1,6 +1,6 @@
 const SignInPage = () => {
   return (
-    <div className="w-full flex flex-col gap-6 px-4">
+    <div className="w-full flex flex-col gap-6">
       {/* Título */}
       <h1 className="text-primary text-2xl font-bold text-center mb-6 md:text-3xl">
         Alumni Fatec Sorocaba

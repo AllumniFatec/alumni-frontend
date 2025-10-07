@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseContainerLayout } from "../../components/BasePageContainerLayout";
+import { BaseContainerLayout } from "../../components/BaseContainerLayout";
 
 export default function AuthLayout({
   children,

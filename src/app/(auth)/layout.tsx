@@ -1,4 +1,5 @@
 import React from "react";
+import { BaseContainerLayout } from "../../components/BasePageContainerLayout";
 
 export default function AuthLayout({
   children,
@@ -6,15 +7,18 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-transparent items-center justify-center h-screen sm:bg-background ">
-      <div>
-        {/* Logo FATEC */}
-        <div className="w-full border border-fuchsia-900">
-          <img src="/basic-name-logo.png" alt="FATEC Sorocaba" />
-        </div>
-
-        <div className="items-center justify-between h-full">{children}</div>
+    <BaseContainerLayout>
+      {/* Logo Container */}
+      <div className="w-full mb-8 flex justify-center">
+        <img
+          src="/basic-name-logo.png"
+          alt="FATEC Sorocaba"
+          className="h-16 md:h-20"
+        />
       </div>
-    </div>
+
+      {/* Container do formulário */}
+      <div className="w-fit mx-auto">{children}</div>
+    </BaseContainerLayout>
   );
 }

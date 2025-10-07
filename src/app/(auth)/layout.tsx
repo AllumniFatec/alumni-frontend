@@ -9,7 +9,7 @@ export default function AuthLayout({
   return (
     <BaseContainerLayout>
       {/* Logo Container */}
-      <div className="w-full mb-8 flex justify-center">
+      <div className="w-full mb-8 flex justify-center pt-10">
         <img
           src="/basic-name-logo.png"
           alt="FATEC Sorocaba"

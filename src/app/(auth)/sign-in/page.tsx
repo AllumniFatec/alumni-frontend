@@ -1,6 +1,9 @@
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
 const SignInPage = () => {
   return (
-    <div className="w-full flex flex-col gap-6">
+    <div className="w-full flex flex-col gap-6 px-4 sm:min-w-lg">
       {/* Título */}
       <h1 className="text-primary text-2xl font-bold text-center mb-6 md:text-3xl">
         Alumni Fatec Sorocaba
@@ -8,26 +11,18 @@ const SignInPage = () => {
 
       {/* Campo Email */}
       <div>
-        <input
-          type="email"
-          placeholder="E-mail"
-          className="w-full p-4 border-0 rounded-lg bg-primary-foreground sm:bg-muted text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        />
+        <Input type="email" placeholder="E-mail" />
       </div>
 
       {/* Campo Senha */}
       <div>
-        <input
-          type="password"
-          placeholder="Senha"
-          className="w-full p-4 border-0 rounded-lg bg-primary-foreground sm:bg-muted text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        />
+        <Input type="password" placeholder="Senha" />
       </div>
 
       {/* Botão Entrar */}
-      <button className="w-full  bg-secondary text-secondary-foreground p-2 rounded-lg font-medium text-md transition-colors hover:bg-secondary">
+      <Button variant="secondary" size="lg" className="w-full">
         Entrar
-      </button>
+      </Button>
 
       {/* Links */}
       <div className="flex items-center justify-center gap-4 text-sm">

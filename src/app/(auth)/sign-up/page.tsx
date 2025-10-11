@@ -1,8 +1,17 @@
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import React from "react";
 
 const SignUpPage = () => {
   return (
-    <div className="w-full flex flex-col gap-6 px-4">
+    <div className="w-full flex flex-col gap-6 px-4 border border-fuchsia-950">
       {/* Título */}
       <h1 className="text-primary text-2xl font-bold text-center mb-6 md:text-3xl">
         Criar Conta
@@ -13,31 +22,20 @@ const SignUpPage = () => {
         <div className="flex flex-col gap-4">
           {/* Email de acesso */}
           <div>
-            <input
-              type="email"
-              placeholder="E-mail de acesso"
-              className="w-full p-4 bg-primary-foreground sm:bg-muted border-0 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            />
+            <Input type="email" placeholder="E-mail de acesso" />
           </div>
 
           {/* Ano de ingresso */}
           <div>
-            <input
+            <Input
               type="number"
               placeholder="Ano de ingresso na universidade"
-              min="1970"
-              max="2030"
-              className="w-full p-4 bg-primary-foreground sm:bg-muted border-0 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
           {/* Criar senha */}
           <div>
-            <input
-              type="password"
-              placeholder="Crie uma senha"
-              className="w-full p-4 bg-primary-foreground sm:bg-muted border-0 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            />
+            <Input type="password" placeholder="Crie uma senha" />
           </div>
         </div>
 
@@ -45,46 +43,46 @@ const SignUpPage = () => {
         <div className="flex flex-col gap-4">
           {/* Nome completo */}
           <div>
-            <input
-              type="text"
-              placeholder="Nome completo"
-              className="w-full p-4 bg-primary-foreground sm:bg-muted border-0 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            />
+            <Input type="text" placeholder="Nome completo" />
           </div>
 
           {/* Curso realizado */}
           <div>
-            <select className="w-full p-4 bg-primary-foreground sm:bg-muted border-0 rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
-              <option value="">Curso realizado</option>
-              <option value="ads">Análise e Desenvolvimento de Sistemas</option>
-              <option value="gestao-ti">
-                Gestão da Tecnologia da Informação
-              </option>
-              <option value="logistica">Logística</option>
-              <option value="processos-gerenciais">Processos Gerenciais</option>
-            </select>
+            <Select>
+              <SelectTrigger className="w-full h-10">
+                <SelectValue placeholder="Curso realizado" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ads">
+                  Análise e Desenvolvimento de Sistemas
+                </SelectItem>
+                <SelectItem value="gestao-ti">
+                  Gestão da Tecnologia da Informação
+                </SelectItem>
+                <SelectItem value="logistica">Logística</SelectItem>
+                <SelectItem value="processos-gerenciais">
+                  Processos Gerenciais
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Confirmar senha */}
           <div>
-            <input
-              type="password"
-              placeholder="Confirme a senha"
-              className="w-full p-4 bg-primary-foreground sm:bg-muted border-0 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-            />
+            <Input type="password" placeholder="Confirme a senha" />
           </div>
         </div>
       </div>
 
       {/* Botões - Um embaixo do outro */}
       <div className="flex flex-col gap-3 mt-4 w-full max-w-sm mx-auto">
-        <button className="w-full bg-primary text-primary-foreground p-2 rounded-lg text-lg transition-colors hover:bg-primary/90">
+        <Button variant="default" size="lg" className="w-full">
           Realizar Cadastro
-        </button>
+        </Button>
 
-        <button className="w-full bg-secondary text-secondary-foreground p-2 rounded-lg text-lg transition-colors hover:bg-secondary/90 text-center">
+        <Button variant="secondary" size="lg" className="w-full">
           Cancelar
-        </button>
+        </Button>
       </div>
 
       <div className="flex items-center justify-center gap-4 text-sm">

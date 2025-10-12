@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -6,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEffect } from "react";
+import { config } from "@/config/env";
 
 export default function Home() {
   return (
@@ -23,6 +27,25 @@ export default function Home() {
 
       {/* Seção principal */}
       <main className="max-w-6xl mx-auto p-6">
+        {/* Teste da API */}
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">🧪 Teste de Configuração</h2>
+          <div className="bg-muted p-4 rounded-lg">
+            <p>
+              <strong>API Base URL:</strong> {config.api.baseUrl}
+            </p>
+            <p>
+              <strong>App Name:</strong> {config.app.name}
+            </p>
+            <p>
+              <strong>Version:</strong> {config.app.version}
+            </p>
+            <p>
+              <strong>Environment:</strong> {config.app.environment}
+            </p>
+          </div>
+        </section>
+
         {/* Cards demonstrando as cores */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {/* Card Primário - Vermelho FATEC */}

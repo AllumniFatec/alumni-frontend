@@ -6,10 +6,22 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-function Select({
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.Root>) {
-  return <SelectPrimitive.Root data-slot="select" {...props} />;
+interface SelectProps
+  extends React.ComponentProps<typeof SelectPrimitive.Root> {
+  error?: string;
+}
+
+function Select({ error, children, ...props }: SelectProps) {
+  return (
+    <div className="w-full">
+      <SelectPrimitive.Root data-slot="select" {...props}>
+        {children}
+      </SelectPrimitive.Root>
+      <div className="h-4 mt-1">
+        {error && <p className="text-red-500 text-xs leading-none">{error}</p>}
+      </div>
+    </div>
+  );
 }
 
 function SelectGroup({
@@ -28,9 +40,11 @@ function SelectTrigger({
   className,
   size = "default",
   children,
+  error,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
   size?: "sm" | "default";
+  error?: boolean;
 }) {
   return (
     <SelectPrimitive.Trigger
@@ -43,13 +57,17 @@ function SelectTrigger({
         "bg-primary-foreground sm:bg-muted",
         // Placeholder e focus igual ao Input
         "data-[placeholder]:text-muted-foreground",
-        "focus:outline-none focus:ring-2 focus:ring-primary",
+        "focus:outline-none focus:ring-2",
         // Estados e transições
         "disabled:cursor-not-allowed disabled:opacity-50",
         "transition-colors",
         // Layout do select
         "flex items-center justify-between gap-2",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        // Estado de erro igual ao Input
+        error
+          ? "focus:ring-red-500 bg-red-50 border border-red-500"
+          : "focus:ring-primary",
         className
       )}
       {...props}

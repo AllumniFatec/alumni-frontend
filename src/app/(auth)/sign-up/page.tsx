@@ -112,42 +112,33 @@ const SignUpPage = () => {
             />
 
             {/* Curso realizado */}
-            <div className="w-full">
-              <Controller
-                name="course"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger
-                      className={`w-full h-10 ${
-                        errors.course ? "border-red-500" : ""
-                      }`}
-                    >
-                      <SelectValue placeholder="Curso realizado" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ads">
-                        Análise e Desenvolvimento de Sistemas
-                      </SelectItem>
-                      <SelectItem value="gestao-ti">
-                        Gestão da Tecnologia da Informação
-                      </SelectItem>
-                      <SelectItem value="logistica">Logística</SelectItem>
-                      <SelectItem value="processos-gerenciais">
-                        Processos Gerenciais
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              <div className="h-4 mt-1">
-                {errors.course && (
-                  <p className="text-red-500 text-xs leading-none">
-                    {errors.course.message}
-                  </p>
-                )}
-              </div>
-            </div>
+            <Controller
+              name="course"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  error={errors.course?.message}
+                >
+                  <SelectTrigger error={!!errors.course}>
+                    <SelectValue placeholder="Curso realizado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ads">
+                      Análise e Desenvolvimento de Sistemas
+                    </SelectItem>
+                    <SelectItem value="gestao-ti">
+                      Gestão da Tecnologia da Informação
+                    </SelectItem>
+                    <SelectItem value="logistica">Logística</SelectItem>
+                    <SelectItem value="processos-gerenciais">
+                      Processos Gerenciais
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
 
             {/* Confirmar senha */}
             <Input

@@ -13,6 +13,7 @@ import React from "react";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 // função refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
 export const signUpSchema = z
@@ -46,10 +47,13 @@ export type SignUpData = {
 };
 
 const SignUpPage = () => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     control,
+    clearErrors,
     formState: { errors },
   } = useForm<SignUpData>({
     resolver: zodResolver(signUpSchema),
@@ -65,6 +69,7 @@ const SignUpPage = () => {
   });
 
   const onClickRegister = (data: SignUpData) => {
+    alert("Função de registro ainda não implementada.");
     console.warn("Register clicked", data);
   };
 
@@ -156,7 +161,16 @@ const SignUpPage = () => {
             Realizar Cadastro
           </Button>
 
-          <Button variant="secondary" size="lg" className="w-full">
+          <Button
+            type="button"
+            onClick={() => {
+              clearErrors();
+              router.push("/sign-in");
+            }}
+            variant="secondary"
+            size="lg"
+            className="w-full"
+          >
             Cancelar
           </Button>
         </div>

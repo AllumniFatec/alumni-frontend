@@ -53,6 +53,7 @@ const SignUpPage = () => {
     formState: { errors },
   } = useForm<SignUpData>({
     resolver: zodResolver(signUpSchema),
+    mode: "onSubmit",
     defaultValues: {
       fullName: "",
       email: "",

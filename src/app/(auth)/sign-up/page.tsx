@@ -1,3 +1,5 @@
+"use client";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,83 +10,171 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import React from "react";
+import { z } from "zod";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+
+// função refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
+export const signUpSchema = z
+  .object({
+    fullName: z.string().min(4, "Nome completo é obrigatório"),
+    email: z.email("E-mail inválido"),
+    entryYear: z
+      .string()
+      .min(4, "Ano de ingresso inválido")
+      .max(4, "Ano de ingresso inválido"),
+    course: z.string().nonempty("Selecione um curso"),
+    password: z
+      .string()
+      .min(8, "A senha deve ter no mínimo 8 caracteres")
+      .max(100, "A senha deve ter no máximo 100 caracteres"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
+//export type SignUpData = z.infer<typeof signUpSchema>;
+
+export type SignUpData = {
+  fullName: string;
+  email: string;
+  entryYear: string;
+  course: string;
+  password: string;
+  confirmPassword: string;
+};
 
 const SignUpPage = () => {
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    clearErrors,
+    formState: { errors },
+  } = useForm<SignUpData>({
+    resolver: zodResolver(signUpSchema),
+    mode: "onSubmit",
+    defaultValues: {
+      fullName: "",
+      email: "",
+      entryYear: "",
+      course: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onClickRegister = (data: SignUpData) => {
+    alert("Função de registro ainda não implementada.");
+    console.warn("Register clicked", data);
+  };
+
   return (
     <div className="w-full flex flex-col gap-6 px-4 sm:min-w-lg md:min-w-2xl">
       {/* Título */}
       <h1 className="text-primary text-2xl font-bold text-center mb-6 md:text-3xl">
         Criar Conta
       </h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-        {/* Primeira Coluna */}
-        <div className="flex flex-col gap-4">
-          {/* Email de acesso */}
-          <div>
-            <Input type="email" placeholder="E-mail de acesso" />
-          </div>
-
-          {/* Ano de ingresso */}
-          <div>
+      <form onSubmit={handleSubmit(onClickRegister)}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          {/* Primeira Coluna */}
+          <div className="flex flex-col gap-2">
+            {/* Nome completo */}
             <Input
-              type="number"
+              {...register("fullName")}
+              type="text"
+              placeholder="Nome completo"
+              error={errors.fullName?.message}
+            />
+            {/* Ano de ingresso */}
+            <Input
+              {...register("entryYear")}
               placeholder="Ano de ingresso na universidade"
+              error={errors.entryYear?.message}
+            />
+
+            {/* Criar senha */}
+            <Input
+              {...register("password")}
+              type="password"
+              placeholder="Crie uma senha"
+              error={errors.password?.message}
             />
           </div>
 
-          {/* Criar senha */}
-          <div>
-            <Input type="password" placeholder="Crie uma senha" />
+          {/* Segunda Coluna */}
+          <div className="flex flex-col gap-2">
+            {/* Email de acesso */}
+            <Input
+              {...register("email")}
+              type="email"
+              placeholder="E-mail de acesso"
+              error={errors.email?.message}
+            />
+
+            {/* Curso realizado */}
+            <Controller
+              name="course"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  error={errors.course?.message}
+                >
+                  <SelectTrigger error={!!errors.course}>
+                    <SelectValue placeholder="Curso realizado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ads">
+                      Análise e Desenvolvimento de Sistemas
+                    </SelectItem>
+                    <SelectItem value="gestao-ti">
+                      Gestão da Tecnologia da Informação
+                    </SelectItem>
+                    <SelectItem value="logistica">Logística</SelectItem>
+                    <SelectItem value="processos-gerenciais">
+                      Processos Gerenciais
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+
+            {/* Confirmar senha */}
+            <Input
+              {...register("confirmPassword")}
+              type="password"
+              placeholder="Confirme a senha"
+              error={errors.confirmPassword?.message}
+            />
           </div>
         </div>
 
-        {/* Segunda Coluna */}
-        <div className="flex flex-col gap-4">
-          {/* Nome completo */}
-          <div>
-            <Input type="text" placeholder="Nome completo" />
-          </div>
+        {/* Botões - Um embaixo do outro */}
+        <div className="flex flex-col gap-3 mt-4 w-full max-w-sm mx-auto">
+          <Button type="submit" variant="default" size="lg" className="w-full">
+            Realizar Cadastro
+          </Button>
 
-          {/* Curso realizado */}
-          <div>
-            <Select>
-              <SelectTrigger className="w-full h-10">
-                <SelectValue placeholder="Curso realizado" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ads">
-                  Análise e Desenvolvimento de Sistemas
-                </SelectItem>
-                <SelectItem value="gestao-ti">
-                  Gestão da Tecnologia da Informação
-                </SelectItem>
-                <SelectItem value="logistica">Logística</SelectItem>
-                <SelectItem value="processos-gerenciais">
-                  Processos Gerenciais
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Confirmar senha */}
-          <div>
-            <Input type="password" placeholder="Confirme a senha" />
-          </div>
+          <Button
+            type="button"
+            onClick={() => {
+              clearErrors();
+              router.push("/sign-in");
+            }}
+            variant="secondary"
+            size="lg"
+            className="w-full"
+          >
+            Cancelar
+          </Button>
         </div>
-      </div>
-
-      {/* Botões - Um embaixo do outro */}
-      <div className="flex flex-col gap-3 mt-4 w-full max-w-sm mx-auto">
-        <Button variant="default" size="lg" className="w-full">
-          Realizar Cadastro
-        </Button>
-
-        <Button variant="secondary" size="lg" className="w-full">
-          Cancelar
-        </Button>
-      </div>
-
+      </form>
       <div className="flex items-center justify-center gap-4 text-sm">
         <a href="/sign-in" className="text-primary hover:text-primary ">
           Login

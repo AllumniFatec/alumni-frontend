@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // função refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
 export const signUpSchema = z
   .object({
-    fullName: z.string({ message: "Nome completo é obrigatório" }),
+    fullName: z.string().min(4, "Nome completo é obrigatório"),
     email: z.email("E-mail inválido"),
     entryYear: z
       .string()
@@ -77,77 +77,85 @@ const SignUpPage = () => {
       <form onSubmit={handleSubmit(onClickRegister)}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Primeira Coluna */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
             {/* Nome completo */}
-            <div>
-              <Input
-                {...register("fullName")}
-                type="text"
-                placeholder="Nome completo"
-              />
-            </div>
+            <Input
+              {...register("fullName")}
+              type="text"
+              placeholder="Nome completo"
+              error={errors.fullName?.message}
+            />
             {/* Ano de ingresso */}
-            <div>
-              <Input
-                {...register("entryYear")}
-                placeholder="Ano de ingresso na universidade"
-              />
-            </div>
+            <Input
+              {...register("entryYear")}
+              placeholder="Ano de ingresso na universidade"
+              error={errors.entryYear?.message}
+            />
 
             {/* Criar senha */}
-            <div>
-              <Input
-                {...register("password")}
-                type="password"
-                placeholder="Crie uma senha"
-              />
-            </div>
+            <Input
+              {...register("password")}
+              type="password"
+              placeholder="Crie uma senha"
+              error={errors.password?.message}
+            />
           </div>
 
           {/* Segunda Coluna */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
             {/* Email de acesso */}
-            <div>
-              <Input
-                {...register("email")}
-                type="email"
-                placeholder="E-mail de acesso"
-              />
-            </div>
-
-            {/* Curso realizado */}
-            <Controller
-              name="course"
-              control={control}
-              render={({ field }) => (
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger className="w-full h-10">
-                    <SelectValue placeholder="Curso realizado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ads">
-                      Análise e Desenvolvimento de Sistemas
-                    </SelectItem>
-                    <SelectItem value="gestao-ti">
-                      Gestão da Tecnologia da Informação
-                    </SelectItem>
-                    <SelectItem value="logistica">Logística</SelectItem>
-                    <SelectItem value="processos-gerenciais">
-                      Processos Gerenciais
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
+            <Input
+              {...register("email")}
+              type="email"
+              placeholder="E-mail de acesso"
+              error={errors.email?.message}
             />
 
-            {/* Confirmar senha */}
-            <div>
-              <Input
-                {...register("confirmPassword")}
-                type="password"
-                placeholder="Confirme a senha"
+            {/* Curso realizado */}
+            <div className="w-full">
+              <Controller
+                name="course"
+                control={control}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger
+                      className={`w-full h-10 ${
+                        errors.course ? "border-red-500" : ""
+                      }`}
+                    >
+                      <SelectValue placeholder="Curso realizado" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ads">
+                        Análise e Desenvolvimento de Sistemas
+                      </SelectItem>
+                      <SelectItem value="gestao-ti">
+                        Gestão da Tecnologia da Informação
+                      </SelectItem>
+                      <SelectItem value="logistica">Logística</SelectItem>
+                      <SelectItem value="processos-gerenciais">
+                        Processos Gerenciais
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
               />
+              <div className="h-4 mt-1">
+                {errors.course && (
+                  <p className="text-red-500 text-xs leading-none">
+                    {errors.course.message}
+                  </p>
+                )}
+              </div>
             </div>
+
+            {/* Confirmar senha */}
+            <Input
+              {...register("confirmPassword")}
+              type="password"
+              placeholder="Confirme a senha"
+              error={errors.confirmPassword?.message}
+            />
           </div>
         </div>
 

@@ -14,6 +14,7 @@ import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { UserType } from "@/models/userType";
 
 // função refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
 export const signUpSchema = z
@@ -28,8 +29,15 @@ export const signUpSchema = z
     password: z
       .string()
       .min(8, "A senha deve ter no mínimo 8 caracteres")
-      .max(100, "A senha deve ter no máximo 100 caracteres"),
+      .max(100, "A senha deve ter no máximo 100 caracteres")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,
+        "senha inválida"
+      ),
     confirmPassword: z.string(),
+    userType: z.enum(UserType, {
+      message: "Selecione um tipo de usuário válido",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas não coincidem",
@@ -44,6 +52,7 @@ export type SignUpData = {
   course: string;
   password: string;
   confirmPassword: string;
+  userType: UserType;
 };
 
 const SignUpPage = () => {
@@ -65,6 +74,7 @@ const SignUpPage = () => {
       course: "",
       password: "",
       confirmPassword: "",
+      userType: "" as UserType,
     },
   });
 
@@ -80,72 +90,103 @@ const SignUpPage = () => {
         Criar Conta
       </h1>
       <form onSubmit={handleSubmit(onClickRegister)}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          {/* Primeira Coluna */}
-          <div className="flex flex-col gap-2">
-            {/* Nome completo */}
-            <Input
-              {...register("fullName")}
-              type="text"
-              placeholder="Nome completo"
-              error={errors.fullName?.message}
-            />
-            {/* Ano de ingresso */}
-            <Input
-              {...register("entryYear")}
-              placeholder="Ano de ingresso na universidade"
-              error={errors.entryYear?.message}
-            />
+        <div className="space-y-4">
+          {/* Grid com duas colunas em desktop */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            {/* Primeira Coluna */}
+            <div className="flex flex-col gap-2">
+              {/* Nome completo */}
+              <Input
+                {...register("fullName")}
+                type="text"
+                placeholder="Nome completo"
+                error={errors.fullName?.message}
+              />
+              {/* Ano de ingresso */}
+              <Input
+                {...register("entryYear")}
+                placeholder="Ano de ingresso na universidade"
+                error={errors.entryYear?.message}
+              />
 
-            {/* Criar senha */}
-            <Input
-              {...register("password")}
-              type="password"
-              placeholder="Crie uma senha"
-              error={errors.password?.message}
-            />
+              {/* Criar senha */}
+              <Input
+                {...register("password")}
+                type="password"
+                placeholder="Crie uma senha"
+                error={errors.password?.message}
+              />
+            </div>
+
+            {/* Segunda Coluna */}
+            <div className="flex flex-col gap-2">
+              {/* Email de acesso */}
+              <Input
+                {...register("email")}
+                type="email"
+                placeholder="E-mail de acesso"
+                error={errors.email?.message}
+              />
+
+              {/* Curso realizado */}
+              <Controller
+                name="course"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    error={errors.course?.message}
+                  >
+                    <SelectTrigger error={!!errors.course}>
+                      <SelectValue placeholder="Curso realizado" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ads">
+                        Análise e Desenvolvimento de Sistemas
+                      </SelectItem>
+                      <SelectItem value="gestao-ti">
+                        Gestão da Tecnologia da Informação
+                      </SelectItem>
+                      <SelectItem value="logistica">Logística</SelectItem>
+                      <SelectItem value="processos-gerenciais">
+                        Processos Gerenciais
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+
+              {/* Tipo de usuário */}
+              <Controller
+                name="userType"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    error={errors.userType?.message}
+                  >
+                    <SelectTrigger error={!!errors.userType}>
+                      <SelectValue placeholder="Tipo de usuário" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={UserType.ALUNO}>Aluno</SelectItem>
+                      <SelectItem value={UserType.PROFESSOR}>
+                        Professor
+                      </SelectItem>
+                      <SelectItem value={UserType.ADMINISTRADOR}>
+                        Administrador
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </div>
           </div>
 
-          {/* Segunda Coluna */}
-          <div className="flex flex-col gap-2">
-            {/* Email de acesso */}
-            <Input
-              {...register("email")}
-              type="email"
-              placeholder="E-mail de acesso"
-              error={errors.email?.message}
-            />
-
-            {/* Curso realizado */}
-            <Controller
-              name="course"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  error={errors.course?.message}
-                >
-                  <SelectTrigger error={!!errors.course}>
-                    <SelectValue placeholder="Curso realizado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ads">
-                      Análise e Desenvolvimento de Sistemas
-                    </SelectItem>
-                    <SelectItem value="gestao-ti">
-                      Gestão da Tecnologia da Informação
-                    </SelectItem>
-                    <SelectItem value="logistica">Logística</SelectItem>
-                    <SelectItem value="processos-gerenciais">
-                      Processos Gerenciais
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-            />
-
-            {/* Confirmar senha */}
+          {/* Campo Confirmar senha - Centralizado e full-width */}
+          <div className="w-full max-w-md mx-auto">
             <Input
               {...register("confirmPassword")}
               type="password"

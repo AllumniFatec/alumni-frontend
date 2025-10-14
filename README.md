@@ -119,9 +119,9 @@ Desenvolvido como Trabalho de Conclusão de Curso na FATEC Sorocaba.
 
 **Desenvolvedores:**
 
-- [Leonardo Silva](https://linkedin.com/in/leonardo-silva)
-- [Gabriel Bellato](https://linkedin.com/in/gabriel-bellato)
-- [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+- [Leonardo Silva](https://www.linkedin.com/in/leonardo-barbosa-da-silva-085858230/)
+- [Gabriel Bellato](https://www.linkedin.com/in/gabriel-silva-bellato/)
+- [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro/)
 
 **Orientador:**
 
@@ -261,9 +261,9 @@ Developed as a Final Course Project at FATEC Sorocaba.
 
 **Developers:**
 
-- [Leonardo Silva](https://linkedin.com/in/leonardo-silva)
-- [Gabriel Bellato](https://linkedin.com/in/gabriel-bellato)
-- [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+- [Leonardo Silva](https://www.linkedin.com/in/leonardo-barbosa-da-silva-085858230/)
+- [Gabriel Bellato](https://www.linkedin.com/in/gabriel-silva-bellato/)
+- [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro/)
 
 **Advisor:**
 

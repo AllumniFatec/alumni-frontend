@@ -121,7 +121,7 @@ Desenvolvido como Trabalho de Conclusão de Curso na FATEC Sorocaba.
 
 - [Leonardo Silva](https://www.linkedin.com/in/leonardo-barbosa-da-silva-085858230/)
 - [Gabriel Bellato](https://www.linkedin.com/in/gabriel-silva-bellato/)
-- [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro/)
+- [Nicolas Ferro]([https://www.linkedin.com/in/nicolas-alexandrino-ferro/)
 
 **Orientador:**
 

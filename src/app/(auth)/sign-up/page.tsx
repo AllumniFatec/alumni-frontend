@@ -171,12 +171,14 @@ const SignUpPage = () => {
                       <SelectValue placeholder="Tipo de usuário" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={UserType.ALUNO}>Aluno</SelectItem>
-                      <SelectItem value={UserType.PROFESSOR}>
-                        Professor
+                      <SelectItem value={UserType.STUDENT}>
+                        {UserType.STUDENT}
                       </SelectItem>
-                      <SelectItem value={UserType.ADMINISTRADOR}>
-                        Administrador
+                      <SelectItem value={UserType.TEACHER}>
+                        {UserType.TEACHER}
+                      </SelectItem>
+                      <SelectItem value={UserType.ALUMNI}>
+                        {UserType.ALUMNI}
                       </SelectItem>
                     </SelectContent>
                   </Select>

@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   /* Cores da FATEC Sorocaba */
@@ -18,15 +21,76 @@
   --color-foreground: #44555d;
   --color-card: #ffffff;
   --color-card-foreground: #44555d;
+
+  /* Cores esperadas pelo Shadcn */
+  --color-border: #e5e5e5;
+  --color-input: #f9fafb;
+  --color-ring: #ae0c0d; /* geralmente igual à primary */
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+}
+
+/* 🔄 Mapeia suas cores FATEC para os tokens que o Shadcn usa */
+:root {
+  --radius: 0.625rem;
+
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+  --card: var(--color-card);
+  --card-foreground: var(--color-card-foreground);
+  --popover: var(--color-card);
+  --popover-foreground: var(--color-card-foreground);
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-primary-foreground);
+  --secondary: var(--color-secondary);
+  --secondary-foreground: var(--color-secondary-foreground);
+  --muted: var(--color-muted);
+  --muted-foreground: var(--color-muted-foreground);
+  --accent: var(--color-accent);
+  --accent-foreground: var(--color-accent-foreground);
+  --destructive: #ef4444;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: var(--color-primary);
+}
+
+/* 🌙 Tema Dark com contraste adequado */
+.dark {
+  --background: #121212;
+  --foreground: #ffffff;
+  --card: #1f1f1f;
+  --card-foreground: #ffffff;
+  --popover: #1f1f1f;
+  --popover-foreground: #ffffff;
+  --primary: #ae0c0d;
+  --primary-foreground: #ffffff;
+  --secondary: #2a2a2a;
+  --secondary-foreground: #ffffff;
+  --muted: #1a1a1a;
+  --muted-foreground: #cccccc;
+  --accent: #00c1cf;
+  --accent-foreground: #000000;
+  --destructive: #dc2626;
+  --border: #333333;
+  --input: #333333;
+  --ring: #ae0c0d;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 @layer base {
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-family: var(--font-roboto-slab), serif;
+  * {
+    @apply border-border outline-ring/50;
   }
-
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-roboto), sans-serif;
+  }
   h1,
   h2,
   h3,
@@ -35,11 +99,5 @@
   h6 {
     font-family: var(--font-roboto-slab), serif;
     font-weight: 600;
-  }
-
-  p,
-  span,
-  div {
-    font-family: var(--font-roboto), sans-serif;
   }
 }

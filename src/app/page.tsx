@@ -1,3 +1,12 @@
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -94,6 +103,124 @@ export default function Home() {
             <button className="mt-4 bg-muted-foreground text-muted px-4 py-2 rounded transition-colors hover:bg-muted-foreground/90">
               Botão Muted
             </button>
+          </div>
+        </div>
+
+        {/* Seção de Demonstração de Botões */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            Demonstração de Botões shadcn/ui
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Botões Variantes */}
+            <div className="bg-card border border-gray-200 rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-4 text-card-foreground">
+                Variantes
+              </h3>
+              <div className="space-y-3">
+                <Button variant="default">Default</Button>
+                <Button variant="secondary">Secondary</Button>
+                <Button variant="destructive">Destructive</Button>
+                <Button variant="outline">Outline</Button>
+                <Button variant="ghost">Ghost</Button>
+                <Button variant="link">Link</Button>
+              </div>
+            </div>
+
+            {/* Botões Tamanhos */}
+            <div className="bg-card border border-gray-200 rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-4 text-card-foreground">
+                Tamanhos
+              </h3>
+              <div className="space-y-3">
+                <Button size="sm">Small</Button>
+                <Button size="default">Default</Button>
+                <Button size="lg">Large</Button>
+                <Button size="icon">🎯</Button>
+              </div>
+            </div>
+
+            {/* Botões Estados */}
+            <div className="bg-card border border-gray-200 rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-4 text-card-foreground">
+                Estados
+              </h3>
+              <div className="space-y-3">
+                <Button>Normal</Button>
+                <Button disabled>Disabled</Button>
+                <Button variant="outline">Hover me!</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Seção de Demonstração de Select */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            Demonstração de Select shadcn/ui
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Select Básico */}
+            <div className="bg-card border border-gray-200 rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-4 text-card-foreground">
+                Select Básico
+              </h3>
+              <Select>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Escolha uma opção" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="opcao1">Opção 1</SelectItem>
+                  <SelectItem value="opcao2">Opção 2</SelectItem>
+                  <SelectItem value="opcao3">Opção 3</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <p className="text-sm text-muted-foreground mt-2">
+                <strong>SelectTrigger:</strong> O botão clicável
+                <br />
+                <strong>SelectValue:</strong> Mostra o selecionado
+                <br />
+                <strong>SelectContent:</strong> O dropdown
+                <br />
+                <strong>SelectItem:</strong> Cada opção
+              </p>
+            </div>
+
+            {/* Select Cursos FATEC */}
+            <div className="bg-card border border-gray-200 rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-4 text-card-foreground">
+                Cursos FATEC (Exemplo Real)
+              </h3>
+              <Select>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Selecione seu curso" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ads">
+                    Análise e Desenvolvimento de Sistemas
+                  </SelectItem>
+                  <SelectItem value="gestao-ti">
+                    Gestão da Tecnologia da Informação
+                  </SelectItem>
+                  <SelectItem value="logistica">Logística</SelectItem>
+                  <SelectItem value="processos-gerenciais">
+                    Processos Gerenciais
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+
+              <p className="text-sm text-muted-foreground mt-2">
+                ✅ Acessível (keyboard navigation)
+                <br />
+                ✅ Searchable (digite para filtrar)
+                <br />
+                ✅ Customizável (cores, tamanhos)
+                <br />✅ Mobile-friendly
+              </p>
+            </div>
           </div>
         </div>
       </main>

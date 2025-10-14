@@ -1,28 +1,33 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import React from "react";
 
-const SignInPage = () => {
+const ConfirmCodePage = () => {
   return (
     <div className="w-full flex flex-col gap-6 px-4 sm:min-w-lg">
       {/* Título */}
       <h1 className="text-primary text-2xl font-bold text-center mb-6 md:text-3xl">
-        Alumni Fatec Sorocaba
+        Insira o código de confirmação
       </h1>
 
-      {/* Campo Email */}
+      {/* Campo Código */}
       <div>
-        <Input type="email" placeholder="E-mail" />
+        <Input
+          type="text"
+          placeholder="Digite o código de confirmação"
+          maxLength={6}
+        />
       </div>
 
-      {/* Campo Senha */}
-      <div>
-        <Input type="password" placeholder="Senha" />
+      {/* Botões */}
+      <div className="flex flex-col gap-3 mt-4">
+        <Button variant="default" size="lg" className="w-full">
+          Confirmar Código
+        </Button>
+        <Button variant="secondary" size="lg" className="w-full">
+          Reenviar Código
+        </Button>
       </div>
-
-      {/* Botão Entrar */}
-      <Button variant="secondary" size="lg" className="w-full">
-        Entrar
-      </Button>
 
       {/* Links */}
       <div className="flex items-center justify-center gap-4 text-sm">
@@ -43,5 +48,4 @@ const SignInPage = () => {
     </div>
   );
 };
-
-export default SignInPage;
+export default ConfirmCodePage;

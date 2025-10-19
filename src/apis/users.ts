@@ -1,3 +1,4 @@
+"use-client";
 import { User } from "@/models/users";
 import { AuthStorage } from "@/store/auth";
 import axios from "axios";
@@ -8,12 +9,19 @@ export class UserApi {
     try {
       //must improve this one
       const token = AuthStorage.getToken();
+      console.warn("meu token é", token);
+
       const response = await axios.get(`${API_BASE_URL}/user/list-users`, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
         },
       });
-      console.info(`users loaded: ${response.data.length}`);
+
+      console.info(
+        `TO AQUI :   users loaded: ${response.data.length} users from API`
+      );
       return response.data;
     } catch (error) {
       console.error("getUsers error", error);
@@ -22,10 +30,13 @@ export class UserApi {
   }
   static async getUserById(userId: number): Promise<User> {
     try {
+      //TODO: REMOVING NGROK SKIP HEADER AFTER TESTS
       const token = AuthStorage.getToken();
       const response = await axios.get(`${API_BASE_URL}/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
         },
       });
       console.info(`user loaded: ${response.data.name}`);

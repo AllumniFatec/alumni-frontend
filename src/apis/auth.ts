@@ -74,13 +74,16 @@ export class AuthApi {
     token: string
   ): Promise<{ message: string }> {
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/password/reset-password`,
+      console.warn("resetPassword chamado com token:", token);
+      console.warn("senha nova é:", newPassword);
+      const response = await axios.patch(
+        `${API_BASE_URL}/password/reset-password/${token}`,
         {
-          newPassword,
+          password: newPassword,
           token, // Enviando o token no body
         }
       );
+      console.warn("resetPassword depois da chamada:", response.data);
       return response.data;
     } catch (error) {
       console.error("resetPassword error", error);

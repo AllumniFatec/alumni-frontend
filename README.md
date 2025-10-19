@@ -14,7 +14,7 @@ Sistema de gerenciamento de ex-alunos da FATEC Sorocaba desenvolvido como Trabal
 
 ## Sobre o Projeto
 
-O Sistema Alumni FATEC Sorocaba é um projeto desenvolvido como Trabalho de Conclusão de Curso pelos alunos [Leonardo Silva](https://linkedin.com/in/leonardo-silva), [Gabriel Bellato](https://linkedin.com/in/gabriel-bellato) e [Nicolas Ferro](https://linkedin.com/in/nicolas-ferro), sob orientação do Professor Jarbas.
+O Sistema Alumni FATEC Sorocaba é um projeto desenvolvido como Trabalho de Conclusão de Curso pelos alunos [Leonardo Silva](https://www.linkedin.com/in/leonardo-barbosa-da-silva-085858230/), [Gabriel Bellato](https://www.linkedin.com/in/gabriel-silva-bellato/) e [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro/), sob orientação do Professor Jarbas.
 
 O objetivo é criar uma plataforma para conectar alunos e ex-alunos da FATEC Sorocaba, facilitando o networking, oportunidades de carreira e manutenção do vínculo com a instituição.
 
@@ -119,9 +119,9 @@ Desenvolvido como Trabalho de Conclusão de Curso na FATEC Sorocaba.
 
 **Desenvolvedores:**
 
-- [Leonardo Silva](https://linkedin.com/in/leonardo-silva)
-- [Gabriel Bellato](https://linkedin.com/in/gabriel-bellato)
-- [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+- [Leonardo Silva](https://www.linkedin.com/in/leonardo-barbosa-da-silva-085858230/)
+- [Gabriel Bellato](https://www.linkedin.com/in/gabriel-silva-bellato/)
+- [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro/)
 
 **Orientador:**
 
@@ -261,9 +261,9 @@ Developed as a Final Course Project at FATEC Sorocaba.
 
 **Developers:**
 
-- [Leonardo Silva](https://linkedin.com/in/leonardo-silva)
-- [Gabriel Bellato](https://linkedin.com/in/gabriel-bellato)
-- [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+- [Leonardo Silva](https://www.linkedin.com/in/leonardo-barbosa-da-silva-085858230/)
+- [Gabriel Bellato](https://www.linkedin.com/in/gabriel-silva-bellato/)
+- [Nicolas Ferro](https://www.linkedin.com/in/nicolas-alexandrino-ferro/)
 
 **Advisor:**
 

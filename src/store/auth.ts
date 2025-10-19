@@ -37,7 +37,7 @@ export class AuthStorage {
   static removeToken(): void {
     if (typeof window !== "undefined") {
       localStorage.removeItem(TOKEN_KEY);
-      console.log("🗑️ Token removido do localStorage");
+      console.log("Token removido do localStorage");
     }
   }
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto_Slab, Roboto } from "next/font/google";
 import "./globals.css";
-
+import { Providers } from "@/providers";
 const robotoSlab = Roboto_Slab({
   variable: "--font-roboto-slab",
   subsets: ["latin"],
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${robotoSlab.variable} ${roboto.variable} antialiased`}>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

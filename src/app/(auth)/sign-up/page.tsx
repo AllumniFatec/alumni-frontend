@@ -14,14 +14,16 @@ import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { UserType } from "@/models/userType";
+import { useMutation } from "@tanstack/react-query";
+import { UserType, NewUser } from "@/models/users";
+import { AuthApi } from "@/apis/auth";
 
 // função refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
 export const signUpSchema = z
   .object({
     fullName: z.string().min(4, "Nome completo é obrigatório"),
     email: z.email("E-mail inválido"),
-    entryYear: z
+    enrollmentYear: z
       .string()
       .min(4, "Ano de ingresso inválido")
       .max(4, "Ano de ingresso inválido"),
@@ -48,7 +50,7 @@ export const signUpSchema = z
 export type SignUpData = {
   fullName: string;
   email: string;
-  entryYear: string;
+  enrollmentYear: string;
   course: string;
   password: string;
   confirmPassword: string;
@@ -70,7 +72,7 @@ const SignUpPage = () => {
     defaultValues: {
       fullName: "",
       email: "",
-      entryYear: "",
+      enrollmentYear: "",
       course: "",
       password: "",
       confirmPassword: "",
@@ -78,9 +80,28 @@ const SignUpPage = () => {
     },
   });
 
+  // Mutation para registro de usuário
+  const signUpMutation = useMutation({
+    mutationFn: (userData: NewUser) => AuthApi.signUp(userData),
+    onSuccess: () => {
+      router.push("/");
+    },
+    onError: (error: any) => {
+      console.error("Erro ao registrar usuário:", error);
+    },
+  });
+
   const onClickRegister = (data: SignUpData) => {
-    alert("Função de registro ainda não implementada.");
-    console.warn("Register clicked", data);
+    const newUser: NewUser = {
+      name: data.fullName,
+      email: data.email,
+      password: data.password,
+      enrollmentYear: parseInt(data.enrollmentYear),
+      userType: data.userType,
+      course: data.course,
+    };
+
+    signUpMutation.mutate(newUser);
   };
 
   return (
@@ -89,6 +110,7 @@ const SignUpPage = () => {
       <h1 className="text-primary text-2xl font-bold text-center mb-6 md:text-3xl">
         Criar Conta
       </h1>
+
       <form onSubmit={handleSubmit(onClickRegister)}>
         <div className="space-y-4">
           {/* Grid com duas colunas em desktop */}
@@ -104,9 +126,9 @@ const SignUpPage = () => {
               />
               {/* Ano de ingresso */}
               <Input
-                {...register("entryYear")}
+                {...register("enrollmentYear")}
                 placeholder="Ano de ingresso na universidade"
-                error={errors.entryYear?.message}
+                error={errors.enrollmentYear?.message}
               />
 
               {/* Criar senha */}
@@ -200,8 +222,16 @@ const SignUpPage = () => {
 
         {/* Botões - Um embaixo do outro */}
         <div className="flex flex-col gap-3 mt-4 w-full max-w-sm mx-auto">
-          <Button type="submit" variant="default" size="lg" className="w-full">
-            Realizar Cadastro
+          <Button
+            type="submit"
+            variant="default"
+            size="lg"
+            className="w-full"
+            disabled={signUpMutation.isPending}
+          >
+            {signUpMutation.isPending
+              ? "Criando conta..."
+              : "Realizar Cadastro"}
           </Button>
 
           <Button
@@ -213,6 +243,7 @@ const SignUpPage = () => {
             variant="secondary"
             size="lg"
             className="w-full"
+            disabled={signUpMutation.isPending}
           >
             Cancelar
           </Button>

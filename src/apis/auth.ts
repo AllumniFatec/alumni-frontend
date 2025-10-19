@@ -11,7 +11,6 @@ export class AuthApi {
         `${API_BASE_URL}/user/login`,
         loginInUser
       );
-
       const authData: AuthResponse = response.data;
 
       if (authData.token) {
@@ -56,7 +55,7 @@ export class AuthApi {
   static async forgotPassword(email: string): Promise<{ message: string }> {
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/password/forgotPassword`,
+        `${API_BASE_URL}/password/forgot-password`,
         {
           email,
         }
@@ -68,15 +67,16 @@ export class AuthApi {
     }
   }
 
-  // como vamos saber de qual usuário é?
   static async resetPassword(
-    newPassword: string
+    newPassword: string,
+    token: string
   ): Promise<{ message: string }> {
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/password/resetPassword`,
+        `${API_BASE_URL}/password/reset-password`,
         {
           newPassword,
+          token, // Enviando o token no body
         }
       );
       return response.data;

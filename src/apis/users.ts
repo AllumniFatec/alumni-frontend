@@ -8,7 +8,7 @@ export class UserApi {
     try {
       //must improve this one
       const token = AuthStorage.getToken();
-      const response = await axios.get(`${API_BASE_URL}/list-users`, {
+      const response = await axios.get(`${API_BASE_URL}/user/list-users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -17,6 +17,21 @@ export class UserApi {
       return response.data;
     } catch (error) {
       console.error("getUsers error", error);
+      throw error;
+    }
+  }
+  static async getUserById(userId: number): Promise<User> {
+    try {
+      const token = AuthStorage.getToken();
+      const response = await axios.get(`${API_BASE_URL}/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.info(`user loaded: ${response.data.name}`);
+      return response.data;
+    } catch (error) {
+      console.error("getUserById error", error);
       throw error;
     }
   }

@@ -38,7 +38,7 @@ const SignInPage = () => {
   const signInMutation = useMutation({
     mutationFn: (loginData: LoginInUser) => AuthApi.signIn(loginData),
     onSuccess: () => {
-      router.push("/");
+      router.push("/members");
     },
     onError: (error: any) => {
       console.error("Erro no login:", error);

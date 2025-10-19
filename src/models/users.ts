@@ -1,10 +1,11 @@
 export enum UserType {
-  STUDENT = "aluno",
-  TEACHER = "professor",
-  ALUMNI = "egresso",
+  STUDENT = "Aluno",
+  TEACHER = "Professor",
+  ALUMNI = "Egresso",
+  ADMIN = "Administrador",
 }
 export interface User {
-  id: number;
+  id?: number;
   name: string;
   email: string;
   enrollmentYear: number;

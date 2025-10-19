@@ -1,4 +1,5 @@
 "use client";
+
 import { MockPostApi } from "@/apis/mockExampleApi";
 import { useQuery } from "@tanstack/react-query";
 import { PostCard } from "@/components/Posts";

@@ -2,7 +2,7 @@ import { AuthResponse, LoginInUser, NewUser } from "@/models/users";
 import axios from "axios";
 import { AuthStorage } from "@/store/auth";
 
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL = "https://scot-nonanaemic-gracia.ngrok-free.dev";
 
 export class AuthApi {
   static async signIn(loginInUser: LoginInUser): Promise<AuthResponse> {
@@ -29,6 +29,8 @@ export class AuthApi {
     newUser: NewUser
   ): Promise<{ userId: number; message: string }> {
     try {
+      console.warn("antes de fazer o post", newUser);
+      console.warn("URL completa:", `${API_BASE_URL}/user/register`);
       const response = await axios.post(
         `${API_BASE_URL}/user/register`,
         newUser
@@ -36,7 +38,7 @@ export class AuthApi {
       console.info(`USER REGISTERED: ${newUser.email}`);
       return response.data;
     } catch (error) {
-      console.error("signUp error", error);
+      console.error("ERRO NO SIGNUP", error);
       throw error;
     }
   }

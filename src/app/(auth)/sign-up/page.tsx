@@ -84,7 +84,8 @@ const SignUpPage = () => {
   const signUpMutation = useMutation({
     mutationFn: (userData: NewUser) => AuthApi.signUp(userData),
     onSuccess: () => {
-      router.push("/");
+      console.warn("Usuário registrado com sucesso");
+      router.push("/sign-in");
     },
     onError: (error: any) => {
       console.error("Erro ao registrar usuário:", error);
@@ -164,14 +165,14 @@ const SignUpPage = () => {
                       <SelectValue placeholder="Curso realizado" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="ads">
+                      <SelectItem value="Análise e Desenvolvimento de Sistemas">
                         Análise e Desenvolvimento de Sistemas
                       </SelectItem>
-                      <SelectItem value="gestao-ti">
+                      <SelectItem value="Gestão da Tecnologia da Informação">
                         Gestão da Tecnologia da Informação
                       </SelectItem>
-                      <SelectItem value="logistica">Logística</SelectItem>
-                      <SelectItem value="processos-gerenciais">
+                      <SelectItem value="Logística">Logística</SelectItem>
+                      <SelectItem value="Processos Gerenciais">
                         Processos Gerenciais
                       </SelectItem>
                     </SelectContent>

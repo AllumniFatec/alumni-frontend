@@ -1,7 +1,7 @@
 import { User } from "@/models/users";
 import { AuthStorage } from "@/store/auth";
 import axios from "axios";
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL = "https://scot-nonanaemic-gracia.ngrok-free.dev";
 
 export class UserApi {
   static async getUsers(): Promise<User[]> {

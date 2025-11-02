@@ -35,23 +35,22 @@ const UserCard = ({ user, className, isLoading = false }: UserCardProps) => {
   return (
     <div
       className={cn(
-        `bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow `,
+        `bg-white border border-gray-200 rounded-lg p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow `,
         className
       )}
     >
-      {/* Título do post */}
-      <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-        {user.name}
-      </h3>
+      <div className="min-h-20 flex flex-col justify-center">
+        {/* Título do post */}
+        <p className="text-2xl font-semibold text-info mb-2 ">{user.name}</p>
 
-      {/* Corpo do post */}
-      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-        {user.description}
-      </p>
-
-      <div className="mt-3 pt-2 border-t border-gray-100">
-        <p>{user?.localWorkplace}</p>
-        <p>{user?.course}</p>
+        {/* Corpo do post */}
+      </div>
+      <p className="text-foreground text-sm ">{user.userType}</p>
+      <div className="mt-3 pt-2 border-t border-gray-100 justify-end">
+        <p className="text-destructive text-md ">{user?.course}</p>
+        <p className="text-destructive text-md ">
+          Ano de matricula: {user?.enrollmentYear}
+        </p>
       </div>
     </div>
   );

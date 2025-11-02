@@ -74,8 +74,8 @@ export class AuthApi {
     token: string
   ): Promise<{ message: string }> {
     try {
-      console.warn("resetPassword chamado com token:", token);
-      console.warn("senha nova é:", newPassword);
+      // console.warn("resetPassword chamado com token:", token);
+      // console.warn("senha nova é:", newPassword);
       const response = await axios.patch(
         `${API_BASE_URL}/password/reset-password/${token}`,
         {

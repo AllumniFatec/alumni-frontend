@@ -14,7 +14,7 @@ export default function Home() {
               <img
                 src="/basic-name-logo.png"
                 alt="FATEC Sorocaba"
-                className="h-8"
+                className="h-16"
               />
             </div>
             <Button variant="destructive">

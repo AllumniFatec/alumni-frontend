@@ -6,7 +6,7 @@ interface CardProps {
   className?: string;
 }
 
-export const Card = ({ title, children, className = "" }: CardProps) => {
+export const HomeCard = ({ title, children, className = "" }: CardProps) => {
   return (
     <div className={cn(`text-center`, className)}>
       <h3 className="font-bold text-xl mb-4 text-gray-800">{title}</h3>

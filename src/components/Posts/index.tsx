@@ -1,8 +1,9 @@
 import React from "react";
 import { Post } from "@/models/posts";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
-interface PostCardProps {
+export interface PostCardProps {
   post?: Post;
   isLoading?: boolean;
   className?: string;
@@ -16,7 +17,10 @@ export const PostCard = ({
   if (isLoading || !post) {
     return (
       <div
-        className={`bg-white border border-gray-200 rounded-lg p-4 shadow-sm ${className}`}
+        className={cn(
+          `bg-white border border-gray-200 rounded-lg p-4 shadow-sm `,
+          className
+        )}
       >
         {/* Skeleton do título */}
         <Skeleton className="h-6 w-3/4 mb-2" />

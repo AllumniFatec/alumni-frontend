@@ -1,14 +1,11 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/Section";
-import { Card } from "@/components/Card";
+import { HomeCard } from "@/components/HomeCard";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Header Hero Section */}
       <header className="relative">
         {/* Top Navigation Bar */}
         <nav className="bg-white shadow-sm px-6 py-4 mb-2">
@@ -41,7 +38,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            s
           </div>
         </div>
       </header>
@@ -51,25 +47,25 @@ export default function Home() {
         {/* Sobre o Alumni Section */}
         <Section title="Sobre o Alumni">
           <div className="grid md:grid-cols-3 gap-8">
-            <Card title="Conectar">
+            <HomeCard title="Conectar">
               <p>
                 Encontre colegas e relembre histórias que marcaram a sua vida na
                 FATEC Sorocaba, veja o que cada pessoa tem feito e mantenha
                 contato.
               </p>
-            </Card>
-            <Card title="Contribuir">
+            </HomeCard>
+            <HomeCard title="Contribuir">
               <p>
                 Apresente pessoas, empregue e ofereça-se para atuar na mentoria
                 de estudantes.
               </p>
-            </Card>
-            <Card title="Expandir">
+            </HomeCard>
+            <HomeCard title="Expandir">
               <p>
                 Amplie seu network profissional, restabeleça contatos e conheça
                 novas pessoas.
               </p>
-            </Card>
+            </HomeCard>
           </div>
         </Section>
 

@@ -18,6 +18,8 @@ export interface User {
   course: string;
   createdAt?: string;
   gender?: Gender;
+  description?: string;
+  localWorkplace?: string;
 }
 
 export interface NewUser {

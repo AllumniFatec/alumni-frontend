@@ -15,7 +15,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { UserType, NewUser } from "@/models/users";
+import { UserType, NewUser, Gender } from "@/models/users";
 import { AuthApi } from "@/apis/auth";
 
 // função refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
@@ -40,6 +40,9 @@ export const signUpSchema = z
     userType: z.enum(UserType, {
       message: "Selecione um tipo de usuário válido",
     }),
+    gender: z.enum(Gender, {
+      message: "Selecione um gênero válido",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas não coincidem",
@@ -55,6 +58,7 @@ export type SignUpData = {
   password: string;
   confirmPassword: string;
   userType: UserType;
+  gender: Gender;
 };
 
 const SignUpPage = () => {
@@ -77,6 +81,7 @@ const SignUpPage = () => {
       password: "",
       confirmPassword: "",
       userType: "" as UserType,
+      gender: "" as Gender,
     },
   });
 
@@ -100,6 +105,7 @@ const SignUpPage = () => {
       enrollmentYear: parseInt(data.enrollmentYear),
       userType: data.userType,
       course: data.course,
+      gender: data.gender,
     };
 
     signUpMutation.mutate(newUser);
@@ -138,6 +144,12 @@ const SignUpPage = () => {
                 type="password"
                 placeholder="Crie uma senha"
                 error={errors.password?.message}
+              />
+              <Input
+                {...register("confirmPassword")}
+                type="password"
+                placeholder="Confirme a senha"
+                error={errors.confirmPassword?.message}
               />
             </div>
 
@@ -207,17 +219,30 @@ const SignUpPage = () => {
                   </Select>
                 )}
               />
-            </div>
-          </div>
 
-          {/* Campo Confirmar senha - Centralizado e full-width */}
-          <div className="w-full max-w-md mx-auto">
-            <Input
-              {...register("confirmPassword")}
-              type="password"
-              placeholder="Confirme a senha"
-              error={errors.confirmPassword?.message}
-            />
+              {/* Gênero */}
+              <Controller
+                name="gender"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    error={errors.gender?.message}
+                  >
+                    <SelectTrigger error={!!errors.gender}>
+                      <SelectValue placeholder="Gênero" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={Gender.MALE}>{Gender.MALE}</SelectItem>
+                      <SelectItem value={Gender.FEMALE}>
+                        {Gender.FEMALE}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </div>
           </div>
         </div>
 

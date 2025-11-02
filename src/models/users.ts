@@ -4,6 +4,11 @@ export enum UserType {
   ALUMNI = "Egresso",
   ADMIN = "Administrador",
 }
+
+export enum Gender {
+  MALE = "Masculino",
+  FEMALE = "Feminino",
+}
 export interface User {
   id?: number;
   name: string;
@@ -11,6 +16,8 @@ export interface User {
   enrollmentYear: number;
   userType: UserType;
   course: string;
+  createdAt?: string;
+  gender?: Gender;
 }
 
 export interface NewUser {
@@ -20,6 +27,7 @@ export interface NewUser {
   enrollmentYear: number;
   userType: UserType;
   course: string;
+  gender: Gender;
 }
 export interface LoginInUser {
   email: string;

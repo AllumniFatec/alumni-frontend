@@ -8,7 +8,7 @@ export class UserApi {
   static async getUsers(): Promise<User[]> {
     try {
       //must improve this one
-      const token = AuthStorage.getToken();
+      //const token = AuthStorage.getToken();
 
       // const response = await axios.get(`${API_BASE_URL}/user/list-users`, {
       //   headers: {

@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 const Members = () => {
-  const { data, error, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: () => UserApi.getUsers(),
   });

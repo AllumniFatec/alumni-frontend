@@ -11,6 +11,7 @@ const Members = () => {
     queryKey: ["users"],
     queryFn: () => UserApi.getUsers(),
   });
+  console.warn("USERS DATA NA PAGE MEMBERS", data);
 
   return (
     <div className="">

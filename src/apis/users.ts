@@ -8,16 +8,16 @@ export class UserApi {
   static async getUsers(): Promise<User[]> {
     try {
       //must improve this one
-      const token = AuthStorage.getToken();
-      console.warn("meu token é", token);
+      //const token = AuthStorage.getToken();
 
-      const response = await axios.get(`${API_BASE_URL}/user/list-users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true",
-        },
-      });
+      // const response = await axios.get(`${API_BASE_URL}/user/list-users`, {
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //     "Content-Type": "application/json",
+      //     "ngrok-skip-browser-warning": "true",
+      //   },
+      // });
+      const response = await axios.get(`${API_BASE_URL}/user/list-users`, {});
 
       console.info(
         `TO AQUI :   users loaded: ${response.data.length} users from API`

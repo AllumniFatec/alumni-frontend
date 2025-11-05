@@ -131,6 +131,30 @@ const SignUpPage = () => {
                 placeholder="Nome completo"
                 error={errors.fullName?.message}
               />
+
+              {/* Gênero */}
+              <Controller
+                name="gender"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    error={errors.gender?.message}
+                  >
+                    <SelectTrigger error={!!errors.gender}>
+                      <SelectValue placeholder="Gênero" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={Gender.MALE}>{Gender.MALE}</SelectItem>
+                      <SelectItem value={Gender.FEMALE}>
+                        {Gender.FEMALE}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+
               {/* Ano de ingresso */}
               <Input
                 {...register("enrollmentYear")}
@@ -145,12 +169,6 @@ const SignUpPage = () => {
                 placeholder="Crie uma senha"
                 error={errors.password?.message}
               />
-              <Input
-                {...register("confirmPassword")}
-                type="password"
-                placeholder="Confirme a senha"
-                error={errors.confirmPassword?.message}
-              />
             </div>
 
             {/* Segunda Coluna */}
@@ -161,6 +179,34 @@ const SignUpPage = () => {
                 type="email"
                 placeholder="E-mail de acesso"
                 error={errors.email?.message}
+              />
+
+              {/* Tipo de usuário */}
+              <Controller
+                name="userType"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    error={errors.userType?.message}
+                  >
+                    <SelectTrigger error={!!errors.userType}>
+                      <SelectValue placeholder="Tipo de usuário" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={UserType.STUDENT}>
+                        {UserType.STUDENT}
+                      </SelectItem>
+                      <SelectItem value={UserType.TEACHER}>
+                        {UserType.TEACHER}
+                      </SelectItem>
+                      <SelectItem value={UserType.ALUMNI}>
+                        {UserType.ALUMNI}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
               />
 
               {/* Curso realizado */}
@@ -192,55 +238,11 @@ const SignUpPage = () => {
                 )}
               />
 
-              {/* Tipo de usuário */}
-              <Controller
-                name="userType"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    error={errors.userType?.message}
-                  >
-                    <SelectTrigger error={!!errors.userType}>
-                      <SelectValue placeholder="Tipo de usuário" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={UserType.STUDENT}>
-                        {UserType.STUDENT}
-                      </SelectItem>
-                      <SelectItem value={UserType.TEACHER}>
-                        {UserType.TEACHER}
-                      </SelectItem>
-                      <SelectItem value={UserType.ALUMNI}>
-                        {UserType.ALUMNI}
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-
-              {/* Gênero */}
-              <Controller
-                name="gender"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    error={errors.gender?.message}
-                  >
-                    <SelectTrigger error={!!errors.gender}>
-                      <SelectValue placeholder="Gênero" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={Gender.MALE}>{Gender.MALE}</SelectItem>
-                      <SelectItem value={Gender.FEMALE}>
-                        {Gender.FEMALE}
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
+              <Input
+                {...register("confirmPassword")}
+                type="password"
+                placeholder="Confirme a senha"
+                error={errors.confirmPassword?.message}
               />
             </div>
           </div>

@@ -36,7 +36,7 @@ const ForgotPasswordPage = () => {
   const forgotPasswordMutation = useMutation({
     mutationFn: (email: string) => AuthApi.forgotPassword(email),
     onSuccess: () => {
-      router.push("/sign-in");
+      router.push("/sucess-reset-send-password");
     },
     onError: (error: any) => {
       console.error("Erro ao enviar e-mail:", error);

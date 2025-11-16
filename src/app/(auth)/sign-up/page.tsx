@@ -112,24 +112,25 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 px-4 sm:min-w-lg md:min-w-2xl">
+    <div className=" w-full flex flex-col gap-6 px-4 sm:min-w-lg md:min-w-2xl">
       {/* Título */}
       <h1 className="text-primary text-2xl font-bold text-center mb-6 md:text-3xl">
         Criar Conta
       </h1>
 
       <form onSubmit={handleSubmit(onClickRegister)}>
-        <div className="space-y-4">
+        <div>
           {/* Grid com duas colunas em desktop */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {/* Primeira Coluna */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col ">
               {/* Nome completo */}
               <Input
                 {...register("fullName")}
                 type="text"
                 placeholder="Nome completo"
                 error={errors.fullName?.message}
+                label="Nome completo"
               />
 
               {/* Gênero */}
@@ -141,9 +142,10 @@ const SignUpPage = () => {
                     onValueChange={field.onChange}
                     value={field.value}
                     error={errors.gender?.message}
+                    label="Gênero"
                   >
                     <SelectTrigger error={!!errors.gender}>
-                      <SelectValue placeholder="Gênero" />
+                      <SelectValue placeholder="Selecione o gênero" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value={Gender.MALE}>{Gender.MALE}</SelectItem>
@@ -158,27 +160,30 @@ const SignUpPage = () => {
               {/* Ano de ingresso */}
               <Input
                 {...register("enrollmentYear")}
-                placeholder="Ano de ingresso na universidade"
+                placeholder="2020"
                 error={errors.enrollmentYear?.message}
+                label="Ano de ingresso"
               />
 
               {/* Criar senha */}
               <Input
                 {...register("password")}
                 type="password"
-                placeholder="Crie uma senha"
+                placeholder="Digite sua senha"
                 error={errors.password?.message}
+                label="Senha"
               />
             </div>
 
             {/* Segunda Coluna */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col ">
               {/* Email de acesso */}
               <Input
                 {...register("email")}
                 type="email"
-                placeholder="E-mail de acesso"
+                placeholder="seu-email@exemplo.com"
                 error={errors.email?.message}
+                label="E-mail de acesso"
               />
 
               {/* Tipo de usuário */}
@@ -190,9 +195,10 @@ const SignUpPage = () => {
                     onValueChange={field.onChange}
                     value={field.value}
                     error={errors.userType?.message}
+                    label="Tipo de usuário"
                   >
                     <SelectTrigger error={!!errors.userType}>
-                      <SelectValue placeholder="Tipo de usuário" />
+                      <SelectValue placeholder="Selecione o tipo de usuário" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value={UserType.STUDENT}>
@@ -218,12 +224,19 @@ const SignUpPage = () => {
                     onValueChange={field.onChange}
                     value={field.value}
                     error={errors.course?.message}
+                    label="Curso realizado"
                   >
-                    <SelectTrigger error={!!errors.course}>
-                      <SelectValue placeholder="Curso realizado" />
+                    <SelectTrigger
+                      className="w-full max-w-full truncate"
+                      error={!!errors.course}
+                    >
+                      <SelectValue placeholder="Selecione seu curso" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Análise e Desenvolvimento de Sistemas">
+                      <SelectItem
+                        className="break-all"
+                        value="Análise e Desenvolvimento de Sistemas"
+                      >
                         Análise e Desenvolvimento de Sistemas
                       </SelectItem>
                       <SelectItem value="Gestão da Tecnologia da Informação">
@@ -241,8 +254,9 @@ const SignUpPage = () => {
               <Input
                 {...register("confirmPassword")}
                 type="password"
-                placeholder="Confirme a senha"
+                placeholder="Confirme sua senha"
                 error={errors.confirmPassword?.message}
+                label="Confirmar senha"
               />
             </div>
           </div>

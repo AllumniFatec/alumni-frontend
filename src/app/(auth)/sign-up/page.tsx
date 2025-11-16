@@ -136,7 +136,7 @@ const SignUpPage = () => {
       <form onSubmit={handleSubmit(onClickRegister)}>
         <div>
           {/* Grid com duas colunas em desktop */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6">
             {/* Primeira Coluna */}
             <div className="flex flex-col ">
               {/* Nome completo */}
@@ -179,15 +179,6 @@ const SignUpPage = () => {
                 error={errors.enrollmentYear?.message}
                 label="Ano de ingresso"
                 maxLength={4}
-              />
-
-              {/* Criar senha */}
-              <Input
-                {...register("password")}
-                type="password"
-                placeholder="Digite sua senha"
-                error={errors.password?.message}
-                label="Senha"
               />
             </div>
 
@@ -266,15 +257,27 @@ const SignUpPage = () => {
                   </Select>
                 )}
               />
-
-              <Input
-                {...register("confirmPassword")}
-                type="password"
-                placeholder="Confirme sua senha"
-                error={errors.confirmPassword?.message}
-                label="Confirmar senha"
-              />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6 md:mt-0">
+            {/* Criar senha */}
+            <Input
+              {...register("password")}
+              type="password"
+              placeholder="Digite sua senha"
+              error={errors.password?.message}
+              label="Senha"
+            />
+
+            {/* Confirmar senha */}
+            <Input
+              {...register("confirmPassword")}
+              type="password"
+              placeholder="Confirme sua senha"
+              error={errors.confirmPassword?.message}
+              label="Confirmar senha"
+            />
           </div>
         </div>
 

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { LoginInUser } from "@/models/users";
 import { AuthApi } from "@/apis/auth";
+import { toast } from "sonner";
 
 // Schema de validação para login
 const signInSchema = z.object({
@@ -41,6 +42,13 @@ const SignInPage = () => {
       router.push("/members");
     },
     onError: (error: any) => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
       console.error("Erro no login:", error);
     },
   });
@@ -63,12 +71,13 @@ const SignInPage = () => {
 
       <form onSubmit={handleSubmit(onSubmitLogin)}>
         {/* Campo Email */}
-        <div className="mb-4">
+        <div className="">
           <Input
             {...register("email")}
             type="email"
             placeholder="E-mail"
             error={errors.email?.message}
+            label="E-mail"
           />
         </div>
 
@@ -79,6 +88,7 @@ const SignInPage = () => {
             type="password"
             placeholder="Senha"
             error={errors.password?.message}
+            label="Senha"
           />
         </div>
 

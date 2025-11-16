@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { UserType, NewUser, Gender } from "@/models/users";
 import { AuthApi } from "@/apis/auth";
+import { toast } from "sonner";
 
 // função refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
 export const signUpSchema = z
@@ -91,8 +92,22 @@ const SignUpPage = () => {
     onSuccess: () => {
       console.warn("Usuário registrado com sucesso");
       router.push("/sign-in");
+      toast.success("Usuário registrado com sucesso", {
+        description: "Você pode agora fazer login com suas credenciais.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
     },
     onError: (error: any) => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
       console.error("Erro ao registrar usuário:", error);
     },
   });
@@ -163,6 +178,7 @@ const SignUpPage = () => {
                 placeholder="2020"
                 error={errors.enrollmentYear?.message}
                 label="Ano de ingresso"
+                maxLength={4}
               />
 
               {/* Criar senha */}

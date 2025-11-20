@@ -18,7 +18,7 @@ export default function AuthLayout({
       </div>
 
       {/* Container do formulário */}
-      <div className="w-full px-4 sm:w-fit sm:mx-auto">{children}</div>
+      <div className="w-full px-4 sm:max-w-3xl sm:mx-auto">{children}</div>
     </BaseContainerLayout>
   );
 }

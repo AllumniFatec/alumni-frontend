@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { AuthApi } from "@/apis/auth";
+import { toast } from "sonner";
 
 // Schema de validação para forgot password
 const forgotPasswordSchema = z.object({
@@ -39,6 +40,13 @@ const ForgotPasswordPage = () => {
       router.push("/sucess-reset-send-password");
     },
     onError: (error: any) => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
       console.error("Erro ao enviar e-mail:", error);
     },
   });
@@ -61,6 +69,7 @@ const ForgotPasswordPage = () => {
             type="email"
             placeholder="Informe seu email para recuperar a senha"
             error={errors.email?.message}
+            label="E-mail"
           />
         </div>
 

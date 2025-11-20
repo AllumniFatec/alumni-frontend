@@ -92,12 +92,13 @@ const ResetPasswordTokenPage = () => {
 
       <form onSubmit={handleSubmit(onSubmitResetPassword)}>
         {/* Campo Nova Senha */}
-        <div className="mb-4">
+        <div>
           <Input
             {...register("password")}
             type="password"
             placeholder="Digite sua nova senha"
             error={errors.password?.message}
+            label="Nova senha"
           />
         </div>
 
@@ -108,6 +109,7 @@ const ResetPasswordTokenPage = () => {
             type="password"
             placeholder="Confirme a nova senha"
             error={errors.confirmPassword?.message}
+            label="Confirmar senha"
           />
         </div>
 

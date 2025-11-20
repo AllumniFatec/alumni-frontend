@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 const ExamplesPage = () => {
   return (
@@ -224,6 +225,160 @@ const ExamplesPage = () => {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Seção de Demonstração de Sonner (Toast Notifications) */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            Demonstração de Sonner (Toast Notifications)
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Toasts Básicos */}
+            <div className="bg-card border border-gray-200 rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-4 text-card-foreground">
+                Tipos Básicos
+              </h3>
+              <div className="space-y-3">
+                <Button
+                  variant="outline"
+                  onClick={() => toast("Evento criado com sucesso!")}
+                  className="w-full"
+                >
+                  Toast Normal
+                </Button>
+                <Button
+                  variant="default"
+                  onClick={() =>
+                    toast.success("Usuário cadastrado com sucesso!", {
+                      className: "!bg-green-500 !text-white !border-green-600",
+                    })
+                  }
+                  className="w-full"
+                >
+                  Success
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() =>
+                    toast.error("Erro ao processar requisição", {
+                      className: "!bg-red-500 !text-white !border-red-600",
+                    })
+                  }
+                  className="w-full"
+                >
+                  Error
+                </Button>
+              </div>
+            </div>
+
+            {/* Toasts com Descrição */}
+            <div className="bg-card border border-gray-200 rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-4 text-card-foreground">
+                Com Descrição
+              </h3>
+              <div className="space-y-3">
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    toast.info("Atualização disponível", {
+                      description:
+                        "Uma nova versão está disponível para download.",
+                      className: "!bg-blue-500 !text-white !border-blue-600",
+                    })
+                  }
+                  className="w-full"
+                >
+                  Info
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    toast.warning("Atenção", {
+                      description: "Você tem ações pendentes para concluir.",
+                      className:
+                        "!bg-yellow-500 !text-white !border-yellow-600",
+                    })
+                  }
+                  className="w-full"
+                >
+                  Warning
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    toast.loading("Carregando...", {
+                      description: "Processando sua solicitação",
+                    })
+                  }
+                  className="w-full"
+                >
+                  Loading
+                </Button>
+              </div>
+            </div>
+
+            {/* Toasts com Ações */}
+            <div className="bg-card border border-gray-200 rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-semibold mb-4 text-card-foreground">
+                Com Ações
+              </h3>
+              <div className="space-y-3">
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    toast("Convite enviado", {
+                      description: "O usuário receberá um e-mail",
+                      action: {
+                        label: "Desfazer",
+                        onClick: () => toast("Convite cancelado"),
+                      },
+                    })
+                  }
+                  className="w-full"
+                >
+                  Toast com Ação
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    const promise = new Promise((resolve) =>
+                      setTimeout(resolve, 2000)
+                    );
+                    toast.promise(promise, {
+                      loading: "Salvando...",
+                      success: () => {
+                        return "Dados salvos!";
+                      },
+                      error: "Erro ao salvar",
+                      classNames: {
+                        success: "!bg-green-500 !text-white !border-green-600",
+                        error: "!bg-red-500 !text-white !border-red-600",
+                      },
+                    });
+                  }}
+                  className="w-full"
+                >
+                  Promise Toast
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    toast.success("Mensagem personalizada", {
+                      duration: 5000,
+                      position: "top-right",
+                      className: "!bg-green-500 !text-white !border-green-600",
+                    })
+                  }
+                  className="w-full"
+                >
+                  Custom Duration
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Dicas de Uso */}
         </div>
       </main>
     </div>

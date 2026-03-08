@@ -32,11 +32,11 @@ yarn-error.log*
 
 # env files - protege configurações locais
 .env.local
-.env.development.local
+.env.development
 .env.test.local
 .env.production.local
 .env
-
+.env.*
 # mantém template
 !.env.example
 

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, MessageCircle } from "lucide-react";
+import { Bell, MessageCircle, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
@@ -26,8 +26,8 @@ export function Header() {
         {/* Logo + Nav */}
         <div className="flex items-center gap-8">
           <Link href="/members" className="flex items-center gap-2">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-              <span className="text-primary text-xl font-black">F</span>
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary">
+              <GraduationCap className="size-5 text-white" />
             </div>
             <h1 className="text-slate-900 dark:text-slate-100 text-lg font-black leading-tight tracking-tight hidden md:block">
               FATEC <span className="text-primary">Alumni</span>

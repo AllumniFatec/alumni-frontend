@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { BaseContainerLayout } from "../../components/BaseContainerLayout";
 
 export default function AuthLayout({
@@ -10,10 +11,14 @@ export default function AuthLayout({
     <BaseContainerLayout>
       {/* Logo Container */}
       <div className="w-full mb-8 flex justify-center pt-10">
-        <img
+        <Image
           src="/basic-name-logo.png"
           alt="FATEC Sorocaba"
+          width={240}
+          height={80}
+          priority
           className="h-16 md:h-20"
+          style={{ width: "auto" }}
         />
       </div>
 

@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { UserType, NewUser, Gender } from "@/models/users";
 import { AuthApi } from "@/apis/auth";
+import { mapUserType, mapGender } from "@/hooks/mapUserType";
 import { toast } from "sonner";
 
 // função refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
@@ -35,7 +36,7 @@ export const signUpSchema = z
       .max(100, "A senha deve ter no máximo 100 caracteres")
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,
-        "senha inválida"
+        "senha inválida",
       ),
     confirmPassword: z.string(),
     userType: z.enum(UserType, {
@@ -118,9 +119,9 @@ const SignUpPage = () => {
       email: data.email,
       password: data.password,
       enrollmentYear: parseInt(data.enrollmentYear),
-      userType: data.userType,
+      userType: mapUserType(data.userType) as UserType,
       course: data.course,
-      gender: data.gender,
+      gender: mapGender(data.gender) as Gender,
     };
 
     signUpMutation.mutate(newUser);

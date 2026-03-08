@@ -4,13 +4,3 @@ export interface Course {
   abbreviation: string;
   create_date?: Date;
 }
-
-export interface CreateCourse {
-  name: string;
-  abbreviation: string;
-}
-
-export interface UpdateCourse {
-  name?: string;
-  abbreviation?: string;
-}

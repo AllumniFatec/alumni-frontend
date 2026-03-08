@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { UserType, UserGender, NewUser } from "@/models/users";
 import { AuthApi } from "@/apis/auth";
-import { mapUserType } from "@/hooks/mapUserType";
 import { toast } from "sonner";
 
 // função refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha

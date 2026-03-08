@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/Section";
 import { HomeCard } from "@/components/HomeCard";
@@ -11,13 +12,16 @@ export default function Home() {
         <nav className="bg-white shadow-sm px-6 py-4 mb-2">
           <div className="max-w-6xl mx-auto flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <img
+              <Image
                 src="/basic-name-logo.png"
                 alt="FATEC Sorocaba"
-                className="h-16"
+                width={180}
+                height={64}
+                priority
+                className="h-16 w-auto"
               />
             </div>
-            <Button variant="destructive">
+            <Button variant="destructive" asChild>
               <Link href="/sign-in">Acessar Sistema</Link>
             </Button>
           </div>
@@ -25,10 +29,12 @@ export default function Home() {
 
         <div className="relative">
           <div className="h-96 relative overflow-hidden">
-            <img
+            <Image
               src="/fatec-entrance.png"
               alt="FATEC Sorocaba Entrance"
-              className="w-full h-full object-contain  inset-0"
+              fill
+              priority
+              className="object-contain"
             />
             <div className="absolute inset-0 bg-opacity-50">
               <div className="absolute inset-0 flex items-center justify-center">
@@ -77,7 +83,7 @@ export default function Home() {
               tem acesso aos melhores professores e alunos dedicados de Sorocaba
               e Região
             </p>
-            <Button variant="destructive">
+            <Button variant="destructive" asChild>
               <Link href="/empresa-parceira">Seja um Parceiro!</Link>
             </Button>
           </div>

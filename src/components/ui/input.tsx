@@ -1,9 +1,9 @@
 import * as React from "react";
+import { useState, useId } from "react";
 
 import { cn } from "@/lib/utils";
 import { BaseLabel } from "@/components/BaseLabel";
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
 
 interface InputProps extends React.ComponentProps<"input"> {
   error?: string;
@@ -11,7 +11,8 @@ interface InputProps extends React.ComponentProps<"input"> {
 }
 
 function Input({ className, type, error, label, id, ...props }: InputProps) {
-  const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+  const generatedId = useId();
+  const inputId = id || `input-${generatedId}`;
   const [showPassword, setShowPassword] = useState(false);
 
   const isPassword = type === "password";

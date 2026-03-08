@@ -1,9 +1,3 @@
-/**
- * Configuração de ambiente - Client Side Only
- *
- * Configuração simples para aplicação frontend que consome APIs externas
- */
-
 // ===== CONFIGURAÇÃO PRINCIPAL =====
 export const config = {
   // 🌐 API Externa
@@ -37,9 +31,8 @@ export const validateConfig = (): void => {
   }
 };
 
-// ===== LOG EM DESENVOLVIMENTO =====
 if (isDevelopment && typeof window !== "undefined") {
-  console.log("🚀 Alumni Config:", {
+  console.log("Alumni Config:", {
     apiUrl: config.api.baseUrl,
     appName: config.app.name,
     version: config.app.version,

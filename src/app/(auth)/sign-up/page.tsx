@@ -15,9 +15,9 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { UserType, NewUser, Gender } from "@/models/users";
+import { UserType, UserGender, NewUser } from "@/models/users";
 import { AuthApi } from "@/apis/auth";
-import { mapUserType, mapGender } from "@/hooks/mapUserType";
+import { mapUserType } from "@/hooks/mapUserType";
 import { toast } from "sonner";
 
 // função refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
@@ -39,10 +39,13 @@ export const signUpSchema = z
         "senha inválida",
       ),
     confirmPassword: z.string(),
-    userType: z.enum(UserType, {
-      message: "Selecione um tipo de usuário válido",
-    }),
-    gender: z.enum(Gender, {
+    userType: z.enum(
+      [UserType.STUDENT, UserType.ALUMNI, UserType.TEACHER, UserType.ADMIN],
+      {
+        message: "Selecione um tipo de usuário válido",
+      },
+    ),
+    gender: z.enum([UserGender.MALE, UserGender.FEMALE, UserGender.OTHERS], {
       message: "Selecione um gênero válido",
     }),
   })
@@ -60,7 +63,7 @@ export type SignUpData = {
   password: string;
   confirmPassword: string;
   userType: UserType;
-  gender: Gender;
+  gender: UserGender;
 };
 
 const SignUpPage = () => {
@@ -82,8 +85,8 @@ const SignUpPage = () => {
       course: "",
       password: "",
       confirmPassword: "",
-      userType: "" as UserType,
-      gender: "" as Gender,
+      userType: "" as any,
+      gender: "" as any,
     },
   });
 
@@ -118,10 +121,16 @@ const SignUpPage = () => {
       name: data.fullName,
       email: data.email,
       password: data.password,
-      enrollmentYear: parseInt(data.enrollmentYear),
-      userType: mapUserType(data.userType) as UserType,
-      course: data.course,
-      gender: mapGender(data.gender) as Gender,
+      gender: data.gender as UserGender,
+      user_type: data.userType,
+      courses: [
+        {
+          course_id: data.course,
+          course_name: data.course,
+          abbreviation: data.course,
+          enrollmentYear: parseInt(data.enrollmentYear),
+        },
+      ],
     };
 
     signUpMutation.mutate(newUser);
@@ -164,10 +173,11 @@ const SignUpPage = () => {
                       <SelectValue placeholder="Selecione o gênero" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={Gender.MALE}>{Gender.MALE}</SelectItem>
-                      <SelectItem value={Gender.FEMALE}>
-                        {Gender.FEMALE}
+                      <SelectItem value={UserGender.MALE}>Masculino</SelectItem>
+                      <SelectItem value={UserGender.FEMALE}>
+                        Feminino
                       </SelectItem>
+                      <SelectItem value={UserGender.OTHERS}>Outros</SelectItem>
                     </SelectContent>
                   </Select>
                 )}
@@ -209,15 +219,11 @@ const SignUpPage = () => {
                       <SelectValue placeholder="Selecione o tipo de usuário" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={UserType.STUDENT}>
-                        {UserType.STUDENT}
-                      </SelectItem>
+                      <SelectItem value={UserType.STUDENT}>Aluno</SelectItem>
                       <SelectItem value={UserType.TEACHER}>
-                        {UserType.TEACHER}
+                        Professor
                       </SelectItem>
-                      <SelectItem value={UserType.ALUMNI}>
-                        {UserType.ALUMNI}
-                      </SelectItem>
+                      <SelectItem value={UserType.ALUMNI}>Egresso</SelectItem>
                     </SelectContent>
                   </Select>
                 )}

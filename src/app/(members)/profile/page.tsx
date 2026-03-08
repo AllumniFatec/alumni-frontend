@@ -1,6 +1,6 @@
 import { Section } from "@/components/Section";
 import { Mail, MapPin, Briefcase, GraduationCap, Calendar } from "lucide-react";
-import { UserType, Gender } from "@/models/users";
+import { UserType, UserGender } from "@/models/users";
 
 const mockUser = {
   id: 1,
@@ -9,7 +9,7 @@ const mockUser = {
   enrollmentYear: 2019,
   userType: UserType.ALUMNI,
   course: "Análise e Desenvolvimento de Sistemas",
-  gender: Gender.MALE,
+  gender: UserGender.MALE,
   description:
     "Desenvolvedor full stack apaixonado por tecnologia e inovação. Formado pela FATEC Sorocaba em 2022, atualmente trabalhando na área de produtos SaaS. Amo compartilhar conhecimento e contribuir com a comunidade.",
   localWorkplace: "TechSorocaba – Sorocaba, SP",

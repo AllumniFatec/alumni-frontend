@@ -1,8 +1,7 @@
 import axios from "axios";
 import { Post } from "@/models/posts";
 
-const API_BASE_URL = "https://jsonplaceholder.typicode.com";
-
+const API_BASE_URL = "http://localhost:3001"; // URL do json-server local
 export class MockPostApi {
   static async getPosts(): Promise<Post[]> {
     try {
@@ -44,7 +43,7 @@ export class MockPostApi {
   static async updatePost(
     postId: number,
     title: string,
-    body: string
+    body: string,
   ): Promise<Post> {
     try {
       const response = await axios.put(`${API_BASE_URL}/posts/${postId}`, {

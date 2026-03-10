@@ -1,8 +1,8 @@
-import { AuthResponse, LoginInUser, NewUser } from "@/models/users";
+import { AuthResponse, LoginUser, NewUser } from "@/models/users";
 import { apiBase } from "@/lib/axiosInstance";
 
 export class AuthApi {
-  static async signIn(loginInUser: LoginInUser): Promise<AuthResponse> {
+  static async signIn(loginInUser: LoginUser): Promise<AuthResponse> {
     try {
       console.warn("loginInUser:", loginInUser);
       const response = await apiBase.post<AuthResponse>(

@@ -9,12 +9,3 @@ export interface UserSkill {
   skill?: Skill;
   create_date: Date;
 }
-
-export interface CreateUserSkill {
-  user_id: string;
-  skill_id: string;
-}
-
-export interface UpdateUserSkill {
-  skill_id?: string;
-}

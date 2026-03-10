@@ -34,18 +34,6 @@ export interface Post {
   deleted_date?: Date;
 }
 
-export interface CreatePost {
-  content: string;
-  images?: Record<string, unknown>[];
-  author_id: string;
-}
-
-export interface UpdatePost {
-  content?: string;
-  images?: Record<string, unknown>[];
-  status?: Status;
-}
-
 export interface LikePost {
   post_id: string;
   user_id: string;

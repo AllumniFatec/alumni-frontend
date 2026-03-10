@@ -1,6 +1,7 @@
 import { Section } from "@/components/Section";
 import { Building2, Calendar, User, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { mockJobDetail } from "@/mocks";
 
 interface JobDetailPageProps {
   params: {
@@ -16,27 +17,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
   // const job = await getJobById(id);
 
   // Mock data para demonstração
-  const mockJob = {
-    job_id: id,
-    title: "Desenvolvedor Full Stack",
-    description:
-      "Buscamos desenvolvedor full stack com experiência em React e Node.js. Trabalho híbrido, benefícios competitivos e ambiente de crescimento. \n\nResponsabilidades:\n- Desenvolver e manter aplicações web\n- Trabalhar em equipe com designers e outros desenvolvedores\n- Participar de code reviews\n- Implementar testes automatizados\n\nRequisitos:\n- 3+ anos de experiência com React\n- Conhecimento em Node.js e Express\n- Experiência com TypeScript\n- Conhecimento em bancos de dados SQL e NoSQL",
-    company: "TechSorocaba",
-    images: [],
-    status: "active" as const,
-    author_id: "1",
-    author: {
-      user_id: "1",
-      name: "João Silva",
-      email: "joao@techsorocaba.com",
-      password: "",
-      user_type: "alumni" as const,
-      status: "active" as const,
-      profile_image: "",
-      create_date: new Date(),
-    },
-    create_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 dias atrás
-  };
+  const mockJob = { ...mockJobDetail, job_id: id };
 
   const formatDate = (date: Date): string => {
     return new Intl.DateTimeFormat("pt-BR", {

@@ -19,7 +19,7 @@ export const PostCard = ({
       <div
         className={cn(
           `bg-white border border-gray-200 rounded-lg p-4 shadow-sm `,
-          className
+          className,
         )}
       >
         {/* Skeleton do título */}
@@ -44,21 +44,20 @@ export const PostCard = ({
     <div
       className={`bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow ${className}`}
     >
-      {/* Título do post */}
-      <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-        {post.title}
-      </h3>
-
       {/* Corpo do post */}
-      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-        {post.body}
+      <p className="text-gray-700 text-sm leading-relaxed mb-3">
+        {post.content}
       </p>
 
-      {/* Footer com ID do usuário */}
-      <div className="mt-3 pt-2 border-t border-gray-100">
+      {/* Footer com autor */}
+      <div className="mt-3 pt-2 border-t border-gray-100 flex items-center justify-between">
         <span className="text-xs text-gray-400">
-          Por usuário #{post.userId}
+          {post.author ? `Por ${post.author.name}` : `Autor #${post.author_id}`}
         </span>
+        <div className="flex items-center gap-3 text-xs text-gray-400">
+          <span>{post.likes_count} curtidas</span>
+          <span>{post.comments_count} comentários</span>
+        </div>
       </div>
     </div>
   );

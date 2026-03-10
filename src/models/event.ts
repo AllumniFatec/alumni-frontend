@@ -15,23 +15,3 @@ export interface Event {
   updated_at?: Date;
   deleted_date?: Date;
 }
-
-export interface CreateEvent {
-  title: string;
-  description: string;
-  local: string;
-  date_start: Date;
-  date_end: Date;
-  images?: Record<string, unknown>[];
-  author_id: string;
-}
-
-export interface UpdateEvent {
-  title?: string;
-  description?: string;
-  local?: string;
-  date_start?: Date;
-  date_end?: Date;
-  images?: Record<string, unknown>[];
-  status?: Status;
-}

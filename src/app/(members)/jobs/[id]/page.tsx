@@ -1,6 +1,11 @@
+"use client";
+
 import { Section } from "@/components/Section";
-import { Building2, Calendar, User, ArrowLeft } from "lucide-react";
+import { InfoCard } from "@/components/InfoCard";
+import { Building2, Clock, ArrowLeft, User } from "lucide-react";
 import Link from "next/link";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { mockJobDetail } from "@/mocks";
 
 interface JobDetailPageProps {
@@ -19,18 +24,10 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
   // Mock data para demonstração
   const mockJob = { ...mockJobDetail, job_id: id };
 
-  const formatDate = (date: Date): string => {
-    return new Intl.DateTimeFormat("pt-BR", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    }).format(new Date(date));
-  };
-
   return (
     <div>
       <Section title="Detalhes da Vaga">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {/* Back button */}
           <Link
             href="/jobs"
@@ -41,61 +38,76 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
           </Link>
 
           {/* Job Header */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-16 h-16 rounded-lg bg-primary/5 flex items-center justify-center p-3">
-                {mockJob.images && mockJob.images.length > 0 ? (
-                  <img
-                    className="w-full h-full object-contain"
-                    src={mockJob.images[0] as string}
-                    alt={mockJob.company}
-                  />
-                ) : (
-                  <span className="text-2xl font-bold text-primary/40">
-                    {mockJob.company.charAt(0).toUpperCase()}
-                  </span>
-                )}
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                Vaga de Emprego
+              </span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight mb-4">
+              {mockJob.title}
+            </h1>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-600 dark:text-slate-400">
+              <div className="flex items-center gap-1.5 font-semibold text-primary">
+                <Building2 className="w-5 h-5" />
+                {mockJob.company}
               </div>
-              <div className="flex-1">
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">
-                  {mockJob.title}
-                </h1>
-                <div className="flex flex-wrap gap-4 text-sm text-slate-600 dark:text-slate-400">
-                  <span className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4" />
-                    {mockJob.company}
-                  </span>
-                  {mockJob.author && (
-                    <span className="flex items-center gap-2">
-                      <User className="w-4 h-4" />
-                      {mockJob.author.name}
-                    </span>
-                  )}
-                  <span className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    Publicado em {formatDate(mockJob.create_date)}
-                  </span>
+              {mockJob.author && (
+                <div className="flex items-center gap-1.5">
+                  <User className="w-5 h-5" />
+                  {mockJob.author.name}
                 </div>
+              )}
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-5 h-5" />
+                Postado{" "}
+                {formatDistanceToNow(new Date(mockJob.create_date), {
+                  locale: ptBR,
+                  addSuffix: true,
+                })}
               </div>
             </div>
+          </div>
 
-            {/* Job Description */}
-            <div className="border-t border-slate-200 dark:border-slate-800 pt-6 mt-6">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-4">
-                Descrição da Vaga
-              </h2>
-              <div className="prose dark:prose-invert max-w-none">
-                <p className="text-slate-700 dark:text-slate-300 whitespace-pre-line leading-relaxed">
-                  {mockJob.description}
-                </p>
-              </div>
+          {/* Hero Banner */}
+          {mockJob.images && mockJob.images.length > 0 && (
+            <div className="w-full h-[400px] bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl shadow-lg mb-8 overflow-hidden">
+              <img
+                className="w-full h-full object-cover"
+                src={(mockJob.images[0] as any)?.url || ""}
+                alt={mockJob.title}
+              />
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="space-y-8">
+            {/* Company Info Card */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <InfoCard
+                icon={<Building2 className="w-5 h-5" />}
+                label="Empresa"
+                title={mockJob.company}
+                subtitle="Confira o perfil da empresa"
+              />
+              {mockJob.author && (
+                <InfoCard
+                  icon={<User className="w-5 h-5" />}
+                  label="Publicado por"
+                  title={mockJob.author.name}
+                  subtitle={mockJob.author.email}
+                />
+              )}
             </div>
 
-            {/* Action Button */}
-            <div className="border-t border-slate-200 dark:border-slate-800 pt-6 mt-6">
-              <button className="w-full sm:w-auto px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors">
-                Candidatar-se
-              </button>
+            {/* Description Section */}
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold border-b border-slate-200 dark:border-slate-800 pb-2">
+                Sobre a Vaga
+              </h3>
+              <div className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+                {mockJob.description}
+              </div>
             </div>
           </div>
         </div>

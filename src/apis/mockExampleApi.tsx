@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Post } from "@/models/posts";
 
-const API_BASE_URL = "http://localhost:3001"; // URL do json-server local
+const API_BASE_URL = config.api.baseUrl; // URL do json-server local
 export class MockPostApi {
   static async getPosts(): Promise<Post[]> {
     try {

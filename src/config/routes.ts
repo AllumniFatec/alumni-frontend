@@ -13,11 +13,11 @@ export enum AuthRoutes {
 }
 
 export enum MembersRoutes {
-  Root = "/members",
-  Posts = "/members/posts",
-  Events = "/members/events",
-  Jobs = "/members/jobs",
-  Profile = "/members/profile",
+  Members = "/members",
+  Posts = "/posts",
+  Events = "/events",
+  Jobs = "/jobs",
+  Profile = "/profile",
 }
 
 export enum ApiRoutes {

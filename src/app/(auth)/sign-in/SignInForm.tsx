@@ -35,7 +35,8 @@ export const SignInForm = () => {
   const signInMutation = useMutation({
     mutationFn: (loginData: SignInData) => AuthApi.signIn(loginData),
     onSuccess: () => {
-      router.push(MembersRoutes.Root);
+      console.log("Login bem-sucedido");
+      router.push(MembersRoutes.Members);
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error) && error.response?.status === 403) {

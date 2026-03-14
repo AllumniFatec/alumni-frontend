@@ -14,8 +14,8 @@ export function middleware(request: NextRequest) {
   const isAuthPath = PUBLIC_AUTH_PATHS.some(
     (path) => pathname === path || pathname.startsWith(`${path}/`),
   );
-  const isMembersPath = PROTECTED_PATHS.some((path) =>
-    pathname.startsWith(path),
+  const isMembersPath = PROTECTED_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`),
   );
 
   // Sem token tentando acessar área protegida → redireciona pro login

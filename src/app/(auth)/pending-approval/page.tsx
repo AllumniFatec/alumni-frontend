@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Clock } from "lucide-react";
 import { AuthRoutes } from "@/config/routes";
+import Link from "next/link";
 
 const PendingApprovalPage = () => {
   const router = useRouter();
@@ -45,19 +46,19 @@ const PendingApprovalPage = () => {
 
       {/* Links */}
       <div className="flex items-center justify-center gap-4 text-sm mt-4">
-        <a
+        <Link
           href={AuthRoutes.SignUp}
           className="text-primary hover:text-primary/80 transition-colors font-medium"
         >
           Criar outra conta
-        </a>
+        </Link>
         <span className="text-muted-foreground">|</span>
-        <a
+        <Link
           href={AuthRoutes.ForgotPassword}
           className="text-primary hover:text-primary/80 transition-colors font-medium"
         >
           Esqueci a Senha
-        </a>
+        </Link>
       </div>
     </div>
   );

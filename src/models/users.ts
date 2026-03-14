@@ -69,8 +69,9 @@ export interface NewUser {
   email: string;
   password: string;
   gender: UserGender;
-  user_type: UserType;
-  courses: UserCourse[];
+  userType: UserType;
+  course: string;
+  enrollmentYear: string;
 }
 
 export interface UpdateUser {

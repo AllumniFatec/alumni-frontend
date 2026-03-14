@@ -11,8 +11,8 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(TOKEN_COOKIE)?.value;
 
-  const isAuthPath = PUBLIC_AUTH_PATHS.some((path) =>
-    pathname.startsWith(path),
+  const isAuthPath = PUBLIC_AUTH_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`),
   );
   const isMembersPath = PROTECTED_PATHS.some((path) =>
     pathname.startsWith(path),

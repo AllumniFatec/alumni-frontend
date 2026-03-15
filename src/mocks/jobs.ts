@@ -1,5 +1,4 @@
-import { Job } from "@/models/job";
-import { Status } from "@/models/users";
+import { Job, JobStatus } from "@/models/job";
 
 export const mockJobs: Job[] = [
   {
@@ -9,7 +8,7 @@ export const mockJobs: Job[] = [
     description:
       "Buscamos desenvolvedor full stack com experiência em React e Node.js. Trabalho híbrido, benefícios competitivos e ambiente de crescimento.",
     images: [],
-    status: Status.ACTIVE,
+    status: JobStatus.ACTIVE,
     author_id: "1",
     create_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 dias atrás
   },
@@ -20,7 +19,7 @@ export const mockJobs: Job[] = [
     description:
       "Vaga para analista de dados com conhecimento em Python, SQL e Power BI. Projeto de longa duração em empresa de tecnologia educacional.",
     images: [],
-    status: Status.ACTIVE,
+    status: JobStatus.ACTIVE,
     author_id: "2",
     create_date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 dia atrás
   },
@@ -31,7 +30,7 @@ export const mockJobs: Job[] = [
     description:
       "Empresa fintech busca engenheiro sênior para liderar squad de pagamentos. Experiência com microserviços, Java e arquitetura de sistemas distribuídos.",
     images: [],
-    status: Status.ACTIVE,
+    status: JobStatus.ACTIVE,
     author_id: "3",
     create_date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 dias atrás
   },
@@ -42,7 +41,7 @@ export const mockJobs: Job[] = [
     description:
       "Procuramos designer criativo com domínio de Figma e experiência em design systems. Foco em produtos SaaS para PMEs.",
     images: [],
-    status: Status.ACTIVE,
+    status: JobStatus.ACTIVE,
     author_id: "4",
     create_date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 dias atrás
   },
@@ -53,7 +52,7 @@ export const mockJobs: Job[] = [
     description:
       "Oportunidade para engenheiro de infraestrutura com AWS, Terraform e Kubernetes. Equipe internacional, cultura ágil.",
     images: [],
-    status: Status.ACTIVE,
+    status: JobStatus.ACTIVE,
     author_id: "5",
     create_date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 1 semana atrás
   },
@@ -64,7 +63,7 @@ export const mockJobs: Job[] = [
     description:
       "Estágio para alunos dos últimos anos de ADS ou SI. Tecnologias: React, TypeScript e Node.js. Ótima oportunidade de crescimento.",
     images: [],
-    status: Status.ACTIVE,
+    status: JobStatus.ACTIVE,
     author_id: "6",
     create_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 dias atrás
   },
@@ -81,7 +80,7 @@ export const mockJobDetail: Job = {
       url: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=400&fit=crop",
     },
   ],
-  status: Status.ACTIVE,
+  status: JobStatus.ACTIVE,
   author_id: "1",
   author: {
     user_id: "1",
@@ -92,7 +91,7 @@ export const mockJobDetail: Job = {
     biography: undefined,
     perfil_photo: undefined,
     receive_notifications: false,
-    user_status: Status.ACTIVE,
+    user_status: JobStatus.ACTIVE,
     user_type: undefined as any,
     social_media: [],
     courses: [],

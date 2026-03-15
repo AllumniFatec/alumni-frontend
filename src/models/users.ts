@@ -12,14 +12,6 @@ export enum UserType {
   ADMIN = "Admin",
 }
 
-export enum Status {
-  ACTIVE = "Active",
-  IN_ANALYSIS = "InAnalysis",
-  SUSPENDED = "Suspended",
-  BANNED = "Banned",
-  DELETED = "Deleted",
-}
-
 export enum SocialMediaType {
   Instagram = "Instagram",
   Linkedin = "Linkedin",

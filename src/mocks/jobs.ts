@@ -1,4 +1,5 @@
 import { Job, JobStatus } from "@/models/job";
+import { UserStatus } from "@/models/users";
 
 export const mockJobs: Job[] = [
   {
@@ -91,7 +92,7 @@ export const mockJobDetail: Job = {
     biography: undefined,
     perfil_photo: undefined,
     receive_notifications: false,
-    user_status: JobStatus.ACTIVE,
+    user_status: UserStatus.ACTIVE,
     user_type: undefined as any,
     social_media: [],
     courses: [],

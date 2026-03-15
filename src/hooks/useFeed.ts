@@ -2,13 +2,17 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { FeedApi } from "@/apis/feed";
 import { FeedPost, FeedEvent, FeedJob } from "@/models";
 
+const FEED_PAGE_SIZE = 20;
+
 export function useFeed() {
   const query = useInfiniteQuery({
     queryKey: ["feed"],
     queryFn: ({ pageParam = 1 }) => FeedApi.getFeed(pageParam as number),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
-      lastPage.posts.length === 20 ? allPages.length + 1 : undefined,
+      lastPage.posts.length === FEED_PAGE_SIZE
+        ? allPages.length + 1
+        : undefined,
   });
 
   const posts: FeedPost[] = query.data?.pages.flatMap((p) => p.posts) ?? [];

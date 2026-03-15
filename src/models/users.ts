@@ -12,6 +12,14 @@ export enum UserType {
   ADMIN = "Admin",
 }
 
+export enum UserStatus {
+  ACTIVE = "Active",
+  IN_ANALYSIS = "InAnalysis",
+  SUSPENDED = "Suspended",
+  BANNED = "Banned",
+  DELETED = "Deleted",
+}
+
 export enum SocialMediaType {
   Instagram = "Instagram",
   Linkedin = "Linkedin",
@@ -44,7 +52,7 @@ export interface User {
   biography?: string;
   perfil_photo?: string;
   receive_notifications: boolean;
-  user_status: Status;
+  user_status: UserStatus;
   user_type: UserType;
   social_media: SocialMedia[];
   courses: UserCourse[];

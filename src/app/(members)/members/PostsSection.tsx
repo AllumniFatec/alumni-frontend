@@ -1,8 +1,9 @@
+import { useMemo } from "react";
 import { Section } from "@/components/Section";
 import { PostCard } from "@/components/Posts";
 import { Spinner } from "@/components/ui/spinner";
 import { EmptyState } from "@/components/EmptyState";
-import { FeedPost, PostStatus } from "@/models";
+import { FeedPost, Post, PostStatus } from "@/models";
 
 interface PostsSectionProps {
   posts: FeedPost[];
@@ -19,6 +20,27 @@ export function PostsSection({
   hasNextPage,
   fetchNextPage,
 }: PostsSectionProps) {
+  const mappedPosts = useMemo<Post[]>(
+    () =>
+      posts.map((post) => ({
+        post_id: post.id,
+        content: post.content,
+        likes_count: post.likes_count,
+        comments_count: post.comments_count,
+        author_id: post.user_id,
+        author: {
+          name: post.user_name,
+          perfil_photo: post.user_perfil_photo,
+        },
+        images: [],
+        status: PostStatus.ACTIVE,
+        likes: [],
+        comments: [],
+        create_date: new Date(post.create_date),
+      })),
+    [posts],
+  );
+
   if (!isLoading && posts.length === 0) {
     return (
       <Section title="Últimos Posts">
@@ -38,26 +60,8 @@ export function PostsSection({
             <PostCard key={i} isLoading />
           ))}
 
-        {posts.map((post) => (
-          <PostCard
-            key={post.id}
-            post={{
-              post_id: post.id,
-              content: post.content,
-              likes_count: post.likes_count,
-              comments_count: post.comments_count,
-              author_id: post.user_id,
-              author: {
-                name: post.user_name,
-                perfil_photo: post.user_perfil_photo,
-              },
-              images: [],
-              status: PostStatus.ACTIVE,
-              likes: [],
-              comments: [],
-              create_date: new Date(post.create_date),
-            }}
-          />
+        {mappedPosts.map((post) => (
+          <PostCard key={post.post_id} post={post} />
         ))}
 
         {hasNextPage && (

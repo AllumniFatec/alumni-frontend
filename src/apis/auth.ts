@@ -75,4 +75,14 @@ export class AuthApi {
       throw error;
     }
   }
+
+  static async logout(): Promise<{ message: string }> {
+    try {
+      const response = await apiBase.post<{ message: string }>("/auth/logout");
+      return response.data;
+    } catch (error) {
+      console.error("logout error", error);
+      throw error;
+    }
+  }
 }

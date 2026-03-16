@@ -85,4 +85,16 @@ export class AuthApi {
       throw error;
     }
   }
+
+  static async getMe(): Promise<{
+    id: string;
+    name: string;
+    email: string;
+    admin: boolean;
+    perfil_photo: { url: string } | null;
+  }> {
+    const response = await apiBase.get("/auth/me");
+    console.log("getMe response:", response.data); // Log para depuração
+    return response.data;
+  }
 }

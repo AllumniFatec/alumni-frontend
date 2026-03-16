@@ -38,6 +38,7 @@ export default function JobsPage() {
     hasNextPage,
     isFetchingNextPage,
   } = useJobs();
+  console.log("Jobs data:", data); // Log para verificar a estrutura dos dados
 
   const allJobs = useMemo(
     () => data?.pages.flatMap((page) => page) ?? [],

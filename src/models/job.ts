@@ -53,6 +53,7 @@ export interface JobListItem {
   workplace: string;
   city: string;
   state: string;
+  author_id: string;
   employment_type: EmploymentType;
   work_model: WorkModel;
   status: string;

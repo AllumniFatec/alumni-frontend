@@ -11,6 +11,7 @@ import { AuthApi } from "@/apis/auth";
 import { AuthRoutes, MembersRoutes } from "@/config/routes";
 import { toast } from "sonner";
 import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 
 const signInSchema = z.object({
   email: z.email("E-mail inválido"),
@@ -21,6 +22,7 @@ type SignInData = z.infer<typeof signInSchema>;
 
 export const SignInForm = () => {
   const router = useRouter();
+  const { refreshUser } = useAuth();
 
   const {
     register,
@@ -34,8 +36,8 @@ export const SignInForm = () => {
 
   const signInMutation = useMutation({
     mutationFn: (loginData: SignInData) => AuthApi.signIn(loginData),
-    onSuccess: () => {
-      console.log("Login bem-sucedido");
+    onSuccess: async () => {
+      await refreshUser();
       router.push(MembersRoutes.Members);
     },
     onError: (error: unknown) => {

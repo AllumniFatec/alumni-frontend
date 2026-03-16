@@ -26,6 +26,7 @@ export enum ApiRoutes {
   Login = "/auth/login",
   Register = "/auth/register",
   Logout = "/auth/logout",
+  Me = "/auth/me",
   ConfirmCode = "/auth/confirm-code",
   ForgotPassword = "/password/forgot-password",
   ResetPassword = "/password/reset-password",

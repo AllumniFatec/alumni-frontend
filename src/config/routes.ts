@@ -17,6 +17,8 @@ export enum MembersRoutes {
   Posts = "/posts",
   Events = "/events",
   Jobs = "/jobs",
+  JobNew = "/jobs/new",
+  JobEdit = "/jobs/:id/edit",
   Profile = "/profile",
 }
 
@@ -27,4 +29,6 @@ export enum ApiRoutes {
   ConfirmCode = "/auth/confirm-code",
   ForgotPassword = "/password/forgot-password",
   ResetPassword = "/password/reset-password",
+  Jobs = "/job",
+  JobById = "/job/:id",
 }

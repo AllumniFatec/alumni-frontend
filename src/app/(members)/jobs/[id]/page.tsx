@@ -1,34 +1,70 @@
 "use client";
 
+import { useParams, useRouter } from "next/navigation";
 import { Section } from "@/components/Section";
 import { InfoCard } from "@/components/InfoCard";
-import { Building2, Clock, ArrowLeft, User } from "lucide-react";
+import { ErrorState } from "@/components/ErrorState";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Building2,
+  Clock,
+  ArrowLeft,
+  User,
+  MapPin,
+  Briefcase,
+  GraduationCap,
+} from "lucide-react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { mockJobDetail } from "@/mocks";
+import { useJobById, useDeleteJob } from "@/hooks/useJobs";
+import { AuthStorage } from "@/store/auth";
+import { toast } from "sonner";
+import {
+  EmploymentTypeLabel,
+  SeniorityLevelLabel,
+  WorkModelLabel,
+} from "@/models/job";
 
-interface JobDetailPageProps {
-  params: {
-    id: string;
-  };
+function getCurrentUserId(): string | null {
+  const token = AuthStorage.getToken();
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.id ?? null;
+  } catch {
+    return null;
+  }
 }
 
-export default function JobDetailPage({ params }: JobDetailPageProps) {
-  const { id } = params;
+export default function JobDetailPage() {
+  const params = useParams();
+  const router = useRouter();
+  const id = params.id as string;
 
-  // TODO: Buscar job da API usando o ID
-  // import { getJobById } from "@/apis/jobs";
-  // const job = await getJobById(id);
+  const { data: job, isLoading, isError, refetch } = useJobById(id);
+  const { mutateAsync: deleteJob, isPending: isDeletingJob } = useDeleteJob();
+  const currentUserId = getCurrentUserId();
+  const isAuthor = !!job && !!currentUserId && job.author_id === currentUserId;
 
-  // Mock data para demonstração
-  const mockJob = { ...mockJobDetail, job_id: id };
+  async function handleDelete() {
+    if (!confirm("Tem certeza que deseja excluir esta vaga?")) return;
+    try {
+      await deleteJob(id);
+      toast.success("Vaga excluída com sucesso!");
+      router.push("/jobs");
+    } catch {
+      toast.error("Erro ao excluir a vaga", {
+        description: "Tente novamente.",
+      });
+    }
+  }
 
   return (
     <div>
       <Section title="Detalhes da Vaga">
-        <div className="max-w-6xl mx-auto">
-          {/* Back button */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
           <Link
             href="/jobs"
             className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 mb-6 transition-colors"
@@ -37,79 +73,139 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
             Voltar para vagas
           </Link>
 
-          {/* Job Header */}
-          <div className="mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                Vaga de Emprego
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight mb-4">
-              {mockJob.title}
-            </h1>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-600 dark:text-slate-400">
-              <div className="flex items-center gap-1.5 font-semibold text-primary">
-                <Building2 className="w-5 h-5" />
-                {mockJob.company}
-              </div>
-              {mockJob.author && (
-                <div className="flex items-center gap-1.5">
-                  <User className="w-5 h-5" />
-                  {mockJob.author.name}
-                </div>
-              )}
-              <div className="flex items-center gap-1.5">
-                <Clock className="w-5 h-5" />
-                Postado{" "}
-                {formatDistanceToNow(new Date(mockJob.create_date), {
-                  locale: ptBR,
-                  addSuffix: true,
-                })}
-              </div>
-            </div>
-          </div>
+          {isError && <ErrorState onRetry={refetch} />}
 
-          {/* Hero Banner */}
-          {mockJob.images && mockJob.images.length > 0 && (
-            <div className="w-full h-[400px] bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl shadow-lg mb-8 overflow-hidden">
-              <img
-                className="w-full h-full object-cover"
-                src={(mockJob.images[0] as any)?.url || ""}
-                alt={mockJob.title}
-              />
+          {isLoading && (
+            <div className="space-y-6">
+              <Skeleton className="h-8 w-1/3" />
+              <Skeleton className="h-6 w-1/2" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Skeleton className="h-24 rounded-xl" />
+                <Skeleton className="h-24 rounded-xl" />
+              </div>
+              <Skeleton className="h-48 rounded-xl" />
             </div>
           )}
 
-          {/* Content */}
-          <div className="space-y-8">
-            {/* Company Info Card */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InfoCard
-                icon={<Building2 className="w-5 h-5" />}
-                label="Empresa"
-                title={mockJob.company}
-                subtitle="Confira o perfil da empresa"
-              />
-              {mockJob.author && (
-                <InfoCard
-                  icon={<User className="w-5 h-5" />}
-                  label="Publicado por"
-                  title={mockJob.author.name}
-                  subtitle={mockJob.author.email}
-                />
-              )}
-            </div>
-
-            {/* Description Section */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-bold border-b border-slate-200 dark:border-slate-800 pb-2">
-                Sobre a Vaga
-              </h3>
-              <div className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
-                {mockJob.description}
+          {!isLoading && !isError && job && (
+            <>
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                    Vaga de Emprego
+                  </span>
+                  <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-medium">
+                    {WorkModelLabel[job.work_model] ?? job.work_model}
+                  </span>
+                  <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-medium">
+                    {EmploymentTypeLabel[job.employment_type] ??
+                      job.employment_type}
+                  </span>
+                  {job.seniority_level && (
+                    <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-medium">
+                      {SeniorityLevelLabel[job.seniority_level] ??
+                        job.seniority_level}
+                    </span>
+                  )}
+                </div>
+                <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight mb-4">
+                  {job.title}
+                </h1>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-600 dark:text-slate-400">
+                  <div className="flex items-center gap-1.5 font-semibold text-primary">
+                    <Building2 className="w-5 h-5" />
+                    {job.workplace}
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <User className="w-5 h-5" />
+                    {job.author_name}
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="w-5 h-5" />
+                    {job.city}, {job.state} — {job.country}
+                  </div>
+                  {job.create_date && (
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-5 h-5" />
+                      Postado{" "}
+                      {formatDistanceToNow(new Date(job.create_date), {
+                        locale: ptBR,
+                        addSuffix: true,
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          </div>
+
+              <div className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <InfoCard
+                    icon={<Building2 className="w-5 h-5" />}
+                    label="Empresa"
+                    title={job.workplace}
+                    subtitle={`${job.city}, ${job.state}`}
+                  />
+                  <InfoCard
+                    icon={<User className="w-5 h-5" />}
+                    label="Publicado por"
+                    title={job.author_name}
+                    subtitle={
+                      job.author_workplace ??
+                      job.author_course_abbreviation ??
+                      ""
+                    }
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <InfoCard
+                    icon={<Briefcase className="w-5 h-5" />}
+                    label="Contratação"
+                    title={
+                      EmploymentTypeLabel[job.employment_type] ??
+                      job.employment_type
+                    }
+                    subtitle={WorkModelLabel[job.work_model] ?? job.work_model}
+                  />
+                  {job.seniority_level && (
+                    <InfoCard
+                      icon={<GraduationCap className="w-5 h-5" />}
+                      label="Senioridade"
+                      title={
+                        SeniorityLevelLabel[job.seniority_level] ??
+                        job.seniority_level
+                      }
+                      subtitle=""
+                    />
+                  )}
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold border-b border-slate-200 dark:border-slate-800 pb-2">
+                    Sobre a Vaga
+                  </h3>
+                  <div className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+                    {job.description}
+                  </div>
+                </div>
+
+                {isAuthor && (
+                  <div className="flex gap-3 pt-4 border-t border-slate-200">
+                    <Link href={`/jobs/${id}/edit`}>
+                      <Button variant="outline">Editar</Button>
+                    </Link>
+                    <Button
+                      variant="destructive"
+                      onClick={handleDelete}
+                      disabled={isDeletingJob}
+                    >
+                      {isDeletingJob ? "Excluindo..." : "Excluir"}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </Section>
     </div>

@@ -19,23 +19,20 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useJobById, useDeleteJob } from "@/hooks/useJobs";
-import { AuthStorage } from "@/store/auth";
 import { toast } from "sonner";
 import {
   EmploymentTypeLabel,
   SeniorityLevelLabel,
   WorkModelLabel,
 } from "@/models/job";
+import { useAuth } from "@/context/AuthContext";
+
+import { DeleteJob } from "@/components/Jobs/DeleteJob";
 
 function getCurrentUserId(): string | null {
-  const token = AuthStorage.getToken();
-  if (!token) return null;
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.id ?? null;
-  } catch {
-    return null;
-  }
+  console.warn("getCurrentUserId is deprecated. Use useAuth instead.");
+  const { user } = useAuth();
+  return user?.id ?? null;
 }
 
 export default function JobDetailPage() {
@@ -48,8 +45,7 @@ export default function JobDetailPage() {
   const currentUserId = getCurrentUserId();
   const isAuthor = !!job && !!currentUserId && job.author_id === currentUserId;
 
-  async function handleDelete() {
-    if (!confirm("Tem certeza que deseja excluir esta vaga?")) return;
+  async function confirmDelete() {
     try {
       await deleteJob(id);
       toast.success("Vaga excluída com sucesso!");
@@ -194,13 +190,10 @@ export default function JobDetailPage() {
                     <Link href={`/jobs/${id}/edit`}>
                       <Button variant="outline">Editar</Button>
                     </Link>
-                    <Button
-                      variant="destructive"
-                      onClick={handleDelete}
-                      disabled={isDeletingJob}
-                    >
-                      {isDeletingJob ? "Excluindo..." : "Excluir"}
-                    </Button>
+                    <DeleteJob
+                      onConfirm={confirmDelete}
+                      isLoading={isDeletingJob}
+                    />
                   </div>
                 )}
               </div>

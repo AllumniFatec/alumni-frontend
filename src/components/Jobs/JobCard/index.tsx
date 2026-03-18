@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { EmploymentTypeLabel, JobListItem, WorkModelLabel } from "@/models/job";
-import { CardActionsMenu } from "@/components/CardActionsMenu";
+import { CardActionsMenu } from "@/components/Jobs/CardActionsMenuJobs";
 import { useDeleteJob } from "@/hooks/useJobs";
 import { toast } from "sonner";
 
@@ -18,7 +18,6 @@ export function JobCard({ job }: JobCardProps) {
   const { mutateAsync: deleteJob, isPending } = useDeleteJob();
 
   async function handleDelete() {
-    if (!confirm("Tem certeza que deseja excluir esta vaga?")) return;
     try {
       await deleteJob(job.id);
       toast.success("Vaga excluída com sucesso!", {
@@ -74,6 +73,7 @@ export function JobCard({ job }: JobCardProps) {
           authorId={job.author_id}
           onEdit={() => router.push(`/jobs/${job.id}/edit`)}
           onDelete={handleDelete}
+          isDeleting={isPending}
         />
       </div>
     </div>

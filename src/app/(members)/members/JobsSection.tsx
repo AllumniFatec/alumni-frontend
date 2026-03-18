@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Section } from "@/components/Section";
-import { JobSmallCard } from "@/components/JobSmallCard";
+import { JobSmallCard } from "@/components/Jobs/JobSmallCard";
 import { EmptyState } from "@/components/EmptyState";
 import { FeedJob } from "@/models";
 

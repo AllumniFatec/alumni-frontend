@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { Section } from "@/components/Section";
 import { ErrorState } from "@/components/ErrorState"; // mantido para isError do query
-import { JobForm, JobFormValues } from "@/components/JobForm";
+import { JobForm, JobFormValues } from "@/components/Jobs/JobForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useJobById, useUpdateJob } from "@/hooks/useJobs";
 import { EmploymentType, SeniorityLevel, WorkModel } from "@/models/job";

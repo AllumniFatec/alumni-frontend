@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Section } from "@/components/Section";
-import { JobForm, JobFormValues } from "@/components/JobForm";
+import { JobForm, JobFormValues } from "@/components/Jobs/JobForm";
 import { useCreateJob } from "@/hooks/useJobs";
 import { toast } from "sonner";
 

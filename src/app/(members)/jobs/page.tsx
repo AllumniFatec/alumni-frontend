@@ -42,16 +42,17 @@ function JobsFilters({
 }) {
   return (
     <div className="flex flex-wrap gap-3 mb-6">
-      <div className="flex-1 min-w-[200px]">
+      <div className="w-full sm:flex-1 sm:min-w-[200px]">
         <Input
+          className="bg-muted"
           placeholder="Buscar por título ou empresa..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
         />
       </div>
-      <div className="w-48">
+      <div className="w-full sm:w-48">
         <Select value={workModel} onValueChange={onWorkModelChange}>
-          <SelectTrigger>
+          <SelectTrigger className="bg-muted">
             <SelectValue placeholder="Modelo" />
           </SelectTrigger>
           <SelectContent>
@@ -64,9 +65,9 @@ function JobsFilters({
           </SelectContent>
         </Select>
       </div>
-      <div className="w-48">
+      <div className="w-full sm:w-48">
         <Select value={employmentType} onValueChange={onEmploymentTypeChange}>
-          <SelectTrigger>
+          <SelectTrigger className="bg-muted">
             <SelectValue placeholder="Contratação" />
           </SelectTrigger>
           <SelectContent>

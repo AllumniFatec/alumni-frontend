@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Event } from "@/models/event";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Calendar, MapPin, Clock } from "lucide-react";
+import { Calendar, MapPin } from "lucide-react";
 
 interface EventCardProps {
   event: Event;

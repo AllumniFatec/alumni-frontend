@@ -55,9 +55,9 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             <HomeCard title="Conectar">
               <p>
-                Encontre colegas11111 e relembre histórias que marcaram a sua
-                vida na FATEC Sorocaba, veja o que cada pessoa tem feito e
-                mantenha contato.
+                Encontre colegasAGORA É O NUMERO 2 e relembre histórias que
+                marcaram a sua vida na FATEC Sorocaba, veja o que cada pessoa
+                tem feito e mantenha contato.
               </p>
             </HomeCard>
             <HomeCard title="Contribuir">

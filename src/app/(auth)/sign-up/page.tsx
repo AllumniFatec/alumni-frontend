@@ -108,7 +108,7 @@ const SignUpPage = () => {
       toast.error("Algo deu errado", {
         description: "Verique seus dados e tente novamente.",
         duration: 5000,
-        position: "top-right",
+        position: "top-center",
         className:
           "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
       });

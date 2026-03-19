@@ -29,21 +29,15 @@ import { useAuth } from "@/context/AuthContext";
 
 import { DeleteJob } from "@/components/Jobs/DeleteJob";
 
-function getCurrentUserId(): string | null {
-  console.warn("getCurrentUserId is deprecated. Use useAuth instead.");
-  const { user } = useAuth();
-  return user?.id ?? null;
-}
-
 export default function JobDetailPage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
 
+  const { user } = useAuth();
   const { data: job, isLoading, isError, refetch } = useJobById(id);
   const { mutateAsync: deleteJob, isPending: isDeletingJob } = useDeleteJob();
-  const currentUserId = getCurrentUserId();
-  const isAuthor = !!job && !!currentUserId && job.author_id === currentUserId;
+  const isAuthor = !!job && !!user && job.author_id === user.id;
 
   async function confirmDelete() {
     try {

@@ -14,6 +14,7 @@ interface JobCardProps {
 }
 
 export function JobCard({ job }: JobCardProps) {
+  //TODO: Refactor later to parents manager this functions
   const router = useRouter();
   const { mutateAsync: deleteJob, isPending } = useDeleteJob();
 

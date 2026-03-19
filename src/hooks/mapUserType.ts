@@ -1,9 +1,4 @@
-import {
-  UserType,
-  UserGender,
-  UserStatus,
-  SocialMediaType,
-} from "@/models/users";
+import { UserType, UserGender, Status, SocialMediaType } from "@/models/users";
 
 const userTypeMap: Record<UserType, string> = {
   [UserType.STUDENT]: "Aluno",
@@ -18,12 +13,12 @@ const genderMap: Record<UserGender, string> = {
   [UserGender.OTHERS]: "Outros",
 };
 
-const statusMap: Record<UserStatus, string> = {
-  [UserStatus.ACTIVE]: "Ativo",
-  [UserStatus.IN_ANALYSIS]: "Em Análise",
-  [UserStatus.SUSPENDED]: "Suspenso",
-  [UserStatus.BANNED]: "Banido",
-  [UserStatus.DELETED]: "Deletado",
+const statusMap: Record<Status, string> = {
+  [Status.ACTIVE]: "Ativo",
+  [Status.IN_ANALYSIS]: "Em Análise",
+  [Status.SUSPENDED]: "Suspenso",
+  [Status.BANNED]: "Banido",
+  [Status.DELETED]: "Deletado",
 };
 
 const socialMediaTypeMap: Record<SocialMediaType, string> = {
@@ -43,7 +38,7 @@ export function mapGender(gender: UserGender): string {
   return genderMap[gender];
 }
 
-export function mapStatus(status: UserStatus): string {
+export function mapStatus(status: Status): string {
   return statusMap[status];
 }
 

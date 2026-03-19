@@ -1,3 +1,5 @@
+import { User } from "./users";
+
 export interface PostAuthor {
   name: string;
   perfil_photo?: string;

@@ -23,12 +23,7 @@ apiBase.interceptors.request.use((requestConfig) => {
   return requestConfig;
 });
 
-const AUTH_ROUTES = [
-  ApiRoutes.Login,
-  ApiRoutes.Register,
-  ApiRoutes.Logout,
-  ApiRoutes.Me,
-];
+const AUTH_ROUTES = [ApiRoutes.Login, ApiRoutes.Register, ApiRoutes.Logout];
 
 apiBase.interceptors.response.use(
   (response) => response,

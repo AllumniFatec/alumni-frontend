@@ -1,5 +1,12 @@
-import { Status, User } from "./users";
+import { User } from "./users";
 
+export enum EventStatus {
+  ACTIVE = "Active",
+  INACTIVE = "Inactive",
+  CLOSED = "Closed",
+  CANCELED = "Canceled",
+  DELETED = "Deleted",
+}
 export interface Event {
   event_id: string;
   title: string;
@@ -8,7 +15,7 @@ export interface Event {
   date_start: Date;
   date_end: Date;
   images: Record<string, unknown>[];
-  status: Status;
+  status: EventStatus;
   author_id: string;
   author?: User;
   create_date: Date;

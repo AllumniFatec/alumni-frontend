@@ -1,8 +1,8 @@
-import { AuthResponse, LoginInUser, NewUser } from "@/models/users";
+import { AuthResponse, LoginUser, NewUser } from "@/models/users";
 import { apiBase } from "@/lib/axiosInstance";
 
 export class AuthApi {
-  static async signIn(loginInUser: LoginInUser): Promise<AuthResponse> {
+  static async signIn(loginInUser: LoginUser): Promise<AuthResponse> {
     try {
       console.warn("loginInUser:", loginInUser);
       const response = await apiBase.post<AuthResponse>(
@@ -74,5 +74,27 @@ export class AuthApi {
       console.error("resetPassword error", error);
       throw error;
     }
+  }
+
+  static async logout(): Promise<{ message: string }> {
+    try {
+      const response = await apiBase.post<{ message: string }>("/auth/logout");
+      return response.data;
+    } catch (error) {
+      console.error("logout error", error);
+      throw error;
+    }
+  }
+
+  static async getMe(): Promise<{
+    id: string;
+    name: string;
+    email: string;
+    admin: boolean;
+    perfil_photo: { url: string } | null;
+  }> {
+    const response = await apiBase.get("/auth/me");
+    console.log("getMe response:", response.data); // Log para depuração
+    return response.data;
   }
 }

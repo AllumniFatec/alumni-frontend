@@ -7,9 +7,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { LoginInUser } from "@/models/users";
 import { AuthApi } from "@/apis/auth";
+import { AuthRoutes, MembersRoutes } from "@/config/routes";
 import { toast } from "sonner";
+import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 
 const signInSchema = z.object({
   email: z.email("E-mail inválido"),
@@ -20,6 +22,7 @@ type SignInData = z.infer<typeof signInSchema>;
 
 export const SignInForm = () => {
   const router = useRouter();
+  const { refreshUser } = useAuth();
 
   const {
     register,
@@ -32,11 +35,16 @@ export const SignInForm = () => {
   });
 
   const signInMutation = useMutation({
-    mutationFn: (loginData: LoginInUser) => AuthApi.signIn(loginData),
-    onSuccess: () => {
-      router.push("/members");
+    mutationFn: (loginData: SignInData) => AuthApi.signIn(loginData),
+    onSuccess: async () => {
+      await refreshUser();
+      router.push(MembersRoutes.Members);
     },
     onError: (error: unknown) => {
+      if (axios.isAxiosError(error) && error.response?.status === 403) {
+        router.push(AuthRoutes.PendingApproval);
+        return;
+      }
       toast.error("Algo deu errado", {
         description: "Verique seus dados e tente novamente.",
         duration: 5000,

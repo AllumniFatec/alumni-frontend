@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { UserType, UserGender, NewUser } from "@/models/users";
 import { AuthApi } from "@/apis/auth";
+import { mapUserType, mapGender } from "@/hooks/mapUserType";
 import { toast } from "sonner";
 
 // função refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
@@ -107,7 +108,7 @@ const SignUpPage = () => {
       toast.error("Algo deu errado", {
         description: "Verique seus dados e tente novamente.",
         duration: 5000,
-        position: "top-right",
+        position: "top-center",
         className:
           "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
       });
@@ -121,15 +122,9 @@ const SignUpPage = () => {
       email: data.email,
       password: data.password,
       gender: data.gender as UserGender,
-      user_type: data.userType,
-      courses: [
-        {
-          course_id: data.course,
-          course_name: data.course,
-          abbreviation: data.course,
-          enrollmentYear: parseInt(data.enrollmentYear),
-        },
-      ],
+      userType: data.userType,
+      course: data.course,
+      enrollmentYear: data.enrollmentYear,
     };
 
     signUpMutation.mutate(newUser);
@@ -172,11 +167,15 @@ const SignUpPage = () => {
                       <SelectValue placeholder="Selecione o gênero" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={UserGender.MALE}>Masculino</SelectItem>
-                      <SelectItem value={UserGender.FEMALE}>
-                        Feminino
+                      <SelectItem value={UserGender.MALE}>
+                        {mapGender(UserGender.MALE)}
                       </SelectItem>
-                      <SelectItem value={UserGender.OTHERS}>Outros</SelectItem>
+                      <SelectItem value={UserGender.FEMALE}>
+                        {mapGender(UserGender.FEMALE)}
+                      </SelectItem>
+                      <SelectItem value={UserGender.OTHERS}>
+                        {mapGender(UserGender.OTHERS)}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 )}
@@ -218,11 +217,15 @@ const SignUpPage = () => {
                       <SelectValue placeholder="Selecione o tipo de usuário" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={UserType.STUDENT}>Aluno</SelectItem>
-                      <SelectItem value={UserType.TEACHER}>
-                        Professor
+                      <SelectItem value={UserType.STUDENT}>
+                        {mapUserType(UserType.STUDENT)}
                       </SelectItem>
-                      <SelectItem value={UserType.ALUMNI}>Egresso</SelectItem>
+                      <SelectItem value={UserType.TEACHER}>
+                        {mapUserType(UserType.TEACHER)}
+                      </SelectItem>
+                      <SelectItem value={UserType.ALUMNI}>
+                        {mapUserType(UserType.ALUMNI)}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 )}

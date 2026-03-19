@@ -1,5 +1,4 @@
-import { Event } from "@/models/event";
-import { Status } from "@/models/users";
+import { Event, EventStatus } from "@/models/event";
 
 export const mockEvents: Event[] = [
   {
@@ -11,7 +10,7 @@ export const mockEvents: Event[] = [
     date_start: new Date("2026-03-15T14:00:00"),
     date_end: new Date("2026-03-15T18:00:00"),
     images: [],
-    status: Status.ACTIVE,
+    status: EventStatus.ACTIVE,
     author_id: "1",
     create_date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
   },
@@ -24,7 +23,7 @@ export const mockEvents: Event[] = [
     date_start: new Date("2026-03-22T19:00:00"),
     date_end: new Date("2026-03-22T22:00:00"),
     images: [],
-    status: Status.ACTIVE,
+    status: EventStatus.ACTIVE,
     author_id: "2",
     create_date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
   },
@@ -37,7 +36,7 @@ export const mockEvents: Event[] = [
     date_start: new Date("2026-04-05T08:00:00"),
     date_end: new Date("2026-04-07T18:00:00"),
     images: [],
-    status: Status.ACTIVE,
+    status: EventStatus.ACTIVE,
     author_id: "3",
     create_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
   },
@@ -50,7 +49,7 @@ export const mockEvents: Event[] = [
     date_start: new Date("2026-04-20T08:00:00"),
     date_end: new Date("2026-04-24T22:00:00"),
     images: [],
-    status: Status.ACTIVE,
+    status: EventStatus.ACTIVE,
     author_id: "4",
     create_date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
   },

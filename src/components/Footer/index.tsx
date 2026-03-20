@@ -174,9 +174,23 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium">
-          <p>© 2026 Alumni FATEC Sorocaba - Todos os direitos reservados.</p>
-          <p>Feito com orgulho em Sorocaba/SP</p>
+        {/* NOVA SEÇÃO DE DIREITOS AUTORAIS E CRÉDITOS DA EQUIPE */}
+        <div className="mt-20 pt-8 border-t border-white/10 flex flex-col lg:flex-row justify-between items-center lg:items-start gap-6 text-xs font-medium">
+          <p className="text-slate-400 text-center lg:text-left">
+            © 2026 Alumni FATEC Sorocaba - Todos os direitos reservados.
+          </p>
+
+          <div className="flex flex-col items-center lg:items-end gap-1.5 text-center lg:text-right">
+            <p className="text-slate-400">Feito com orgulho em Sorocaba/SP</p>
+            <p className="text-[11px] text-slate-500">
+              Desenvolvido por:{" "}
+              <span className="text-slate-300">Gabriel Silva Bellato</span>{" "}
+              &bull;{" "}
+              <span className="text-slate-300">Leonardo Barbosa da Silva</span>{" "}
+              &bull;{" "}
+              <span className="text-slate-300">Nicolas Alexandrino Ferro</span>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

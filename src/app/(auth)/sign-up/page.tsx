@@ -131,7 +131,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className=" w-full flex flex-col gap-6 px-4 sm:min-w-lg md:min-w-2xl">
+    <div className="w-full flex flex-col gap-6">
       {/* Título */}
       <h1 className="text-primary text-2xl font-bold text-center mb-6 md:text-3xl">
         Criar Conta

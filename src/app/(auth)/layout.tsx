@@ -1,29 +1,27 @@
-import React from "react";
-import Image from "next/image";
-import { BaseContainerLayout } from "../../components/BaseContainerLayout";
+import { ReactNode } from "react";
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <BaseContainerLayout>
-      {/* Logo Container */}
-      <div className="w-full mb-8 flex justify-center pt-10">
-        <Image
-          src="/basic-name-logo.png"
-          alt="FATEC Sorocaba"
-          width={240}
-          height={80}
-          priority
-          className="h-16 md:h-20"
-          style={{ width: "auto" }}
-        />
-      </div>
+    // O segredo: min-h-screen no flex-col para o Footer sempre ficar no fim
+    <div
+      className="min-h-screen w-full flex flex-col bg-slate-900 bg-cover bg-center bg-fixed relative"
+      style={{
+        backgroundImage:
+          "linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('/fachada-fatec.png')",
+      }}
+    >
+      {/* A div principal agora é um container flex normal. 
+          Ela vai crescer o quanto o formulário pedir.
+      */}
+      <main className="flex-1 flex items-center justify-center p-6 py-16 md:py-24">
+        <div className="w-full max-w-3xl bg-white rounded-[40px] shadow-2xl p-8 md:p-16 border border-white/10">
+          {children}
+        </div>
+      </main>
 
-      {/* Container do formulário */}
-      <div className="w-full px-4 sm:max-w-3xl sm:mx-auto">{children}</div>
-    </BaseContainerLayout>
+      {/* O Footer será renderizado aqui pelo RootLayout, 
+          logo abaixo desse main que cresce conforme o conteúdo.
+      */}
+    </div>
   );
 }

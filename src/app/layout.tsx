@@ -28,12 +28,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className="h-full">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-          rel="stylesheet"
-        />
-      </head>
       <body
         className={`${robotoSlab.variable} ${roboto.variable} antialiased flex flex-col min-h-screen bg-slate-50`}
       >

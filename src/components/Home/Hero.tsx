@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Hero() {
   return (
@@ -37,19 +38,26 @@ export default function Hero() {
           {/* USUÁRIOS */}
           <div className="flex items-center gap-4">
             <div className="flex -space-x-3">
-              <img
-                src="https://avatars.githubusercontent.com/u/129206194?v=4"
+              {/* Ajustado para os novos nomes dos arquivos */}
+              <Image
+                src="/avatar-leo.jpg"
                 alt="Egresso 1"
+                width={40}
+                height={40}
                 className="w-10 h-10 rounded-full object-cover border-2 border-slate-50"
               />
-              <img
-                src="https://avatars.githubusercontent.com/u/141833471?v=4"
+              <Image
+                src="/avatar-nicolas.jpg"
                 alt="Egresso 2"
+                width={40}
+                height={40}
                 className="w-10 h-10 rounded-full object-cover border-2 border-slate-50"
               />
-              <img
-                src="https://avatars.githubusercontent.com/u/141738096?v=4"
+              <Image
+                src="/avatar-bellato.jpg"
                 alt="Egresso 3"
+                width={40}
+                height={40}
                 className="w-10 h-10 rounded-full object-cover border-2 border-slate-50"
               />
             </div>
@@ -59,11 +67,13 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="w-full h-80 lg:h-[450px] bg-slate-100 rounded-[20px] overflow-hidden shadow-md animate-fade-in-right">
-          <img
-            src="https://smetal.org.br/wp-content/uploads/2024/04/internafatec-1200x675.png"
+        <div className="relative w-full h-80 lg:h-[450px] bg-slate-100 rounded-[20px] overflow-hidden shadow-md animate-fade-in-right">
+          <Image
+            src="/fachada-fatec.png"
             alt="Fachada da FATEC Sorocaba"
-            className="w-full h-full object-cover"
+            fill
+            priority
+            className="object-cover"
           />
         </div>
       </div>

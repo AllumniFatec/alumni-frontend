@@ -40,9 +40,11 @@ export default function Companies() {
 
       {/* Container das logos */}
       <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
-        {partners.map((partner, index) => (
+        {/* Alterado para não receber o index, pois não será mais usado */}
+        {partners.map((partner) => (
           <a
-            key={index}
+            /* A key passa a ser o partner.name em vez do index */
+            key={partner.name}
             href={partner.url}
             target="_blank"
             rel="noopener noreferrer"

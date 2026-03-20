@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-slate-900 text-slate-300">
@@ -97,24 +99,36 @@ export default function Footer() {
             </h4>
             <ul className="flex flex-col gap-4 text-sm">
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link
+                  className="hover:text-white transition-colors"
+                  href="/members"
+                >
                   Membros
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link
+                  className="hover:text-white transition-colors"
+                  href="/jobs"
+                >
                   Vagas Disponíveis
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link
+                  className="hover:text-white transition-colors"
+                  href="/events"
+                >
                   Eventos
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link
+                  className="hover:text-white transition-colors"
+                  href="/mentorship"
+                >
                   Mentoria
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -125,24 +139,36 @@ export default function Footer() {
             </h4>
             <ul className="flex flex-col gap-4 text-sm">
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link
+                  className="hover:text-white transition-colors"
+                  href="/privacy"
+                >
                   Privacidade
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link
+                  className="hover:text-white transition-colors"
+                  href="/terms"
+                >
                   Termos de Uso
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link
+                  className="hover:text-white transition-colors"
+                  href="/contact"
+                >
                   Contato
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-white transition-colors" href="#">
+                <Link
+                  className="hover:text-white transition-colors"
+                  href="/faq"
+                >
                   FAQ
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

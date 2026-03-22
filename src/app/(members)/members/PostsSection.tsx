@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/EmptyState";
 import type { FeedPost } from "@/models";
 import { useAuth } from "@/context/AuthContext";
 import { usePostLikeMutation } from "@/hooks/usePost";
+import { usePostCommentMutation } from "@/hooks/usePostComment";
 
 interface PostsSectionProps {
   posts: FeedPost[];
@@ -25,10 +26,26 @@ export function PostsSection({
 }: PostsSectionProps) {
   const { user } = useAuth();
   const { mutate } = usePostLikeMutation();
+  const {
+    mutate: commentMutate,
+    isPending: isCommentPending,
+    variables: commentVariables,
+  } = usePostCommentMutation();
 
   const onClickLike = (postId: string) => {
     if (user) {
       mutate({ postId, userId: user.id, userName: user.name });
+    }
+  };
+
+  const onSubmitComment = (postId: string, content: string) => {
+    if (user) {
+      commentMutate({
+        postId,
+        content,
+        userId: user.id,
+        userName: user.name,
+      });
     }
   };
 
@@ -58,8 +75,10 @@ export function PostsSection({
             user={user}
             key={p.id}
             post={p}
-            onClickLike={ 
-              () => onClickLike(p.id)
+            onClickLike={() => onClickLike(p.id)}
+            onSubmitComment={(content) => onSubmitComment(p.id, content)}
+            isCommentPending={
+              isCommentPending && commentVariables?.postId === p.id
             }
           />
         ))}

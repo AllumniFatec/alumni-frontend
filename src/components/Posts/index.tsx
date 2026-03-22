@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Heart, MessageCircle } from "lucide-react";
 import type { FeedPost, FeedPostComment, Post } from "@/models/posts";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,9 +17,12 @@ export interface PostCardProps {
   commentsCount?: number;
   comments?: FeedPostComment[];
   onClickLike?: () => void;
+  /** Envia um novo comentário (feed); otimista + invalidate no hook. */
+  onSubmitComment?: (content: string) => void;
+  isCommentPending?: boolean;
 }
 
-export const PostCard = ({ 
+export const PostCard = ({
   user,
   post,
   isLoading = false,
@@ -28,11 +31,17 @@ export const PostCard = ({
   commentsCount,
   comments: _comments = [],
   onClickLike,
-}: PostCardProps) => { 
+  onSubmitComment,
+  isCommentPending = false,
+}: PostCardProps) => {
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [draft, setDraft] = useState("");
 
-  
+  const isFeedPost = Boolean(post && "user_name" in post);
+
   const haveILiked = useMemo(() => {
-    return post?.likes.some((like) => like.user_id === user?.id);
+    if (!post?.likes || !user?.id) return false;
+    return post.likes.some((like) => like.user_id === user.id);
   }, [post?.likes, user?.id]);
 
   const likeCount = useMemo(
@@ -47,6 +56,20 @@ export const PostCard = ({
         : (post?.comments_count ?? 0),
     [commentsCount, post?.comments_count],
   );
+
+  const feedComments: FeedPostComment[] = useMemo(() => {
+    if (isFeedPost && post && "comments" in post) {
+      return post.comments as FeedPostComment[];
+    }
+    return [];
+  }, [isFeedPost, post]);
+
+  const handleSubmitComment = () => {
+    const text = draft.trim();
+    if (!text || !onSubmitComment) return;
+    onSubmitComment(text);
+    setDraft("");
+  };
 
   if (isLoading || !post) {
     return (
@@ -119,15 +142,76 @@ export const PostCard = ({
             </span>
           </Button>
 
-          <div
-            className="flex items-center gap-1.5 h-8 px-2 text-gray-500"
-            aria-label={`${commentCount} comentários`}
-          >
-            <MessageCircle className="size-4 shrink-0" strokeWidth={2} />
-            <span className="text-xs tabular-nums">{commentCount}</span>
-          </div>
+          {isFeedPost && onSubmitComment ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "h-8 gap-1.5 px-2 text-gray-500 hover:text-primary",
+                commentsOpen && "text-primary",
+              )}
+              onClick={() => setCommentsOpen((prev) => !prev)}
+              aria-expanded={commentsOpen}
+              aria-label={`${commentCount} comentários — ${commentsOpen ? "recolher" : "ver comentários"}`}
+            >
+              <MessageCircle className="size-4 shrink-0" strokeWidth={2} />
+              <span className="text-xs tabular-nums">{commentCount}</span>
+            </Button>
+          ) : (
+            <div
+              className="flex items-center gap-1.5 h-8 px-2 text-gray-500"
+              aria-label={`${commentCount} comentários`}
+            >
+              <MessageCircle className="size-4 shrink-0" strokeWidth={2} />
+              <span className="text-xs tabular-nums">{commentCount}</span>
+            </div>
+          )}
         </div>
       </div>
+
+      {commentsOpen && isFeedPost && (
+        <div className="mt-3 pt-3 border-t border-gray-100 space-y-3">
+          <ul className="space-y-2 max-h-48 overflow-y-auto">
+            {feedComments.length === 0 ? (
+              <li className="text-xs text-gray-400">Nenhum comentário ainda.</li>
+            ) : (
+              feedComments.map((c) => (
+                <li key={c.id} className="text-sm">
+                  <span className="font-medium text-gray-800">
+                    {c.user_name}
+                  </span>
+                  <p className="text-gray-600 leading-snug">{c.content}</p>
+                </li>
+              ))
+            )}
+          </ul>
+
+          {user && onSubmitComment && (
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+              <textarea
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                placeholder="Escreva um comentário…"
+                rows={2}
+                className="flex-1 min-h-[60px] rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                disabled={isCommentPending}
+              />
+              <Button
+                type="button"
+                size="sm"
+                className="shrink-0"
+                disabled={
+                  !draft.trim() || isCommentPending || !user
+                }
+                onClick={handleSubmitComment}
+              >
+                {isCommentPending ? "Enviando…" : "Comentar"}
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

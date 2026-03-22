@@ -4,6 +4,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { PostsApi } from "@/apis/posts";
+import { createOptimisticId } from "@/lib/optimisticId";
 import type { FeedPost, FeedResponse } from "@/models";
 
 const FEED_QUERY_KEY = ["feed"] as const;
@@ -44,7 +45,7 @@ function postWithToggledLike(
     likes: [
       ...post.likes,
       {
-        id: `optimistic-${Date.now()}`,
+        id: createOptimisticId("optimistic-like"),
         create_date: new Date(),
         user_id: userId,
         user_name: userName,

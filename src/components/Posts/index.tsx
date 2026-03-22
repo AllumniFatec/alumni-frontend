@@ -15,7 +15,6 @@ export interface PostCardProps {
   className?: string;
   likesCount?: number;
   commentsCount?: number;
-  comments?: FeedPostComment[];
   onClickLike?: () => void;
   /** Envia um novo comentário (feed); otimista + invalidate no hook. */
   onSubmitComment?: (content: string) => void;
@@ -29,7 +28,6 @@ export const PostCard = ({
   className = "",
   likesCount,
   commentsCount,
-  comments: _comments = [],
   onClickLike,
   onSubmitComment,
   isCommentPending = false,
@@ -63,6 +61,18 @@ export const PostCard = ({
     }
     return [];
   }, [isFeedPost, post]);
+
+  const authorLabel = useMemo(() => {
+    if (!post) return "";
+    if ("user_name" in post) {
+      return post.user_name
+        ? `Por ${post.user_name}`
+        : `Autor #${post.user_id}`;
+    }
+    return post.author
+      ? `Por ${post.author.name}`
+      : `Autor #${post.author_id}`;
+  }, [post]);
 
   const handleSubmitComment = () => {
     const text = draft.trim();
@@ -108,15 +118,7 @@ export const PostCard = ({
       </p>
 
       <div className="mt-3 pt-2 border-t border-gray-100 flex items-center justify-between gap-3 flex-wrap">
-        <span className="text-xs text-gray-400">
-          {"user_name" in post
-            ? post.user_name
-              ? `Por ${post.user_name}`
-              : `Autor #${post.user_id}`
-            : post.author
-              ? `Por ${post.author.name}`
-              : `Autor #${post.author_id}`}
-        </span>
+        <span className="text-xs text-gray-400">{authorLabel}</span>
 
         <div className="flex items-center gap-1 sm:gap-2">
           <Button
@@ -202,7 +204,7 @@ export const PostCard = ({
                 size="sm"
                 className="shrink-0"
                 disabled={
-                  !draft.trim() || isCommentPending || !user
+                  !draft.trim() || isCommentPending 
                 }
                 onClick={handleSubmitComment}
               >

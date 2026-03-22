@@ -4,6 +4,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { CommentsApi } from "@/apis/comments";
+import { createOptimisticId } from "@/lib/optimisticId";
 import type { FeedPost, FeedPostComment, FeedResponse } from "@/models";
 
 const FEED_QUERY_KEY = ["feed"] as const;
@@ -64,7 +65,7 @@ export function usePostCommentMutation() {
       );
 
       const comment: FeedPostComment = {
-        id: `optimistic-comment-${Date.now()}`,
+        id: createOptimisticId("optimistic-comment"),
         content: variables.content,
         create_date: new Date(),
         user_id: variables.userId,

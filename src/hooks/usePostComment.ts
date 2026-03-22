@@ -26,7 +26,7 @@ function optimisticComment(
 ): FeedPost {
   return {
     ...post,
-    comments: [...post.comments, comment],
+    comments: [comment, ...post.comments],
     comments_count: post.comments_count + 1,
   };
 }

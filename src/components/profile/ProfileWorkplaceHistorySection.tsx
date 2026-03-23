@@ -2,6 +2,7 @@
 
 import { Building2 } from "lucide-react";
 import type { ProfileWorkplaceHistoryEntry } from "@/models/profile";
+import { formatDateDayMonthYear } from "@/lib/utils";
 
 export function ProfileWorkplaceHistorySection({
   entries,
@@ -28,7 +29,9 @@ export function ProfileWorkplaceHistorySection({
             </p>
             <p className="mt-1 text-xs text-muted-foreground">{w.function}</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              {w.start_date} → {w.end_date ?? "atual"}
+              {formatDateDayMonthYear(w.start_date)}
+              {" → "}
+              {w.end_date ? formatDateDayMonthYear(w.end_date) : "atual"}
             </p>
           </div>
         ))}

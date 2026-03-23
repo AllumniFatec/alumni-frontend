@@ -21,6 +21,7 @@ export default function ProfilePage() {
   const { data, isLoading, isError, refetch, isFetching } = useMyProfile({
     enabled: !!user,
   });
+  console.log(data);
 
   if (!user) {
     return (

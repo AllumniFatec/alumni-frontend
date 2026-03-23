@@ -1,9 +1,9 @@
 import { apiBase } from "@/lib/axiosInstance";
 import type {
   MyProfile,
-  MyProfileJobCreatePayload,
-  MyProfileJobDeletePayload,
-  MyProfileJobUpdatePayload,
+  MyProfileProfessionalHistoryCreatePayload,
+  MyProfileProfessionalHistoryDeletePayload,
+  MyProfileProfessionalHistoryUpdatePayload,
   MyProfileSkillCreatePayload,
   MyProfileSkillDeletePayload,
   MyProfileSocialCreatePayload,
@@ -63,8 +63,9 @@ export class ProfileApi {
     }
   }
 
-  static async addWorkplaceJob(
-    payload: MyProfileJobCreatePayload,
+  /** `POST /myProfile/job` — histórico profissional (não é vaga na plataforma). */
+  static async addProfessionalHistory(
+    payload: MyProfileProfessionalHistoryCreatePayload,
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.post<ProfileMutationMessage>(
@@ -73,13 +74,14 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("addWorkplaceJob error", error);
+      console.error("addProfessionalHistory error", error);
       throw error;
     }
   }
 
-  static async updateWorkplaceJob(
-    payload: MyProfileJobUpdatePayload,
+  /** `PUT /myProfile/job` */
+  static async updateProfessionalHistory(
+    payload: MyProfileProfessionalHistoryUpdatePayload,
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.put<ProfileMutationMessage>(
@@ -88,13 +90,14 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("updateWorkplaceJob error", error);
+      console.error("updateProfessionalHistory error", error);
       throw error;
     }
   }
 
-  static async deleteWorkplaceJob(
-    payload: MyProfileJobDeletePayload,
+  /** `DELETE /myProfile/job` */
+  static async deleteProfessionalHistory(
+    payload: MyProfileProfessionalHistoryDeletePayload,
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.delete<ProfileMutationMessage>(
@@ -103,7 +106,7 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("deleteWorkplaceJob error", error);
+      console.error("deleteProfessionalHistory error", error);
       throw error;
     }
   }

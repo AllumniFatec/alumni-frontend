@@ -24,11 +24,12 @@ export function JobCard({ job }: JobCardProps) {
       toast.success("Vaga excluída com sucesso!", {
         className: "!bg-green-500 !text-white !border-green-600",
       });
-    } catch {
+    } catch (err) {
       toast.error("Erro ao excluir a vaga", {
         className: "!bg-red-500 !text-white !border-red-600",
         description: "Tente novamente.",
       });
+      throw err;
     }
   }
 

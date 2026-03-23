@@ -51,14 +51,6 @@ export interface ProfileEventSummary {
   status: string;
 }
 
-/**
- * Vagas ligadas ao perfil: mesmos `title`/`status` que `JobListItem`,
- * mas o id vem como `job_id` (não `id`) e sem os demais campos da listagem pública.
- */
-export type ProfileJobSummary = Pick<JobListItem, "title" | "status"> & {
-  job_id: string;
-};
-
 export interface ProfilePostAuthorCourse {
   abbreviation: string;
   enrollmentYear: number;
@@ -114,7 +106,8 @@ export interface MyProfile {
   social_media: ProfileSocialMedia[];
   skills: ProfileSkillEntry[];
   events: ProfileEventSummary[];
-  jobs: ProfileJobSummary[];
+  /** Oportunidades publicadas na plataforma — mesmo shape que GET /job (listagem). */
+  jobs: JobListItem[];
   posts: ProfilePost[];
   gender: UserGender | string;
   email: string;
@@ -126,8 +119,11 @@ export type UpdateMyProfilePayload = Partial<
   Pick<MyProfile, "name" | "gender" | "biography" | "receive_notifications">
 >;
 
-/** POST /myProfile/job */
-export interface MyProfileJobCreatePayload {
+/**
+ * Corpo de `POST /myProfile/job` — insere um emprego no **histórico profissional**
+ * (não é publicação de vaga na plataforma).
+ */
+export interface MyProfileProfessionalHistoryCreatePayload {
   company_name: string;
   position: string;
   functions: string;
@@ -135,13 +131,14 @@ export interface MyProfileJobCreatePayload {
   end_date: string | null;
 }
 
-/** PUT /myProfile/job */
-export type MyProfileJobUpdatePayload = MyProfileJobCreatePayload & {
-  jobUserId: string;
-};
+/** Corpo de `PUT /myProfile/job`. */
+export type MyProfileProfessionalHistoryUpdatePayload =
+  MyProfileProfessionalHistoryCreatePayload & {
+    jobUserId: string;
+  };
 
-/** DELETE /myProfile/job */
-export interface MyProfileJobDeletePayload {
+/** Corpo de `DELETE /myProfile/job`. */
+export interface MyProfileProfessionalHistoryDeletePayload {
   jobUserId: string;
 }
 

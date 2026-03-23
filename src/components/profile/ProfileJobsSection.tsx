@@ -1,10 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { Briefcase } from "lucide-react";
-import type { ProfileJobSummary } from "@/models/profile";
+import { JobCard } from "@/components/Jobs/JobCard";
+import type { JobListItem } from "@/models/job";
 
-export function ProfileJobsSection({ jobs }: { jobs: ProfileJobSummary[] }) {
+/** Oportunidades de emprego publicadas na plataforma por este utilizador (campo `jobs` no GET /myProfile). */
+export function ProfileJobsSection({
+  jobs,
+}: {
+  jobs: JobListItem[];
+}) {
   if (jobs.length === 0) return null;
 
   return (
@@ -14,15 +19,8 @@ export function ProfileJobsSection({ jobs }: { jobs: ProfileJobSummary[] }) {
         Vagas
       </h3>
       <div className="space-y-2">
-        {jobs.map((j) => (
-          <Link
-            key={j.job_id}
-            href={`/jobs/${j.job_id}`}
-            className="block rounded-xl border border-border/60 bg-card/50 p-4 transition-colors hover:border-primary/30 hover:bg-muted/30"
-          >
-            <p className="font-medium text-foreground">{j.title}</p>
-            <p className="text-sm text-muted-foreground">{j.status}</p>
-          </Link>
+        {jobs.map((job) => (
+          <JobCard key={job.id} job={job} />
         ))}
       </div>
     </section>

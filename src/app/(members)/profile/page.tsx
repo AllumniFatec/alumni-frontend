@@ -9,7 +9,7 @@ import { ProfileSummarySection } from "@/components/profile/ProfileSummarySectio
 import { ProfileInformationSection } from "@/components/profile/ProfileInformationSection";
 import { ProfileCoursesSection } from "@/components/profile/ProfileCoursesSection";
 import { ProfileWorkplaceHistorySection } from "@/components/profile/ProfileWorkplaceHistorySection";
-import { ProfileSocialSection } from "@/components/profile/ProfileSocialSection";
+import { ProfileSocialMediaSection } from "@/components/profile/ProfileSociaMedialSection";
 import { ProfileSkillsSection } from "@/components/profile/ProfileSkillsSection";
 import { ProfileJobsSection } from "@/components/profile/ProfileJobsSection";
 import { ProfileEventsSection } from "@/components/profile/ProfileEventsSection";
@@ -99,7 +99,7 @@ export default function ProfilePage() {
             <ProfileInformationSection profile={profile} />
             <ProfileCoursesSection courses={profile.courses} />
             <ProfileWorkplaceHistorySection entries={profile.workplace_history} />
-            <ProfileSocialSection socialMedia={profile.social_media} />
+            <ProfileSocialMediaSection socialMedia={profile.social_media} />
             <ProfileSkillsSection skills={profile.skills} />
             <ProfileJobsSection jobs={profile.jobs} />
             <ProfileEventsSection events={profile.events} />

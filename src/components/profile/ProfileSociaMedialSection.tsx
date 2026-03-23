@@ -14,7 +14,7 @@ function linkDisplayText(url: string): string {
   }
 }
 
-export function ProfileSocialSection({
+export function ProfileSocialMediaSection({
   socialMedia,
 }: {
   socialMedia: ProfileSocialMedia[];

@@ -10,7 +10,24 @@ import { usePostLikeMutation } from "@/hooks/usePost";
 import { usePostCommentMutation } from "@/hooks/usePostComment";
 import { PROFILE_QUERY_KEY } from "@/hooks/useProfile";
 
-export function ProfilePostsSection({ posts }: { posts: ProfilePost[] }) {
+export interface ProfilePostsSectionProps {
+  posts: ProfilePost[];
+  /** Dono do perfil — usado como autor do post no card (não o visitante logado). */
+  ownerId: string;
+  ownerName: string;
+  /**
+   * Quando false, o empty state não sugere que o visitante publique primeiro.
+   * Default: true (ex.: /profile só mostra o próprio usuário).
+   */
+  isOwnProfile?: boolean;
+}
+
+export function ProfilePostsSection({
+  posts,
+  ownerId,
+  ownerName,
+  isOwnProfile = true,
+}: ProfilePostsSectionProps) {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const { mutate } = usePostLikeMutation();
@@ -46,9 +63,6 @@ export function ProfilePostsSection({ posts }: { posts: ProfilePost[] }) {
     }
   };
 
-  const viewerName = user?.name ?? "";
-  const viewerId = user?.id ?? "";
-
   if (posts.length === 0) {
     return (
       <section className="mt-6">
@@ -58,7 +72,11 @@ export function ProfilePostsSection({ posts }: { posts: ProfilePost[] }) {
         </h3>
         <EmptyState
           title="Nenhum post ainda"
-          description="Seja o primeiro a compartilhar algo com a rede Alumni."
+          description={
+            isOwnProfile
+              ? "Seja o primeiro a compartilhar algo com a rede Alumni."
+              : "Este perfil ainda não publicou nada na rede."
+          }
         />
       </section>
     );
@@ -79,8 +97,8 @@ export function ProfilePostsSection({ posts }: { posts: ProfilePost[] }) {
               id: p.post_id,
               content: p.content,
               create_date: new Date(p.create_date),
-              user_id: viewerId,
-              user_name: viewerName,
+              user_id: ownerId,
+              user_name: ownerName,
               comments_count: p.comments_count,
               likes_count: p.likes_count,
               comments: p.comments.map((c) => ({

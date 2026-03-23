@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { Section } from "@/components/Section";
 import { ErrorState } from "@/components/ErrorState";
 import { Spinner } from "@/components/ui/spinner";
@@ -15,13 +14,14 @@ import { ProfileSkillsSection } from "@/components/profile/ProfileSkillsSection"
 import { ProfileJobsSection } from "@/components/profile/ProfileJobsSection";
 import { ProfileEventsSection } from "@/components/profile/ProfileEventsSection";
 import { ProfilePostsSection } from "@/components/profile/ProfilePostsSection";
+import Image from "next/image";
 
 export default function ProfilePage() {
   const { user } = useAuth();
   const { data, isLoading, isError, refetch, isFetching } = useMyProfile({
     enabled: !!user,
   });
-  console.log(data);
+
 
   if (!user) {
     return (
@@ -72,9 +72,11 @@ export default function ProfilePage() {
             <div className="flex items-end gap-4 -mt-10 mb-4">
               {photoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={photoUrl}
-                  alt=""
+                  alt={profile.name}
+                  width={80}
+                  height={80}
                   className="size-20 rounded-full border-4 border-white object-cover shadow"
                 />
               ) : (
@@ -101,7 +103,12 @@ export default function ProfilePage() {
             <ProfileSkillsSection skills={profile.skills} />
             <ProfileJobsSection jobs={profile.jobs} />
             <ProfileEventsSection events={profile.events} />
-            <ProfilePostsSection posts={profile.posts} />
+            <ProfilePostsSection
+              posts={profile.posts}
+              ownerId={profile.user_id}
+              ownerName={profile.name}
+              isOwnProfile={user.id === profile.user_id}
+            />
           </div>
         </div>
       </Section>

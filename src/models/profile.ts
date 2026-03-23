@@ -88,6 +88,7 @@ export interface ProfilePostLike {
 /**
  * Post em GET /myProfile: alinha com `Post` nos campos comuns;
  * `create_date` em string (JSON), comentários/likes com autor aninhado (≠ `Post`/`FeedPost`).
+ * `post_id` é o mesmo identificador que `FeedPost.id` nas rotas de like/comentário do feed.
  */
 export type ProfilePost = Pick<
   Post,

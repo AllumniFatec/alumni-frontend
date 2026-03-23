@@ -1,69 +1,106 @@
+"use client";
+
+import { useEffect } from "react";
 import { Section } from "@/components/Section";
-import { Mail, MapPin, Briefcase, GraduationCap, Calendar } from "lucide-react";
-import { mockUser, profileStats } from "@/mocks";
+import { ErrorState } from "@/components/ErrorState";
+import { Spinner } from "@/components/ui/spinner";
+import { useAuth } from "@/context/AuthContext";
+import { useMyProfile } from "@/hooks/useProfile";
+import { ProfileSummarySection } from "@/components/profile/ProfileSummarySection";
+import { ProfileInformationSection } from "@/components/profile/ProfileInformationSection";
+import { ProfileCoursesSection } from "@/components/profile/ProfileCoursesSection";
+import { ProfileWorkplaceHistorySection } from "@/components/profile/ProfileWorkplaceHistorySection";
+import { ProfileSocialSection } from "@/components/profile/ProfileSocialSection";
+import { ProfileSkillsSection } from "@/components/profile/ProfileSkillsSection";
+import { ProfileJobsSection } from "@/components/profile/ProfileJobsSection";
+import { ProfileEventsSection } from "@/components/profile/ProfileEventsSection";
+import { ProfilePostsSection } from "@/components/profile/ProfilePostsSection";
 
 export default function ProfilePage() {
+  const { user } = useAuth();
+  const { data, isLoading, isError, refetch, isFetching } = useMyProfile({
+    enabled: !!user,
+  });
+
+  if (!user) {
+    return (
+      <Section title="Meu Perfil">
+        <p className="text-sm text-slate-500">
+          Faça login para ver seu perfil.
+        </p>
+      </Section>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Section title="Meu Perfil">
+        <div className="flex justify-center py-16">
+          <Spinner className="size-8 text-primary" />
+        </div>
+      </Section>
+    );
+  }
+
+  if (isError || !data) {
+    return (
+      <Section title="Meu Perfil">
+        <ErrorState
+          title="Não foi possível carregar o perfil"
+          description="Verifique sua conexão ou tente novamente."
+          onRetry={() => refetch()}
+        />
+      </Section>
+    );
+  }
+
+  const profile = data;
+  const photoUrl = profile.perfil_photo?.url;
+
   return (
     <div>
       <Section title="Meu Perfil">
+        {isFetching && !isLoading && (
+          <p className="text-xs text-slate-400 mb-2">Atualizando…</p>
+        )}
+
         <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm text-left">
-          {/* Cover */}
           <div className="h-32 bg-gradient-to-r from-primary/80 to-primary" />
 
-          {/* Avatar + basic info */}
           <div className="px-6 pb-6">
             <div className="flex items-end gap-4 -mt-10 mb-4">
-              <div className="size-20 rounded-full border-4 border-white bg-primary/10 flex items-center justify-center text-primary text-3xl font-black shadow">
-                {mockUser.name.charAt(0)}
-              </div>
+              {photoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={photoUrl}
+                  alt=""
+                  className="size-20 rounded-full border-4 border-white object-cover shadow"
+                />
+              ) : (
+                <div className="size-20 rounded-full border-4 border-white bg-primary/10 flex items-center justify-center text-primary text-3xl font-black shadow">
+                  {profile.name.charAt(0)}
+                </div>
+              )}
             </div>
 
-            <h2 className="text-xl font-bold text-slate-800">
-              {mockUser.name}
-            </h2>
-            <p className="text-sm text-slate-500 mb-1">{mockUser.userType}</p>
+            <h2 className="text-xl font-bold text-slate-800">{profile.name}</h2>
+            <p className="text-sm text-slate-500 mb-1">{profile.user_type}</p>
 
-            {mockUser.description && (
+            {profile.biography && (
               <p className="text-sm text-slate-600 mt-3 leading-relaxed">
-                {mockUser.description}
+                {profile.biography}
               </p>
             )}
 
-            {/* Stats */}
-            <div className="flex gap-6 mt-4 py-4 border-y border-slate-100">
-              {profileStats.map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <p className="text-lg font-bold text-primary">{stat.value}</p>
-                  <p className="text-xs text-slate-400">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Details */}
-            <div className="mt-4 flex flex-col gap-2">
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                <Mail className="size-4 text-primary" />
-                {mockUser.email}
-              </div>
-              {mockUser.localWorkplace && (
-                <div className="flex items-center gap-2 text-sm text-slate-500">
-                  <Briefcase className="size-4 text-primary" />
-                  {mockUser.localWorkplace}
-                </div>
-              )}
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                <GraduationCap className="size-4 text-primary" />
-                {mockUser.course}
-              </div>
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                <Calendar className="size-4 text-primary" />
-                Ingressou em {mockUser.enrollmentYear}
-              </div>
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                <MapPin className="size-4 text-primary" />
-                Sorocaba, SP
-              </div>
-            </div>
+            <ProfileSummarySection profile={profile} />
+            <ProfileInformationSection profile={profile} />
+            <ProfileCoursesSection courses={profile.courses} />
+            <ProfileWorkplaceHistorySection entries={profile.workplace_history} />
+            <ProfileSocialSection socialMedia={profile.social_media} />
+            <ProfileSkillsSection skills={profile.skills} />
+            <ProfileJobsSection jobs={profile.jobs} />
+            <ProfileEventsSection events={profile.events} />
+            <ProfilePostsSection posts={profile.posts} />
           </div>
         </div>
       </Section>

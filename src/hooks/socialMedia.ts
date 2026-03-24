@@ -1,44 +1,43 @@
-import type { LucideIcon } from "lucide-react";
+import type { IconType } from "react-icons";
+import { FaLinkedinIn } from "react-icons/fa";
 import {
-  AtSign,
-  Briefcase,
-  Camera,
-  FolderGit2,
-  Globe,
-  UsersRound,
-} from "lucide-react";
+  SiFacebook,
+  SiGithub,
+  SiInstagram,
+  SiX,
+} from "react-icons/si";
+import { HiOutlineGlobeAlt } from "react-icons/hi2";
 import { SocialMediaType } from "@/models/users";
 
 export type SocialMediaUi = {
   label: string;
-  Icon: LucideIcon;
+  Icon: IconType;
 };
-
 
 export const SOCIAL_MEDIA_UI: Record<SocialMediaType, SocialMediaUi> = {
   [SocialMediaType.Instagram]: {
     label: "Instagram",
-    Icon: Camera,
+    Icon: SiInstagram,
   },
   [SocialMediaType.Linkedin]: {
     label: "LinkedIn",
-    Icon: Briefcase,
+    Icon: FaLinkedinIn,
   },
   [SocialMediaType.Github]: {
     label: "GitHub",
-    Icon: FolderGit2,
+    Icon: SiGithub,
   },
   [SocialMediaType.Facebook]: {
     label: "Facebook",
-    Icon: UsersRound,
+    Icon: SiFacebook,
   },
   [SocialMediaType.X]: {
     label: "X",
-    Icon: AtSign,
+    Icon: SiX,
   },
   [SocialMediaType.Website]: {
     label: "Website",
-    Icon: Globe,
+    Icon: HiOutlineGlobeAlt,
   },
 };
 
@@ -50,6 +49,6 @@ export function getSocialMediaUi(type: string): SocialMediaUi {
   }
   return {
     label: type,
-    Icon: Globe,
+    Icon: HiOutlineGlobeAlt,
   };
 }

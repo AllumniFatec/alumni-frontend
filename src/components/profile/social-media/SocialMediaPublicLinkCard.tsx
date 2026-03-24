@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { socialLinkDisplayUrl } from "@/components/Profile/social-media/socialLinkDisplayUrl";
 import Link from "next/link";
 
-
 export interface SocialMediaPublicLinkCardProps {
   socialMedia: ProfileSocialMedia;
   className?: string;
@@ -35,7 +34,7 @@ export function SocialMediaPublicLinkCard({
         className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary"
         aria-hidden
       >
-        <Icon className="size-[18px] stroke-[1.75]" />
+        <Icon className="size-[18px]" aria-hidden />
       </span>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-foreground">{label}</p>
@@ -50,3 +49,4 @@ export function SocialMediaPublicLinkCard({
     </Link>
   );
 }
+

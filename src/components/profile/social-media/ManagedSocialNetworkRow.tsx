@@ -126,7 +126,7 @@ export function ManagedSocialNetworkRow({
             className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary sm:size-9"
             aria-hidden
           >
-            <Icon className="size-[18px] stroke-[1.75]" />
+            <Icon className="size-[18px]" aria-hidden />
           </span>
           <div className="min-w-0 flex-1">
             <p className="text-sm font-medium">{label}</p>
@@ -143,7 +143,7 @@ export function ManagedSocialNetworkRow({
               aria-label={`Editar ${label}`}
               onClick={() => onStartEdit(entry)}
             >
-              <Pencil className="size-4" />
+              <Pencil className="size-4" aria-hidden />
             </Button>
             <Button
               type="button"
@@ -153,7 +153,7 @@ export function ManagedSocialNetworkRow({
               aria-label={`Excluir ${label}`}
               onClick={() => setDeleteDialogOpen(true)}
             >
-              <Trash2 className="size-4" />
+              <Trash2 className="size-4" aria-hidden />
             </Button>
           </div>
         </div>

@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { ProfileApi } from "@/apis/profile";
 import type {
-  MyProfileJobCreatePayload,
-  MyProfileJobDeletePayload,
-  MyProfileJobUpdatePayload,
+  MyProfileProfessionalHistoryCreatePayload,
+  MyProfileProfessionalHistoryDeletePayload,
+  MyProfileProfessionalHistoryUpdatePayload,
   MyProfileSkillCreatePayload,
   MyProfileSkillDeletePayload,
   MyProfileSocialCreatePayload,
@@ -34,7 +35,25 @@ export function useUpdateMyProfile() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (payload: UpdateMyProfilePayload) =>
       ProfileApi.updateMyProfile(payload),
-    onSuccess: () => invalidate(),
+    onSuccess: () => {
+      invalidate();
+      toast.success("Perfil atualizado", {
+        description: "Suas informações foram salvas.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description: "Verifique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
   });
   return { mutateAsync, isPending };
 }
@@ -43,7 +62,25 @@ export function useUpdateProfilePhoto() {
   const invalidate = useInvalidateMyProfile();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (image: File) => ProfileApi.updateProfilePhoto(image),
-    onSuccess: () => invalidate(),
+    onSuccess: () => {
+      invalidate();
+      toast.success("Foto atualizada", {
+        description: "Sua foto de perfil foi alterada.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
   });
   return { mutateAsync, isPending };
 }
@@ -54,37 +91,110 @@ export function useDeleteMyProfile() {
     mutationFn: () => ProfileApi.deleteMyProfile(),
     onSuccess: () => {
       qc.removeQueries({ queryKey: PROFILE_QUERY_KEY });
+      toast.success("Conta excluída", {
+        description: "Seu perfil foi removido da plataforma.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
     },
   });
   return { mutateAsync, isPending };
 }
 
-export function useAddWorkplaceJob() {
+/** Histórico profissional (`POST /myProfile/job`). */
+export function useAddProfessionalHistory() {
   const invalidate = useInvalidateMyProfile();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (payload: MyProfileJobCreatePayload) =>
-      ProfileApi.addWorkplaceJob(payload),
-    onSuccess: () => invalidate(),
+    mutationFn: (payload: MyProfileProfessionalHistoryCreatePayload) =>
+      ProfileApi.addProfessionalHistory(payload),
+    onSuccess: () => {
+      invalidate();
+      toast.success("Experiência adicionada", {
+        description: "Seu histórico profissional foi atualizado.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
   });
   return { mutateAsync, isPending };
 }
 
-export function useUpdateWorkplaceJob() {
+/** Histórico profissional (`PUT /myProfile/job`). */
+export function useUpdateProfessionalHistory() {
   const invalidate = useInvalidateMyProfile();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (payload: MyProfileJobUpdatePayload) =>
-      ProfileApi.updateWorkplaceJob(payload),
-    onSuccess: () => invalidate(),
+    mutationFn: (payload: MyProfileProfessionalHistoryUpdatePayload) =>
+      ProfileApi.updateProfessionalHistory(payload),
+    onSuccess: () => {
+      invalidate();
+      toast.success("Experiência atualizada", {
+        description: "Seu histórico profissional foi atualizado.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
   });
   return { mutateAsync, isPending };
 }
 
-export function useDeleteWorkplaceJob() {
+/** Histórico profissional (`DELETE /myProfile/job`). */
+export function useDeleteProfessionalHistory() {
   const invalidate = useInvalidateMyProfile();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (payload: MyProfileJobDeletePayload) =>
-      ProfileApi.deleteWorkplaceJob(payload),
-    onSuccess: () => invalidate(),
+    mutationFn: (payload: MyProfileProfessionalHistoryDeletePayload) =>
+      ProfileApi.deleteProfessionalHistory(payload),
+    onSuccess: () => {
+      invalidate();
+      toast.success("Experiência removida", {
+        description: "O registro foi excluído do seu histórico.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
   });
   return { mutateAsync, isPending };
 }
@@ -94,7 +204,25 @@ export function useAddProfileSkill() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (payload: MyProfileSkillCreatePayload) =>
       ProfileApi.addSkill(payload),
-    onSuccess: () => invalidate(),
+    onSuccess: () => {
+      invalidate();
+      toast.success("Skill adicionada", {
+        description: "Sua lista de skills foi atualizada.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
   });
   return { mutateAsync, isPending };
 }
@@ -104,7 +232,25 @@ export function useDeleteProfileSkill() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (payload: MyProfileSkillDeletePayload) =>
       ProfileApi.deleteSkill(payload),
-    onSuccess: () => invalidate(),
+    onSuccess: () => {
+      invalidate();
+      toast.success("Skill removida", {
+        description: "Sua lista de skills foi atualizada.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
   });
   return { mutateAsync, isPending };
 }
@@ -114,7 +260,25 @@ export function useAddProfileSocialMedia() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (payload: MyProfileSocialCreatePayload) =>
       ProfileApi.addSocialMedia(payload),
-    onSuccess: () => invalidate(),
+    onSuccess: () => {
+      invalidate();
+      toast.success("Rede social adicionada", {
+        description: "Seu perfil foi atualizado.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
   });
   return { mutateAsync, isPending };
 }
@@ -124,7 +288,25 @@ export function useUpdateProfileSocialMedia() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (payload: MyProfileSocialUpdatePayload) =>
       ProfileApi.updateSocialMedia(payload),
-    onSuccess: () => invalidate(),
+    onSuccess: () => {
+      invalidate();
+      toast.success("Rede social atualizada", {
+        description: "Seu perfil foi atualizado.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
   });
   return { mutateAsync, isPending };
 }
@@ -134,7 +316,25 @@ export function useDeleteProfileSocialMedia() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (payload: MyProfileSocialDeletePayload) =>
       ProfileApi.deleteSocialMedia(payload),
-    onSuccess: () => invalidate(),
+    onSuccess: () => {
+      invalidate();
+      toast.success("Rede social removida", {
+        description: "Seu perfil foi atualizado.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description: "Verique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
   });
   return { mutateAsync, isPending };
 }

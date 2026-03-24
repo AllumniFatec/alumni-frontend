@@ -47,7 +47,7 @@ export function useUpdateMyProfile() {
     },
     onError: () => {
       toast.error("Algo deu errado", {
-        description: "Verique seus dados e tente novamente.",
+        description: "Verifique seus dados e tente novamente.",
         duration: 5000,
         position: "top-right",
         className:

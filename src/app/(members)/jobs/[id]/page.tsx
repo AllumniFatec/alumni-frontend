@@ -27,7 +27,7 @@ import {
 } from "@/models/job";
 import { useAuth } from "@/context/AuthContext";
 
-import { DeleteJob } from "@/components/Jobs/DeleteJob";
+import { DeleteJobConfirmationDialog } from "@/components/Jobs/DeleteJobConfirmationDialog";
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -184,10 +184,10 @@ export default function JobDetailPage() {
                     <Link href={`/jobs/${id}/edit`}>
                       <Button variant="outline">Editar</Button>
                     </Link>
-                    <DeleteJob
+                    <DeleteJobConfirmationDialog
                       onConfirm={confirmDelete}
                       isLoading={isDeletingJob}
-                    />
+                                          />
                   </div>
                 )}
               </div>

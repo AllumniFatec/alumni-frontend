@@ -8,13 +8,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DeleteJob } from "@/components/Jobs/DeleteJob";
+import { DeleteJobConfirmationDialog } from "@/components/Jobs/DeleteJobConfirmationDialog";
 import { useAuth } from "@/context/AuthContext";
 
 interface CardActionsMenuProps {
   authorId: string;
   onEdit: () => void;
-  onDelete: () => void;
+  onDelete: () => void | Promise<void>;
   isDeleting?: boolean;
 }
 
@@ -62,10 +62,13 @@ export function CardActionsMenu({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <DeleteJob
+      <DeleteJobConfirmationDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
-        onConfirm={onDelete}
+        onConfirm={async () => {
+          await Promise.resolve(onDelete());
+          setIsDeleteDialogOpen(false);
+        }}
         isLoading={isDeleting}
         trigger={null}
       />

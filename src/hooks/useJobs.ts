@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { JobApi } from "@/apis/jobs";
 import { JobPayload } from "@/models/job";
+import { PROFILE_QUERY_KEY } from "@/hooks/useProfile";
 
 const JOB_PAGE_SIZE = 20;
 
@@ -51,7 +52,10 @@ export function useCreateJob() {
   const qc = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (data: JobPayload) => JobApi.createJob(data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["jobs", "list"] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["jobs", "list"] });
+      qc.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
+    },
   });
 
   return { mutateAsync, isPending };
@@ -64,6 +68,7 @@ export function useUpdateJob(id: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["jobs", "list"] });
       qc.invalidateQueries({ queryKey: ["jobs", "detail", id] });
+      qc.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
     },
   });
 
@@ -73,8 +78,12 @@ export function useUpdateJob(id: string) {
 export function useDeleteJob() {
   const qc = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (id: string) => JobApi.deleteJob(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["jobs", "list"] }),
+    mutationFn: async (id: string) => {
+      await JobApi.deleteJob(id);
+      qc.removeQueries({ queryKey: ["jobs", "detail", id] });
+      await qc.invalidateQueries({ queryKey: ["jobs", "list"] });
+      await qc.refetchQueries({ queryKey: PROFILE_QUERY_KEY });
+    },
   });
 
   return { mutateAsync, isPending };

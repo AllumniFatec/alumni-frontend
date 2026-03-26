@@ -28,7 +28,8 @@ function Input({ className, type, error, label, id, ...props }: InputProps) {
           className={cn(
             "w-full h-10 px-3 py-2 border-0 rounded-lg text-sm text-foreground",
             "placeholder:text-xs placeholder:text-muted-foreground/60",
-            "bg-primary-foreground sm:bg-muted",
+            // AQUI ESTAVA O ERRO: mudamos de "bg-primary-foreground sm:bg-muted" para apenas "bg-muted"
+            "bg-muted",
             "focus:outline-none focus:ring-2",
             "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
             "transition-colors",
@@ -36,7 +37,7 @@ function Input({ className, type, error, label, id, ...props }: InputProps) {
               ? "focus:ring-red-500 bg-red-50 border border-red-500"
               : "focus:ring-primary",
             isPassword && "pr-10",
-            className
+            className,
           )}
           {...props}
         />

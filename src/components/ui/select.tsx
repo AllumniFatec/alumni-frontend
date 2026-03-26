@@ -7,8 +7,9 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BaseLabel } from "@/components/BaseLabel";
 
-interface SelectProps
-  extends React.ComponentProps<typeof SelectPrimitive.Root> {
+interface SelectProps extends React.ComponentProps<
+  typeof SelectPrimitive.Root
+> {
   error?: string;
   label?: string;
 }
@@ -56,8 +57,8 @@ function SelectTrigger({
       className={cn(
         // Mesmo estilo do Input FATEC
         "w-full h-10 px-3 py-2 border-0 rounded-lg text-sm text-foreground",
-        // Background responsivo igual ao Input
-        "bg-primary-foreground sm:bg-muted",
+        // AQUI ESTAVA O ERRO: Background fixo em muted (cinza) para mobile e desktop
+        "bg-muted",
         // Placeholder e focus igual ao Input com melhor contraste
         "data-[placeholder]:text-xs data-[placeholder]:text-muted-foreground/60",
         "focus:outline-none focus:ring-2",
@@ -71,7 +72,7 @@ function SelectTrigger({
         error
           ? "focus:ring-red-500 bg-red-50 border border-red-500"
           : "focus:ring-primary",
-        className
+        className,
       )}
       {...props}
     >
@@ -104,7 +105,7 @@ function SelectContent({
           "min-w-[8rem] origin-(--radix-select-content-transform-origin)",
           "overflow-x-hidden overflow-y-auto rounded-lg border border-gray-200 shadow-lg",
 
-          className
+          className,
         )}
         position={position}
         align={align}
@@ -115,7 +116,7 @@ function SelectContent({
           className={cn(
             "p-1",
             position === "popper" &&
-              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1"
+              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1",
           )}
         >
           {children}
@@ -149,7 +150,7 @@ function SelectItem({
       data-slot="select-item"
       className={cn(
         "break-all focus:bg-accent focus:text-accent-foreground relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm ",
-        className
+        className,
       )}
       {...props}
     >
@@ -185,7 +186,7 @@ function SelectScrollUpButton({
       data-slot="select-scroll-up-button"
       className={cn(
         "flex cursor-default items-center justify-center py-1",
-        className
+        className,
       )}
       {...props}
     >
@@ -203,7 +204,7 @@ function SelectScrollDownButton({
       data-slot="select-scroll-down-button"
       className={cn(
         "flex cursor-default items-center justify-center py-1",
-        className
+        className,
       )}
       {...props}
     >

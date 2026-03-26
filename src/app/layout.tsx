@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Roboto_Slab, Roboto } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/providers";
+import Footer from "@/components/Footer";
+
 const robotoSlab = Roboto_Slab({
   variable: "--font-roboto-slab",
   subsets: ["latin"],
@@ -25,9 +27,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body className={`${robotoSlab.variable} ${roboto.variable} antialiased`}>
-        <Providers>{children}</Providers>
+    <html lang="pt-BR" className="h-full">
+      <body
+        className={`${robotoSlab.variable} ${roboto.variable} antialiased flex flex-col min-h-screen bg-slate-50`}
+      >
+        <Providers>
+          <main className="flex-1 w-full flex flex-col">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

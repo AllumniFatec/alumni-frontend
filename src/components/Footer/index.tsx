@@ -22,7 +22,8 @@ export default function Footer() {
             </p>
 
             <div className="flex gap-4">
-              <a
+              {/* Trocado de <a> para <Link> conforme review do Nicolas */}
+              <Link
                 className="w-10 h-10 rounded-[10px] bg-white/5 flex items-center justify-center hover:bg-primary transition-colors"
                 href="https://fatecsorocaba.cps.sp.gov.br/"
                 target="_blank"
@@ -32,8 +33,8 @@ export default function Footer() {
                 <span className="material-symbols-outlined text-xl">
                   language
                 </span>
-              </a>
-              <a
+              </Link>
+              <Link
                 className="w-10 h-10 rounded-[10px] bg-white/5 flex items-center justify-center hover:bg-primary transition-colors"
                 href="https://fatecsorocaba.cps.sp.gov.br/fale-conosco/"
                 target="_blank"
@@ -41,7 +42,7 @@ export default function Footer() {
                 title="Fale Conosco"
               >
                 <span className="material-symbols-outlined text-xl">mail</span>
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -50,45 +51,46 @@ export default function Footer() {
               Institucional
             </h4>
             <ul className="flex flex-col gap-4 text-sm">
+              {/* Todos os <a> desta seção foram trocados para <Link> */}
               <li>
-                <a
+                <Link
                   className="hover:text-white transition-colors"
                   href="https://fatecsorocaba.cps.sp.gov.br/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   FATEC Sorocaba
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   className="hover:text-white transition-colors"
                   href="https://www.cps.sp.gov.br/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Centro Paula Souza
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   className="hover:text-white transition-colors"
                   href="https://fatecsorocaba.cps.sp.gov.br/cursos-fatec/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Cursos de Graduação
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   className="hover:text-white transition-colors"
                   href="https://vestibular.fatec.sp.gov.br/home/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Vestibular
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -174,7 +176,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* NOVA SEÇÃO DE DIREITOS AUTORAIS E CRÉDITOS DA EQUIPE */}
+        {/* SEÇÃO DE DIREITOS AUTORAIS E CRÉDITOS DA EQUIPE */}
         <div className="mt-20 pt-8 border-t border-white/10 flex flex-col lg:flex-row justify-between items-center lg:items-start gap-6 text-xs font-medium">
           <p className="text-slate-400 text-center lg:text-left">
             © 2026 Alumni FATEC Sorocaba - Todos os direitos reservados.

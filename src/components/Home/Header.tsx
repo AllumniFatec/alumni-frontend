@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,28 +9,20 @@ export default function Header() {
   // Fecha o menu ao clicar em um link ou no fundo
   const closeMenu = () => setIsMenuOpen(false);
 
-  // Trava o scroll do corpo da página quando o menu está aberto
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isMenuOpen]);
-
   return (
     <header className="sticky top-0 z-[100] w-full bg-white border-b border-slate-200">
+      {/* Overlay Escuro com bloqueio de scroll via Tailwind */}
       {isMenuOpen && (
         <div
           onClick={closeMenu}
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[-1] animate-in fade-in duration-300"
+          className="fixed inset-0 h-screen w-screen bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300 overscroll-none overflow-hidden"
+          // O z-index foi ajustado para ficar abaixo do menu branco, mas acima do resto da página
+          style={{ zIndex: 90 }}
         />
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between bg-white">
+      {/* Container principal do Header (z-index maior para ficar acima do overlay) */}
+      <div className="relative z-[100] max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between bg-white">
         {/* Logo */}
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="text-red-700 flex size-9 sm:size-11 items-center justify-center rounded-lg bg-red-100 shrink-0">
@@ -85,7 +77,7 @@ export default function Header() {
 
       {/* Mobile Menu Content */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-20 left-0 w-full bg-white border-b border-slate-200 shadow-2xl animate-in fade-in slide-in-from-top duration-300">
+        <div className="md:hidden absolute top-20 left-0 w-full bg-white border-b border-slate-200 shadow-2xl animate-in fade-in slide-in-from-top duration-300 z-[100]">
           <nav className="flex flex-col p-4 gap-2">
             <a
               href="#top"

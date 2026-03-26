@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Companies() {
   const partners = [
     {
@@ -40,10 +42,8 @@ export default function Companies() {
 
       {/* Container das logos */}
       <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
-        {/* Alterado para não receber o index, pois não será mais usado */}
         {partners.map((partner) => (
           <a
-            /* A key passa a ser o partner.name em vez do index */
             key={partner.name}
             href={partner.url}
             target="_blank"
@@ -51,11 +51,18 @@ export default function Companies() {
             className="min-w-[180px] h-24 bg-white border border-gray-100 shadow-sm rounded-lg flex items-center justify-center p-6 group cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-300"
             title={`Visitar site da ${partner.name}`}
           >
-            <img
-              src={partner.logo}
-              alt={`Logo da ${partner.name}`}
-              className="max-h-full max-w-full object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
-            />
+            {/* Criamos uma div wrapper 'relative' com w-full e h-full 
+              para que o 'fill' da imagem respeite o padding do card 
+            */}
+            <div className="relative w-full h-full">
+              <Image
+                src={partner.logo}
+                alt={`Logo da ${partner.name}`}
+                fill
+                unoptimized
+                className="object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+              />
+            </div>
           </a>
         ))}
       </div>

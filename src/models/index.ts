@@ -7,6 +7,7 @@ export * from "./event";
 export * from "./job";
 export * from "./skill";
 export * from "./userSkill";
+export * from "./profile";
 
 import { FeedPost } from "./posts";
 export type { FeedPost };

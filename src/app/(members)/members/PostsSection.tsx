@@ -1,9 +1,13 @@
-import { useMemo } from "react";
+"use client";
+
 import { Section } from "@/components/Section";
 import { PostCard } from "@/components/Posts";
 import { Spinner } from "@/components/ui/spinner";
 import { EmptyState } from "@/components/EmptyState";
-import { FeedPost, Post, PostStatus } from "@/models";
+import type { FeedPost } from "@/models";
+import { useAuth } from "@/context/AuthContext";
+import { usePostLikeMutation } from "@/hooks/usePost";
+import { usePostCommentMutation } from "@/hooks/usePostComment";
 
 interface PostsSectionProps {
   posts: FeedPost[];
@@ -20,28 +24,34 @@ export function PostsSection({
   hasNextPage,
   fetchNextPage,
 }: PostsSectionProps) {
-  const mappedPosts = useMemo<Post[]>(
-    () =>
-      posts.map((post) => ({
-        post_id: post.id,
-        content: post.content,
-        likes_count: post.likes_count,
-        comments_count: post.comments_count,
-        author_id: post.user_id,
-        author: {
-          name: post.user_name,
-          perfil_photo: post.user_perfil_photo,
-        },
-        images: [],
-        status: PostStatus.ACTIVE,
-        likes: [],
-        comments: [],
-        create_date: new Date(post.create_date),
-      })),
-    [posts],
-  );
+  const { user } = useAuth();
+  const { mutate } = usePostLikeMutation();
+  const {
+    mutate: commentMutate,
+    isPending: isCommentPending,
+    variables: commentVariables,
+  } = usePostCommentMutation();
+
+  const onClickLike = (postId: string) => {
+    if (user) {
+      mutate({ postId, userId: user.id, userName: user.name });
+    }
+  };
+
+  const onSubmitComment = (postId: string, content: string) => {
+    if (user) {
+      commentMutate({
+        postId,
+        content,
+        userId: user.id,
+        userName: user.name,
+      });
+    }
+  };
+
 
   if (!isLoading && posts.length === 0) {
+
     return (
       <Section title="Últimos Posts">
         <EmptyState
@@ -57,11 +67,20 @@ export function PostsSection({
       <div className="bg-white rounded-xl border shadow-sm flex flex-col gap-4 p-4">
         {isLoading &&
           Array.from({ length: 3 }).map((_, i) => (
-            <PostCard key={i} isLoading />
+            <PostCard key={i} isLoading user={user} />
           ))}
 
-        {mappedPosts.map((post) => (
-          <PostCard key={post.post_id} post={post} />
+        {posts.map((p) => (
+          <PostCard
+            user={user}
+            key={p.id}
+            post={p}
+            onClickLike={() => onClickLike(p.id)}
+            onSubmitComment={(content) => onSubmitComment(p.id, content)}
+            isCommentPending={
+              isCommentPending && commentVariables?.postId === p.id
+            }
+          />
         ))}
 
         {hasNextPage && (

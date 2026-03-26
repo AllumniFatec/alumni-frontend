@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 
 interface DeleteJobProps {
-  onConfirm: () => void;
+  onConfirm: () => void | Promise<void>;
   /**
    * Optional trigger element to open the dialog. If omitted, a default button is rendered.
    */
@@ -30,7 +30,7 @@ interface DeleteJobProps {
   isLoading?: boolean;
 }
 
-export function DeleteJob({
+export function DeleteJobConfirmationDialog({
   onConfirm,
   trigger,
   open,
@@ -67,7 +67,7 @@ export function DeleteJob({
             <Button variant="outline">Cancelar</Button>
           </DialogClose>
           <Button
-            onClick={onConfirm}
+            onClick={() => void Promise.resolve(onConfirm())}
             variant={"destructive"}
             disabled={isLoading}
           >

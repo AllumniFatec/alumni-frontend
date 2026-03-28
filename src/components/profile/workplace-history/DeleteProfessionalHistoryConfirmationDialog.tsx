@@ -50,7 +50,7 @@ export function DeleteProfessionalHistoryConfirmationDialog({
             type="button"
             variant="destructive"
             disabled={isLoading}
-            onClick={() => void Promise.resolve(onConfirm())}
+            onClick={() => void onConfirm()}
           >
             {isLoading ? "Excluindo..." : "Confirmar"}
           </Button>

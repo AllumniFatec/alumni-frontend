@@ -63,13 +63,13 @@ export class ProfileApi {
     }
   }
 
-  /** `POST /my-profile/job` — histórico profissional (não é vaga na plataforma). */
+  /** `POST /my-profile/workplace` — histórico profissional (não é vaga na plataforma). */
   static async addProfessionalHistory(
     payload: MyProfileProfessionalHistoryCreatePayload,
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.post<ProfileMutationMessage>(
-        "/my-profile/job",
+        "/my-profile/workplace",
         payload,
       );
       return response.data;
@@ -79,13 +79,13 @@ export class ProfileApi {
     }
   }
 
-  /** `PUT /my-profile/job` */
+  /** `PUT /my-profile/workplace` */
   static async updateProfessionalHistory(
     payload: MyProfileProfessionalHistoryUpdatePayload,
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.put<ProfileMutationMessage>(
-        "/my-profile/job",
+        "/my-profile/workplace",
         payload,
       );
       return response.data;
@@ -95,13 +95,13 @@ export class ProfileApi {
     }
   }
 
-  /** `DELETE /my-profile/job` */
+  /** `DELETE /my-profile/workplace` */
   static async deleteProfessionalHistory(
     payload: MyProfileProfessionalHistoryDeletePayload,
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.delete<ProfileMutationMessage>(
-        "/my-profile/job",
+        "/my-profile/workplace",
         { data: payload },
       );
       return response.data;

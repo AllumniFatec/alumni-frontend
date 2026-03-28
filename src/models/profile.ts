@@ -120,7 +120,7 @@ export type UpdateMyProfilePayload = Partial<
 >;
 
 /**
- * Corpo de `POST /my-profile/job` — insere um emprego no **histórico profissional**
+ * Corpo de `POST /my-profile/workplace` — insere um emprego no **histórico profissional**
  * (não é publicação de vaga na plataforma).
  */
 export interface MyProfileProfessionalHistoryCreatePayload {
@@ -131,13 +131,13 @@ export interface MyProfileProfessionalHistoryCreatePayload {
   end_date: string | null;
 }
 
-/** Corpo de `PUT /my-profile/job`. */
+/** Corpo de `PUT /my-profile/workplace`. */
 export type MyProfileProfessionalHistoryUpdatePayload =
   MyProfileProfessionalHistoryCreatePayload & {
     jobUserId: string;
   };
 
-/** Corpo de `DELETE /my-profile/job`. */
+/** Corpo de `DELETE /my-profile/workplace`. */
 export interface MyProfileProfessionalHistoryDeletePayload {
   jobUserId: string;
 }

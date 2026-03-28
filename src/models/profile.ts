@@ -41,7 +41,7 @@ export interface ProfileSocialMedia {
  * Reaproveita o modelo `Skill` via `Pick`.
  */
 export interface ProfileSkillEntry {
-  user_skill_id?: string;
+  user_skill_id: string;
   skill: Pick<Skill, "name">;
 }
 

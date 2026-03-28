@@ -4,7 +4,7 @@ import { ExternalLink } from "lucide-react";
 import type { ProfileSocialMedia } from "@/models/profile";
 import { getSocialMediaUi } from "@/hooks/socialMedia";
 import { cn } from "@/lib/utils";
-import { socialLinkDisplayUrl } from "@/components/Profile/social-media/socialLinkDisplayUrl";
+import { socialLinkDisplayUrl } from "@/components/profile/social-media/socialLinkDisplayUrl";
 import Link from "next/link";
 
 export interface SocialMediaPublicLinkCardProps {

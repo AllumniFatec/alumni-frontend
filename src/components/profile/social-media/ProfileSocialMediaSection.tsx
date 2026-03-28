@@ -5,8 +5,8 @@ import { Share2 } from "lucide-react";
 import type { ProfileSocialMedia } from "@/models/profile";
 import { useCanManageProfile } from "@/hooks/useCanManageProfile";
 import { Button } from "@/components/ui/button";
-import { ProfileSocialMediaManageDialog } from "@/components/Profile/social-media/ProfileSocialMediaManageDialog";
-import { SocialMediaPublicLinkCard } from "@/components/Profile/social-media/SocialMediaPublicLinkCard";
+import { ProfileSocialMediaManageDialog } from "@/components/profile/social-media/ProfileSocialMediaManageDialog";
+import { SocialMediaPublicLinkCard } from "@/components/profile/social-media/SocialMediaPublicLinkCard";
 
 export function ProfileSocialMediaSection({
   profileUserId,

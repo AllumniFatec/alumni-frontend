@@ -2,8 +2,8 @@
 
 import type { UseFormReturn } from "react-hook-form";
 import type { ProfileSocialMedia } from "@/models/profile";
-import type { UpdateSocialNetworkFormValues } from "@/components/Profile/social-media/socialNetworkFormSchemas";
-import { ManagedSocialNetworkRow } from "@/components/Profile/social-media/ManagedSocialNetworkRow";
+import type { UpdateSocialNetworkFormValues } from "@/components/profile/social-media/socialNetworkFormSchemas";
+import { ManagedSocialNetworkRow } from "@/components/profile/social-media/ManagedSocialNetworkRow";
 
 interface YourSocialNetworksSectionProps {
   items: ProfileSocialMedia[];

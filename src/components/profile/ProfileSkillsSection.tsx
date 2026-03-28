@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Award } from "lucide-react";
 import type { ProfileSkillEntry } from "@/models/profile";
 import { useCanManageProfile } from "@/hooks/useCanManageProfile";
@@ -22,12 +22,10 @@ export function ProfileSkillsSection({
   const canManage = useCanManageProfile(profileUserId);
   const dialogRef = useRef<ProfileSkillsManageDialogHandle>(null);
   const { mutateAsync: deleteSkill } = useDeleteProfileSkill(); 
-  console.log("minhas skills na secao é", skills);
 
   if (skills.length === 0 && !canManage) return null;
 
   async function handleRemove(userSkillId: string) { 
-    console.log("userSkillId", userSkillId);
     if (!canManage) return;
       await deleteSkill({ user_skill_id: userSkillId });
   }
@@ -59,7 +57,6 @@ export function ProfileSkillsSection({
       ) : (
         <div className="flex flex-wrap gap-2">
           {skills.map((userSkill) => {
-            console.log("userSkill", userSkill);
             return (
               <ProfileSkillBadge
                 key={userSkill.user_skill_id}

@@ -112,7 +112,7 @@ export function useDeleteMyProfile() {
   return { mutateAsync, isPending };
 }
 
-/** Histórico profissional (`POST /myProfile/job`). */
+/** Histórico profissional (`POST /my-profile/job`). */
 export function useAddProfessionalHistory() {
   const invalidate = useInvalidateMyProfile();
   const { mutateAsync, isPending } = useMutation({
@@ -141,7 +141,7 @@ export function useAddProfessionalHistory() {
   return { mutateAsync, isPending };
 }
 
-/** Histórico profissional (`PUT /myProfile/job`). */
+/** Histórico profissional (`PUT /my-profile/job`). */
 export function useUpdateProfessionalHistory() {
   const invalidate = useInvalidateMyProfile();
   const { mutateAsync, isPending } = useMutation({
@@ -170,7 +170,7 @@ export function useUpdateProfessionalHistory() {
   return { mutateAsync, isPending };
 }
 
-/** Histórico profissional (`DELETE /myProfile/job`). */
+/** Histórico profissional (`DELETE /my-profile/job`). */
 export function useDeleteProfessionalHistory() {
   const invalidate = useInvalidateMyProfile();
   const { mutateAsync, isPending } = useMutation({

@@ -7,6 +7,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AuthUser } from "@/context/AuthContext";
+import { PostCardActionsMenu } from "@/components/Posts/PostCardActionsMenu";
+import { EditPostDialog } from "@/components/Posts/EditPostDialog";
+import { useCanManageContent } from "@/hooks/useCanManageContent";
+import { useDeletePostMutation } from "@/hooks/usePost";
 
 export interface PostCardProps {
   user?: AuthUser | null;
@@ -34,9 +38,16 @@ export const PostCard = ({
 }: PostCardProps) => {
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [draft, setDraft] = useState("");
+  const [editOpen, setEditOpen] = useState(false);
   const lastLikeAtRef = useRef(0);
+  const { mutateAsync: deletePost, isPending: isDeletePending } =
+    useDeletePostMutation();
 
   const isFeedPost = Boolean(post && "user_name" in post);
+
+  const authorId = !post ? "" : "user_name" in post ? post.user_id : post.author_id;
+  const postId = !post ? "" : "user_name" in post ? post.id : post.post_id;
+  const { canManageContent } = useCanManageContent(authorId);
 
   const haveILiked = useMemo(() => {
     if (!post?.likes || !user?.id) return false;
@@ -118,13 +129,40 @@ export const PostCard = ({
   return (
     <div
       className={cn(
-        "bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow",
+        "relative bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow",
         className,
       )}
     >
-      <p className="text-gray-700 text-sm leading-relaxed mb-3">
+      {canManageContent && (
+        <div className="absolute top-2 right-2 z-10">
+          <PostCardActionsMenu
+            authorId={authorId}
+            onEdit={() => setEditOpen(true)}
+            onDelete={async () => {
+              await deletePost(postId);
+            }}
+            isDeleting={isDeletePending}
+          />
+        </div>
+      )}
+
+      <p
+        className={cn(
+          "text-gray-700 text-sm leading-relaxed mb-3",
+          canManageContent && "pr-10",
+        )}
+      >
         {post.content}
       </p>
+
+      {canManageContent && (
+        <EditPostDialog
+          open={editOpen}
+          onOpenChange={setEditOpen}
+          postId={postId}
+          initialContent={post.content}
+        />
+      )}
 
       <div className="mt-3 pt-2 border-t border-gray-100 flex items-center justify-between gap-3 flex-wrap">
         <span className="text-xs text-gray-400">{authorLabel}</span>

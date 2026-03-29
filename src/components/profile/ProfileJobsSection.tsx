@@ -4,7 +4,7 @@ import { Briefcase } from "lucide-react";
 import { JobCard } from "@/components/Jobs/JobCard";
 import type { JobListItem } from "@/models/job";
 
-/** Oportunidades de emprego publicadas na plataforma por este utilizador (campo `jobs` no GET /myProfile). */
+/** Oportunidades de emprego publicadas na plataforma por este utilizador (campo `jobs` no GET /my-profile). */
 export function ProfileJobsSection({
   jobs,
 }: {

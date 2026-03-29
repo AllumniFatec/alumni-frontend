@@ -20,7 +20,8 @@ export default function ProfilePage() {
   const { user } = useAuth();
   const { data, isLoading, isError, refetch, isFetching } = useMyProfile({
     enabled: !!user,
-  });
+  }); 
+
   console.log("meu perfil", JSON.stringify(data, null, 2));
 
 
@@ -99,7 +100,10 @@ export default function ProfilePage() {
             <ProfileSummarySection profile={profile} />
             <ProfileInformationSection profile={profile} />
             <ProfileCoursesSection courses={profile.courses} />
-            <ProfileWorkplaceHistorySection entries={profile.workplace_history} />
+            <ProfileWorkplaceHistorySection
+              profileUserId={profile.user_id}
+              entries={profile.workplace_history}
+            />
             <ProfileSocialMediaSection
               profileUserId={profile.user_id}
               socialMedia={profile.social_media}

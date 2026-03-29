@@ -15,11 +15,8 @@ export function ProfileSkillBadge({
   label,
   onRemove,
   className,
-  isOwner = false,
-
+  isOwner,
 }: ProfileSkillBadgeProps) {
-
-
   return (
     <span
       className={cn(

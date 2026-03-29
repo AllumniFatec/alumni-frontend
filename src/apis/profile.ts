@@ -15,7 +15,7 @@ import type {
 
 export class ProfileApi {
   static async getMyProfile(): Promise<MyProfile> {
-    const response = await apiBase.get<MyProfile>("/myProfile");
+    const response = await apiBase.get<MyProfile>("/my-profile");
     return response.data;
   }
 
@@ -24,7 +24,7 @@ export class ProfileApi {
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.put<ProfileMutationMessage>(
-        "/myProfile",
+        "/my-profile",
         payload,
       );
       return response.data;
@@ -41,7 +41,7 @@ export class ProfileApi {
       const formData = new FormData();
       formData.append("image", image);
       const response = await apiBase.patch<ProfileMutationMessage>(
-        "/myProfile/profilePhoto",
+        "/my-profile/profile-photo",
         formData,
       );
       return response.data;
@@ -54,7 +54,7 @@ export class ProfileApi {
   static async deleteMyProfile(): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.delete<ProfileMutationMessage>(
-        "/myProfile",
+        "/my-profile",
       );
       return response.data;
     } catch (error) {
@@ -63,13 +63,13 @@ export class ProfileApi {
     }
   }
 
-  /** `POST /myProfile/job` — histórico profissional (não é vaga na plataforma). */
+  /** `POST /my-profile/workplace` — histórico profissional (não é vaga na plataforma). */
   static async addProfessionalHistory(
     payload: MyProfileProfessionalHistoryCreatePayload,
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.post<ProfileMutationMessage>(
-        "/myProfile/job",
+        "/my-profile/workplace",
         payload,
       );
       return response.data;
@@ -79,13 +79,13 @@ export class ProfileApi {
     }
   }
 
-  /** `PUT /myProfile/job` */
+  /** `PUT /my-profile/workplace` */
   static async updateProfessionalHistory(
     payload: MyProfileProfessionalHistoryUpdatePayload,
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.put<ProfileMutationMessage>(
-        "/myProfile/job",
+        "/my-profile/workplace",
         payload,
       );
       return response.data;
@@ -95,13 +95,13 @@ export class ProfileApi {
     }
   }
 
-  /** `DELETE /myProfile/job` */
+  /** `DELETE /my-profile/workplace` */
   static async deleteProfessionalHistory(
     payload: MyProfileProfessionalHistoryDeletePayload,
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.delete<ProfileMutationMessage>(
-        "/myProfile/job",
+        "/my-profile/workplace",
         { data: payload },
       );
       return response.data;
@@ -116,7 +116,7 @@ export class ProfileApi {
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.post<ProfileMutationMessage>(
-        "/myProfile/skill",
+        "/my-profile/skill",
         payload,
       );
       return response.data;
@@ -131,7 +131,7 @@ export class ProfileApi {
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.delete<ProfileMutationMessage>(
-        "/myProfile/skill",
+        "/my-profile/skill",
         { data: payload },
       );
       return response.data;
@@ -146,7 +146,7 @@ export class ProfileApi {
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.post<ProfileMutationMessage>(
-        "/myProfile/socialMedia",
+        "/my-profile/social-media",
         payload,
       );
       return response.data;
@@ -161,7 +161,7 @@ export class ProfileApi {
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.patch<ProfileMutationMessage>(
-        "/myProfile/socialMedia",
+        "/my-profile/social-media",
         payload,
       );
       return response.data;
@@ -176,7 +176,7 @@ export class ProfileApi {
   ): Promise<ProfileMutationMessage> {
     try {
       const response = await apiBase.delete<ProfileMutationMessage>(
-        "/myProfile/socialMedia",
+        "/my-profile/social-media",
         { data: payload },
       );
       return response.data;

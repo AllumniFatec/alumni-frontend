@@ -27,7 +27,7 @@ export class PostsApi {
   static async updatePost( payload: PostContentPayload): Promise<string> {
     try {
       console.log("Updating post:", payload.post_id);
-      const response = await apiBase.put<string>(`/post/${payload.post_id}`, payload);
+      const response = await apiBase.patch<string>(`/post/${payload.post_id}`, payload);
       console.log("Response:", response.data);
       return response.data;
     } catch (error) {

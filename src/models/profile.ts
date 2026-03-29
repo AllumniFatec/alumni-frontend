@@ -76,6 +76,28 @@ export interface MyProfile {
   receive_notifications: boolean;
 }
 
+/**
+ * Campos necessários para o formulário de edição (PUT /my-profile).
+ * Usado por `ProfileInformationEditDialog` em vez de acoplar a `MyProfile` inteiro.
+ */
+export type ProfileInformationEditable = Pick<
+  MyProfile,
+  "name" | "gender" | "biography" | "receive_notifications"
+>;
+
+/** Constrói o payload do diálogo a partir de qualquer perfil que traga estes campos. */
+export function toProfileInformationEditable(
+  profile: Pick<MyProfile, "name" | "gender" | "biography"> &
+    Partial<Pick<MyProfile, "receive_notifications">>,
+): ProfileInformationEditable {
+  return {
+    name: profile.name,
+    gender: profile.gender,
+    biography: profile.biography ?? "",
+    receive_notifications: profile.receive_notifications ?? false,
+  };
+}
+
 /** Corpo de PUT /my-profile — todos opcionais para updates parciais. */
 export type UpdateMyProfilePayload = Partial<
   Pick<MyProfile, "name" | "gender" | "biography" | "receive_notifications">

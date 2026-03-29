@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Bell, FileText, Mail, User } from "lucide-react";
-import type { MyProfile } from "@/models/profile";
+import { type MyProfile, toProfileInformationEditable } from "@/models/profile";
 
 import { UserGender } from "@/models/users";
 import { useCanManageProfile } from "@/hooks/useCanManageProfile";
@@ -17,7 +17,7 @@ const genderLabel: Record<string, string> = {
 
 type ProfileInformationModel = Pick<
   MyProfile,
-  "user_id" | "gender" | "biography"
+  "user_id" | "name" | "gender" | "biography"
 > &
   Partial<Pick<MyProfile, "email" | "receive_notifications">>;
 
@@ -86,7 +86,7 @@ export function ProfileInformationSection({
 
       {canManage && isAccountView && (
         <ProfileInformationEditDialog
-          profile={profile as MyProfile}
+          profile={toProfileInformationEditable(profile)}
           open={editOpen}
           onOpenChange={setEditOpen}
         />

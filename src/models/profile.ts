@@ -9,7 +9,7 @@ export interface ProfilePhoto {
   public_id: string;
 }
 
-/** Curso no payload de GET /myProfile (sem `course_id` / `abbreviation` obrigatórios). */
+/** Curso no payload de GET /my-profile (sem `course_id` / `abbreviation` obrigatórios). */
 export interface ProfileCourse {
   course_name: string;
   enrollmentYear: number;
@@ -19,7 +19,7 @@ export interface ProfileWorkplaceCompany {
   company: string;
 }
 
-/** Item de `workplace_history` em GET /myProfile. */
+/** Item de `workplace_history` em GET /my-profile. */
 export interface ProfileWorkplaceHistoryEntry {
   workplace_user_id: string;
   position: string;
@@ -41,7 +41,7 @@ export interface ProfileSocialMedia {
  * Reaproveita o modelo `Skill` via `Pick`.
  */
 export interface ProfileSkillEntry {
-  user_skill_id?: string;
+  user_skill_id: string;
   skill: Pick<Skill, "name">;
 }
 
@@ -78,7 +78,7 @@ export interface ProfilePostLike {
 }
 
 /**
- * Post em GET /myProfile: alinha com `Post` nos campos comuns;
+ * Post em GET /my-profile: alinha com `Post` nos campos comuns;
  * `create_date` em string (JSON), comentários/likes com autor aninhado (≠ `Post`/`FeedPost`).
  * `post_id` é o mesmo identificador que `FeedPost.id` nas rotas de like/comentário do feed.
  */
@@ -92,7 +92,7 @@ export type ProfilePost = Pick<
 };
 
 /**
- * Resposta de GET /myProfile.
+ * Resposta de GET /my-profile.
  * Não reutiliza `User` direto: sem senha/token e com campos e aninhamentos específicos da API.
  */
 export interface MyProfile {
@@ -114,13 +114,13 @@ export interface MyProfile {
   receive_notifications: boolean;
 }
 
-/** Corpo de PUT /myProfile — todos opcionais para updates parciais. */
+/** Corpo de PUT /my-profile — todos opcionais para updates parciais. */
 export type UpdateMyProfilePayload = Partial<
   Pick<MyProfile, "name" | "gender" | "biography" | "receive_notifications">
 >;
 
 /**
- * Corpo de `POST /myProfile/job` — insere um emprego no **histórico profissional**
+ * Corpo de `POST /my-profile/workplace` — insere um emprego no **histórico profissional**
  * (não é publicação de vaga na plataforma).
  */
 export interface MyProfileProfessionalHistoryCreatePayload {
@@ -131,39 +131,39 @@ export interface MyProfileProfessionalHistoryCreatePayload {
   end_date: string | null;
 }
 
-/** Corpo de `PUT /myProfile/job`. */
+/** Corpo de `PUT /my-profile/workplace`. */
 export type MyProfileProfessionalHistoryUpdatePayload =
   MyProfileProfessionalHistoryCreatePayload & {
     jobUserId: string;
   };
 
-/** Corpo de `DELETE /myProfile/job`. */
+/** Corpo de `DELETE /my-profile/workplace`. */
 export interface MyProfileProfessionalHistoryDeletePayload {
   jobUserId: string;
 }
 
-/** POST /myProfile/skill */
+/** POST /my-profile/skill */
 export interface MyProfileSkillCreatePayload {
   skill: string;
 }
 
-/** DELETE /myProfile/skill */
+/** DELETE /my-profile/skill */
 export interface MyProfileSkillDeletePayload {
   user_skill_id: string;
 }
 
-/** POST /myProfile/socialMedia (`media` na API, não `type`) */
+/** POST /my-profile/social-media (`media` na API, não `type`) */
 export interface MyProfileSocialCreatePayload {
   media: SocialMediaType | string;
   url: string;
 }
 
-/** PATCH /myProfile/socialMedia */
+/** PATCH /my-profile/social-media */
 export type MyProfileSocialUpdatePayload = MyProfileSocialCreatePayload & {
   socialMediaId: string;
 };
 
-/** DELETE /myProfile/socialMedia */
+/** DELETE /my-profile/social-media */
 export type MyProfileSocialDeletePayload = Pick<
   MyProfileSocialUpdatePayload,
   "socialMediaId"

@@ -24,9 +24,9 @@ import {
   updateSocialNetworkSchema,
   type CreateSocialNetworkFormValues,
   type UpdateSocialNetworkFormValues,
-} from "@/components/Profile/social-media/socialNetworkFormSchemas";
-import { YourSocialNetworksSection } from "@/components/Profile/social-media/YourSocialNetworksSection";
-import { AddSocialNetworkSection } from "@/components/Profile/social-media/AddSocialNetworkSection";
+} from "@/components/profile/social-media/socialNetworkFormSchemas";
+import { YourSocialNetworksSection } from "@/components/profile/social-media/YourSocialNetworksSection";
+import { AddSocialNetworkSection } from "@/components/profile/social-media/AddSocialNetworkSection";
 
 interface ProfileSocialMediaManageDialogProps {
   open: boolean;

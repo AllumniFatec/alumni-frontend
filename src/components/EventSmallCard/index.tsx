@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 interface EventSmallCardProps {
   event?: FeedEvent;
-  /** Resumo vindo de GET /myProfile (sem data/local). */
+  /** Resumo vindo de GET /my-profile (sem data/local). */
   profileEvent?: ProfileEventSummary;
   isLoading?: boolean;
 }

@@ -5,22 +5,24 @@ import { ErrorState } from "@/components/ErrorState";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuth } from "@/context/AuthContext";
 import { useMyProfile } from "@/hooks/useProfile";
-import { ProfileSummarySection } from "@/components/Profile/ProfileSummarySection";
-import { ProfileInformationSection } from "@/components/Profile/ProfileInformationSection";
-import { ProfileCoursesSection } from "@/components/Profile/ProfileCoursesSection";
-import { ProfileWorkplaceHistorySection } from "@/components/Profile/ProfileWorkplaceHistorySection";
-import { ProfileSocialMediaSection } from "@/components/Profile/social-media/ProfileSocialMediaSection";
-import { ProfileSkillsSection } from "@/components/Profile/ProfileSkillsSection";
-import { ProfileJobsSection } from "@/components/Profile/ProfileJobsSection";
-import { ProfileEventsSection } from "@/components/Profile/ProfileEventsSection";
-import { ProfilePostsSection } from "@/components/Profile/ProfilePostsSection";
+import { ProfileSummarySection } from "@/components/profile/ProfileSummarySection";
+import { ProfileInformationSection } from "@/components/profile/ProfileInformationSection";
+import { ProfileCoursesSection } from "@/components/profile/ProfileCoursesSection";
+import { ProfileWorkplaceHistorySection } from "@/components/profile/ProfileWorkplaceHistorySection";
+import { ProfileSocialMediaSection } from "@/components/profile/social-media/ProfileSocialMediaSection";
+import { ProfileSkillsSection } from "@/components/profile/ProfileSkillsSection";
+import { ProfileJobsSection } from "@/components/profile/ProfileJobsSection";
+import { ProfileEventsSection } from "@/components/profile/ProfileEventsSection";
+import { ProfilePostsSection } from "@/components/profile/ProfilePostsSection";
 import Image from "next/image";
 
 export default function ProfilePage() {
   const { user } = useAuth();
   const { data, isLoading, isError, refetch, isFetching } = useMyProfile({
     enabled: !!user,
-  });
+  }); 
+
+  console.log("meu perfil", JSON.stringify(data, null, 2));
 
 
   if (!user) {
@@ -98,12 +100,18 @@ export default function ProfilePage() {
             <ProfileSummarySection profile={profile} />
             <ProfileInformationSection profile={profile} />
             <ProfileCoursesSection courses={profile.courses} />
-            <ProfileWorkplaceHistorySection entries={profile.workplace_history} />
+            <ProfileWorkplaceHistorySection
+              profileUserId={profile.user_id}
+              entries={profile.workplace_history}
+            />
             <ProfileSocialMediaSection
               profileUserId={profile.user_id}
               socialMedia={profile.social_media}
             />
-            <ProfileSkillsSection skills={profile.skills} />
+            <ProfileSkillsSection
+              profileUserId={profile.user_id}
+              skills={profile.skills}
+            />
             <ProfileJobsSection jobs={profile.jobs} />
             <ProfileEventsSection events={profile.events} />
             <ProfilePostsSection

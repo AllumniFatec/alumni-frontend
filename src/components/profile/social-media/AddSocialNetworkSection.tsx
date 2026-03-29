@@ -1,8 +1,8 @@
 "use client";
 
 import type { UseFormReturn } from "react-hook-form";
-import type { CreateSocialNetworkFormValues } from "@/components/Profile/social-media/socialNetworkFormSchemas";
-import { SocialNetworkTypeSelect } from "@/components/Profile/social-media/SocialNetworkTypeSelect";
+import type { CreateSocialNetworkFormValues } from "@/components/profile/social-media/socialNetworkFormSchemas";
+import { SocialNetworkTypeSelect } from "@/components/profile/social-media/SocialNetworkTypeSelect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BaseLabel } from "@/components/BaseLabel";

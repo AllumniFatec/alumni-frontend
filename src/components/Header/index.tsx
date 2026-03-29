@@ -14,7 +14,7 @@ const navItems: NavItem[] = [
   { label: "Início", href: "/members" },
   { label: "Vagas", href: "/jobs" },
   { label: "Eventos", href: "/events" },
-  { label: "Rede", href: "/posts" },
+  { label: "Rede", href: "/network" },
 ];
 
 export function Header() {

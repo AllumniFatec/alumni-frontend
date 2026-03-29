@@ -9,10 +9,11 @@ export interface ProfilePhoto {
   public_id: string;
 }
 
-/** Curso no payload de GET /my-profile (sem `course_id` / `abbreviation` obrigatórios). */
+/** Curso no payload de GET /my-profile / GET /user/:id (`abbreviation` quando a API envia). */
 export interface ProfileCourse {
   course_name: string;
   enrollmentYear: number;
+  abbreviation?: string;
 }
 
 export interface ProfileWorkplaceCompany {

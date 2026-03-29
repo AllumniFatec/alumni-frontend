@@ -90,6 +90,7 @@ export class AuthApi {
     id: string;
     name: string;
     email: string;
+    user_type: string;
     admin: boolean;
     perfil_photo: { url: string } | null;
   }> {

@@ -51,46 +51,6 @@ export interface ProfileEventSummary {
   status: string;
 }
 
-export interface ProfilePostAuthorCourse {
-  abbreviation: string;
-  enrollmentYear: number;
-}
-
-export interface ProfilePostAuthor {
-  user_id: string;
-  name: string;
-  perfil_photo: string | null;
-  user_status: string;
-  courses: ProfilePostAuthorCourse[];
-}
-
-export interface ProfilePostComment {
-  content: string;
-  comment_id: string;
-  create_date: string;
-  author: ProfilePostAuthor;
-}
-
-export interface ProfilePostLike {
-  like_id: string;
-  create_date: string;
-  author: ProfilePostAuthor;
-}
-
-/**
- * Post em GET /my-profile: alinha com `Post` nos campos comuns;
- * `create_date` em string (JSON), comentários/likes com autor aninhado (≠ `Post`/`FeedPost`).
- * `post_id` é o mesmo identificador que `FeedPost.id` nas rotas de like/comentário do feed.
- */
-export type ProfilePost = Pick<
-  Post,
-  "post_id" | "content" | "images" | "comments_count" | "likes_count"
-> & {
-  create_date: string;
-  comments: ProfilePostComment[];
-  likes: ProfilePostLike[];
-};
-
 /**
  * Resposta de GET /my-profile.
  * Não reutiliza `User` direto: sem senha/token e com campos e aninhamentos específicos da API.
@@ -108,7 +68,8 @@ export interface MyProfile {
   events: ProfileEventSummary[];
   /** Oportunidades publicadas na plataforma — mesmo shape que GET /job (listagem). */
   jobs: JobListItem[];
-  posts: ProfilePost[];
+  /** Mesmo formato que GET /feed (`Post`). */
+  posts: Post[];
   gender: UserGender | string;
   email: string;
   receive_notifications: boolean;

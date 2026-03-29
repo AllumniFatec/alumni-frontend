@@ -5,13 +5,13 @@ import { PostCard } from "@/components/Posts";
 import { CreatePostComposer } from "@/components/Posts/CreatePostComposer";
 import { Spinner } from "@/components/ui/spinner";
 import { EmptyState } from "@/components/EmptyState";
-import type { FeedPost } from "@/models";
+import type { Post } from "@/models";
 import { useAuth } from "@/context/AuthContext";
 import { usePostLikeMutation } from "@/hooks/usePost";
 import { usePostCommentMutation } from "@/hooks/usePostComment";
 
 interface PostsSectionProps {
-  posts: FeedPost[];
+  posts: Post[];
   isLoading: boolean;
   isFetchingNextPage: boolean;
   hasNextPage: boolean | undefined;

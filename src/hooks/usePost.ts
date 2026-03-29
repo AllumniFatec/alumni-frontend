@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { PostsApi } from "@/apis/posts";
 import { createOptimisticId } from "@/lib/optimisticId";
-import type { FeedPost, FeedResponse, PostContentPayload } from "@/models";
+import type { FeedResponse, Post, PostContentPayload } from "@/models";
 import { toast } from "sonner";
 
 const FEED_QUERY_KEY = ["feed"] as const;
@@ -27,10 +27,10 @@ type LikeMutationContext = {
  * if the user is already in `likes`, remove them; otherwise append and bump the count.
  */
 function postWithToggledLike(
-  post: FeedPost,
+  post: Post,
   userId: string,
   userName: string,
-): FeedPost {
+): Post {
   const alreadyLiked = post.likes.some((like) => like.user_id === userId);
 
   if (alreadyLiked) {

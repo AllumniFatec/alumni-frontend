@@ -113,8 +113,6 @@ export default function ProfilePage() {
             <ProfileEventsSection events={profile.events} />
             <ProfilePostsSection
               posts={profile.posts}
-              ownerId={profile.user_id}
-              ownerName={profile.name}
               isOwnProfile={user.id === profile.user_id}
             />
           </div>

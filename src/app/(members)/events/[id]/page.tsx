@@ -17,9 +17,9 @@ import {
 } from "@/hooks/useEvents";
 import { useCanManageEvents } from "@/hooks/useCanManageEvents";
 import { DeleteEventConfirmationDialog } from "@/components/Events/DeleteEventConfirmationDialog";
-import { CloseEventConfirmationDialog } from "@/components/Events/CloseEventConfirmationDialog";
 import { EventStatus } from "@/models/event";
 import { isAxiosError } from "axios";
+import { CloseEventConfirmationDialog } from "@/components/Events/CloseEventConfirmationDialog";
 
 export default function EventDetailPage() {
   const params = useParams();
@@ -70,17 +70,7 @@ export default function EventDetailPage() {
           {isError && (
             <ErrorState
               onRetry={refetch}
-              description={
-                isAxiosError(error) &&
-                error.response?.data &&
-                typeof error.response.data === "object" &&
-                "error" in error.response.data
-                  ? String(
-                      (error.response.data as { error?: string }).error ??
-                        "Não foi possível carregar este evento.",
-                    )
-                  : "Não foi possível carregar este evento."
-              }
+              description="Não foi possível carregar este evento."
             />
           )}
 

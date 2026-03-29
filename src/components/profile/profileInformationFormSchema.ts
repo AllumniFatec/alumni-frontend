@@ -13,6 +13,7 @@ export const profileInformationFormSchema = z.object({
   ),
   biography: z
     .string()
+    .trim()
     .max(2000, "Máximo de 2000 caracteres"),
   receive_notifications: z.boolean(),
 });

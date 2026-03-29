@@ -77,9 +77,9 @@ export function ProfileInformationEditDialog({
 
   async function onSubmit(values: ProfileInformationFormValues) {
     await mutateAsync({
-      name: values.name.trim(),
+      name: values.name,
       gender: values.gender,
-      biography: values.biography.trim() === "" ? "" : values.biography.trim(),
+      biography: values.biography,
       receive_notifications: values.receive_notifications,
     });
     onOpenChange(false);

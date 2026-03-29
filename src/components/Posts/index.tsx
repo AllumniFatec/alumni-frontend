@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Heart, MessageCircle } from "lucide-react";
 import type { FeedPost, FeedPostComment, Post } from "@/models/posts";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -34,6 +34,7 @@ export const PostCard = ({
 }: PostCardProps) => {
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [draft, setDraft] = useState("");
+  const lastLikeAtRef = useRef(0);
 
   const isFeedPost = Boolean(post && "user_name" in post);
 
@@ -81,6 +82,14 @@ export const PostCard = ({
     setDraft("");
   };
 
+  const handleClickLike = () => {
+    if (!onClickLike || !user) return;
+    const now = Date.now();
+    if (now - lastLikeAtRef.current < 800) return;
+    lastLikeAtRef.current = now;
+    onClickLike();
+  };
+
   if (isLoading || !post) {
     return (
       <div
@@ -126,7 +135,7 @@ export const PostCard = ({
             variant="ghost"
             size="sm"
             className="h-8 gap-1.5 px-2 text-gray-500 hover:text-red-600"
-            onClick={() => onClickLike?.()}
+            onClick={handleClickLike}
             disabled={!onClickLike || !user}
             aria-label="Curtir"
           >

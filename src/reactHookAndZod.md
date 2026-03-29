@@ -12,6 +12,7 @@ Este projeto utiliza **React Hook Form** para gerenciamento de formulários e **
 - [Controller para Componentes Customizados](#controller-para-componentes-customizados)
 - [Exemplos Práticos](#exemplos-práticos)
 - [Boas Práticas](#boas-práticas)
+- [Form HTML vs Form do Next.js](#form-html-vs-form-do-nextjs)
 
 ## 🚀 Instalação
 
@@ -495,3 +496,11 @@ setError('email', {
   message: 'E-mail já cadastrado'
 });
 ```
+
+---
+
+## Form HTML vs Form do Next.js
+
+Este guia trata de **React Hook Form + Zod** em cima do `<form>` HTML. No Next.js existe também o componente **`<Form>`** (`next/form`): é um wrapper que melhora a integração com **rotas e navegação** (por exemplo formulários GET que atualizam a URL), não substitui RHF/Zod para validação e estado.
+
+A explicação completa (comparativo, quando usar cada um e link para a documentação oficial) está em **[docs/next.md](../docs/next.md#form-html-vs-form-do-nextjs)**.

@@ -37,6 +37,11 @@ export interface Post {
   create_date: Date;
   updated_at?: Date;
   deleted_date?: Date;
+} 
+/** Corpo para criar ou atualizar post quando só o texto importa (ex.: PUT com `content`). */
+export interface PostContentPayload { 
+  post_id?: string;
+  content: string;
 }
 
 export interface LikePost {

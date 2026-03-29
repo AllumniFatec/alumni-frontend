@@ -1,4 +1,5 @@
 import { apiBase } from "@/lib/axiosInstance";
+import type { PostContentPayload } from "@/models/posts";
 
 export class PostsApi {
   static async updatePostLike(postId: string): Promise<string> {
@@ -9,6 +10,39 @@ export class PostsApi {
       return response.data;
     } catch (error) {
       console.error("Error updating post:", error);
+      throw error;
+    }
+  }
+  static async createPost(payload: PostContentPayload): Promise<string> {
+    try {
+      console.log("Creating post:", payload);
+      const response = await apiBase.post<string>("/post", payload);
+      console.log("Response:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error creating post:", error);
+      throw error;
+    }
+  } 
+  static async updatePost( payload: PostContentPayload): Promise<string> {
+    try {
+      console.log("Updating post:", payload.post_id);
+      const response = await apiBase.put<string>(`/post/${payload.post_id}`, payload);
+      console.log("Response:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating post:", error);
+      throw error;
+    }
+  }
+  static async deletePost(postId: string): Promise<string> {
+    try {
+      console.log("Deleting post:", postId);
+      const response = await apiBase.delete<string>(`/post/${postId}`);
+      console.log("Response:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting post:", error);
       throw error;
     }
   }

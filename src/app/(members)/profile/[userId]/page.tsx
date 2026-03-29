@@ -33,9 +33,7 @@ export default function ProfileByUserIdPage() {
     isSelf === true ? myProfileQuery : otherProfileQuery;
 
   const pageLoading =
-    authLoading ||
-    isSelf === null ||
-    (Boolean(userId) && isLoading && !data);
+    authLoading || isSelf === null || isLoading;
 
   if (pageLoading) {
     return (

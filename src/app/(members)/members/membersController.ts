@@ -1,8 +1,8 @@
 import { useFeed } from "@/hooks/useFeed";
-import { FeedPost, FeedEvent, FeedJob } from "@/models";
+import type { FeedEvent, FeedJob, Post } from "@/models";
 
 export interface MembersController {
-  posts: FeedPost[];
+  posts: Post[];
   latestEvents: FeedEvent[];
   latestJobs: FeedJob[];
   isLoading: boolean;

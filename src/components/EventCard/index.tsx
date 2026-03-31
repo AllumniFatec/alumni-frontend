@@ -1,13 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { Event } from "@/models/event";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Calendar, MapPin } from "lucide-react";
 
+/** Item de lista ou detalhe mínimo para o card */
+export type EventCardModel = {
+  id: string;
+  title: string;
+  local: string;
+  date_start: string;
+  description?: string;
+  images?: Record<string, unknown>[] | null;
+};
+
 interface EventCardProps {
-  event: Event;
+  event: EventCardModel;
 }
 
 export function EventCard({ event }: EventCardProps) {
@@ -20,10 +29,9 @@ export function EventCard({ event }: EventCardProps) {
 
   return (
     <Link
-      href={`/events/${event.event_id}`}
+      href={`/events/${event.id}`}
       className="min-w-[320px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden group shrink-0"
     >
-      {/* Image Section */}
       <div className="h-44 relative bg-gradient-to-br from-primary/20 to-primary/5">
         {event.images && event.images.length > 0 ? (
           <img
@@ -38,7 +46,6 @@ export function EventCard({ event }: EventCardProps) {
         )}
       </div>
 
-      {/* Content Section */}
       <div className="p-5">
         <div className="flex items-center gap-2 mb-2">
           <span className="text-primary text-[11px] font-bold uppercase tracking-wider">
@@ -48,9 +55,11 @@ export function EventCard({ event }: EventCardProps) {
         <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 leading-tight mb-4 line-clamp-2">
           {event.title}
         </h3>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">
-          {event.description}
-        </p>
+        {event.description ? (
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">
+            {event.description}
+          </p>
+        ) : null}
         <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-xs">
           <MapPin className="w-3.5 h-3.5" />
           <span className="truncate">{event.local}</span>

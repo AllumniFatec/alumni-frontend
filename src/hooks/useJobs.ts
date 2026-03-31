@@ -8,8 +8,6 @@ import { JobApi } from "@/apis/jobs";
 import { JobPayload } from "@/models/job";
 import { PROFILE_QUERY_KEY } from "@/hooks/useProfile";
 
-const JOB_PAGE_SIZE = 20;
-
 export function useJobs() {
   const {
     data,
@@ -23,8 +21,10 @@ export function useJobs() {
     queryKey: ["jobs", "list"],
     queryFn: ({ pageParam = 1 }) => JobApi.getJobs(pageParam as number),
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === JOB_PAGE_SIZE ? allPages.length + 1 : undefined,
+    getNextPageParam: (lastPage) =>
+      lastPage.pagination.hasNextPage
+        ? lastPage.pagination.page + 1
+        : undefined,
   });
 
   return {

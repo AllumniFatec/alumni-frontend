@@ -2,19 +2,22 @@
 
 import { Section } from "@/components/Section";
 import { PostCard } from "@/components/Posts";
+import { CreatePostComposer } from "@/components/Posts/CreatePostComposer";
 import { Spinner } from "@/components/ui/spinner";
 import { EmptyState } from "@/components/EmptyState";
-import type { FeedPost } from "@/models";
+import type { Post } from "@/models";
 import { useAuth } from "@/context/AuthContext";
 import { usePostLikeMutation } from "@/hooks/usePost";
 import { usePostCommentMutation } from "@/hooks/usePostComment";
 
 interface PostsSectionProps {
-  posts: FeedPost[];
+  posts: Post[];
   isLoading: boolean;
   isFetchingNextPage: boolean;
   hasNextPage: boolean | undefined;
   fetchNextPage: () => void;
+  /** Título da secção (ex.: página dedicada de posts). */
+  sectionTitle?: string;
 }
 
 export function PostsSection({
@@ -23,6 +26,7 @@ export function PostsSection({
   isFetchingNextPage,
   hasNextPage,
   fetchNextPage,
+  sectionTitle = "Últimos Posts",
 }: PostsSectionProps) {
   const { user } = useAuth();
   const { mutate } = usePostLikeMutation();
@@ -49,42 +53,40 @@ export function PostsSection({
     }
   };
 
-
-  if (!isLoading && posts.length === 0) {
-
-    return (
-      <Section title="Últimos Posts">
-        <EmptyState
-          title="Nenhum post ainda"
-          description="Seja o primeiro a compartilhar algo com a rede Alumni."
-        />
-      </Section>
-    );
-  }
-
   return (
-    <Section title="Últimos Posts">
+    <Section title={sectionTitle}>
       <div className="bg-white rounded-xl border shadow-sm flex flex-col gap-4 p-4">
+        <CreatePostComposer />
+
         {isLoading &&
           Array.from({ length: 3 }).map((_, i) => (
             <PostCard key={i} isLoading user={user} />
           ))}
 
-        {posts.map((p) => (
-          <PostCard
-            user={user}
-            key={p.id}
-            post={p}
-            onClickLike={() => onClickLike(p.id)}
-            onSubmitComment={(content) => onSubmitComment(p.id, content)}
-            isCommentPending={
-              isCommentPending && commentVariables?.postId === p.id
-            }
+        {!isLoading && posts.length === 0 && (
+          <EmptyState
+            title="Nenhum post ainda"
+            description="Seja o primeiro a compartilhar algo com a rede Alumni."
           />
-        ))}
+        )}
 
-        {hasNextPage && (
+        {!isLoading &&
+          posts.map((p) => (
+            <PostCard
+              user={user}
+              key={p.id}
+              post={p}
+              onClickLike={() => onClickLike(p.id)}
+              onSubmitComment={(content) => onSubmitComment(p.id, content)}
+              isCommentPending={
+                isCommentPending && commentVariables?.postId === p.id
+              }
+            />
+          ))}
+
+        {!isLoading && hasNextPage && (
           <button
+            type="button"
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
             className="w-full py-3 text-sm text-slate-500 hover:text-primary transition-colors flex items-center justify-center gap-2"

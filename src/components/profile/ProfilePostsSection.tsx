@@ -4,17 +4,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import { FileText } from "lucide-react";
 import { PostCard } from "@/components/Posts";
 import { EmptyState } from "@/components/EmptyState";
-import type { ProfilePost } from "@/models/profile";
+import type { Post } from "@/models/posts";
 import { useAuth } from "@/context/AuthContext";
 import { usePostLikeMutation } from "@/hooks/usePost";
 import { usePostCommentMutation } from "@/hooks/usePostComment";
 import { PROFILE_QUERY_KEY } from "@/hooks/useProfile";
 
 export interface ProfilePostsSectionProps {
-  posts: ProfilePost[];
-  /** Dono do perfil — usado como autor do post no card (não o visitante logado). */
-  ownerId: string;
-  ownerName: string;
+  posts: Post[];
   /**
    * Quando false, o empty state não sugere que o visitante publique primeiro.
    * Default: true (ex.: /profile só mostra o próprio usuário).
@@ -24,8 +21,6 @@ export interface ProfilePostsSectionProps {
 
 export function ProfilePostsSection({
   posts,
-  ownerId,
-  ownerName,
   isOwnProfile = true,
 }: ProfilePostsSectionProps) {
   const queryClient = useQueryClient();
@@ -92,34 +87,12 @@ export function ProfilePostsSection({
         {posts.map((p) => (
           <PostCard
             user={user}
-            key={p.post_id}
-            post={{
-              id: p.post_id,
-              content: p.content,
-              create_date: new Date(p.create_date),
-              user_id: ownerId,
-              user_name: ownerName,
-              comments_count: p.comments_count,
-              likes_count: p.likes_count,
-              comments: p.comments.map((c) => ({
-                id: c.comment_id,
-                content: c.content,
-                create_date: new Date(c.create_date),
-                user_id: c.author.user_id,
-                user_name: c.author.name,
-                user_perfil_photo: c.author.perfil_photo ?? undefined,
-              })),
-              likes: p.likes.map((l) => ({
-                id: l.like_id,
-                create_date: new Date(l.create_date),
-                user_id: l.author.user_id,
-                user_name: l.author.name,
-              })),
-            }}
-            onClickLike={() => onClickLike(p.post_id)}
-            onSubmitComment={(content) => onSubmitComment(p.post_id, content)}
+            key={p.id}
+            post={p}
+            onClickLike={() => onClickLike(p.id)}
+            onSubmitComment={(content) => onSubmitComment(p.id, content)}
             isCommentPending={
-              isCommentPending && commentVariables?.postId === p.post_id
+              isCommentPending && commentVariables?.postId === p.id
             }
           />
         ))}

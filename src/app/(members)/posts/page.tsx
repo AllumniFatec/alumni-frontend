@@ -1,17 +1,27 @@
-import { Section } from "@/components/Section";
-import { PostCard } from "@/components/Posts";
-import { mockPosts } from "@/mocks";
+"use client";
+
+import { PostsSection } from "@/app/(members)/members/PostsSection";
+import { useFeed } from "@/hooks/useFeed";
 
 export default function PostsPage() {
+  const {
+    posts,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useFeed();
+
   return (
     <div>
-      <Section title="Publicações da Rede">
-        <div className="flex flex-col gap-4">
-          {mockPosts.map((post) => (
-            <PostCard key={post.post_id} post={post} />
-          ))}
-        </div>
-      </Section>
+      <PostsSection
+        posts={posts}
+        isLoading={isLoading}
+        isFetchingNextPage={isFetchingNextPage}
+        hasNextPage={hasNextPage}
+        fetchNextPage={fetchNextPage}
+        sectionTitle="Publicações da Rede"
+      />
     </div>
   );
 }

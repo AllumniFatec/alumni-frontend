@@ -60,6 +60,22 @@ export interface JobListItem {
   create_date: string;
 }
 
+/** Metadados de paginação em GET /job */
+export interface JobsPagination {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+/** Envelope retornado por GET /job */
+export interface JobsListResponse {
+  jobs: JobListItem[];
+  pagination: JobsPagination;
+}
+
 /** Shape retornado por GET /job/:id (detalhe) */
 export interface JobDetail extends JobListItem {
   description: string;

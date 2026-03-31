@@ -13,22 +13,22 @@ export function ProfileSummarySection({ profile }: { profile: ProfileLite }) {
   const items = [
     {
       label: "Posts",
-      value: profile.posts.length,
+      value: profile.posts?.length,
       icon: FileText,
     },
     {
       label: "Skills",
-      value: profile.skills.length,
+      value: profile.skills?.length ?? 0,
       icon: Award,
     },
     {
       label: "Vagas",
-      value: profile.jobs.length,
+      value: profile.jobs?.length ?? 0,
       icon: Briefcase,
     },
     {
       label: "Eventos",
-      value: profile.events.length,
+      value: profile.events?.length ?? 0,
       icon: Calendar,
     },
   ];

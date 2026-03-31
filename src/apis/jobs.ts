@@ -1,9 +1,9 @@
 import { apiBase } from "@/lib/axiosInstance";
-import { JobDetail, JobListItem, JobPayload } from "@/models/job";
+import { JobDetail, JobPayload, JobsListResponse } from "@/models/job";
 
 export class JobApi {
-  static async getJobs(page: number = 1): Promise<JobListItem[]> {
-    const response = await apiBase.get<JobListItem[]>("/job", {
+  static async getJobs(page: number = 1): Promise<JobsListResponse> {
+    const response = await apiBase.get<JobsListResponse>("/job", {
       params: { page },
     });
     return response.data;

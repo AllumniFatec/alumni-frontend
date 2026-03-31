@@ -1,9 +1,9 @@
 import axios from "axios";
-import { Post } from "@/models/posts";
 
 const API_BASE_URL = "http://localhost:3001"; // URL do json-server local
+
 export class MockPostApi {
-  static async getPosts(): Promise<Post[]> {
+  static async getPosts(): Promise<unknown[]> {
     try {
       const response = await axios.get(`${API_BASE_URL}/posts`);
       console.log(`✅ Posts carregados: ${response.data.length} posts da API`);
@@ -14,7 +14,7 @@ export class MockPostApi {
     }
   }
 
-  static async getPostById(postId: number): Promise<Post> {
+  static async getPostById(postId: number): Promise<unknown> {
     try {
       const response = await axios.get(`${API_BASE_URL}/posts/${postId}`);
       console.log(`✅ Post carregado: ${response.data.title}`);
@@ -25,7 +25,7 @@ export class MockPostApi {
     }
   }
 
-  static async createPost(title: string, body: string): Promise<Post> {
+  static async createPost(title: string, body: string): Promise<unknown> {
     try {
       const response = await axios.post(`${API_BASE_URL}/posts`, {
         title,
@@ -44,7 +44,7 @@ export class MockPostApi {
     postId: number,
     title: string,
     body: string,
-  ): Promise<Post> {
+  ): Promise<unknown> {
     try {
       const response = await axios.put(`${API_BASE_URL}/posts/${postId}`, {
         id: postId,

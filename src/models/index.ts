@@ -1,6 +1,7 @@
 // Export all models and types
 export * from "./users";
 export * from "./posts";
+import type { Post } from "./posts";
 export * from "./workplace";
 export * from "./course";
 export * from "./event";
@@ -8,9 +9,6 @@ export * from "./job";
 export * from "./skill";
 export * from "./userSkill";
 export * from "./profile";
-
-import { FeedPost } from "./posts";
-export type { FeedPost };
 
 export interface FeedUser {
   id: string;
@@ -37,7 +35,7 @@ export interface FeedJob {
 }
 
 export interface FeedResponse {
-  posts: FeedPost[];
+  posts: Post[];
   latestUsers: FeedUser[];
   latestEvents: FeedEvent[];
   latestJobs: FeedJob[];

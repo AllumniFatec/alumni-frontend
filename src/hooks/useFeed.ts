@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FeedApi } from "@/apis/feed";
-import { FeedPost, FeedEvent, FeedJob } from "@/models";
+import type { FeedEvent, FeedJob, Post } from "@/models";
 
 const FEED_PAGE_SIZE = 20;
 
@@ -15,7 +15,7 @@ export function useFeed() {
         : undefined,
   });
 
-  const posts: FeedPost[] = query.data?.pages.flatMap((p) => p.posts) ?? [];
+  const posts: Post[] = query.data?.pages.flatMap((p) => p.posts) ?? [];
   const latestEvents: FeedEvent[] = query.data?.pages[0]?.latestEvents ?? [];
   const latestJobs: FeedJob[] = query.data?.pages[0]?.latestJobs ?? [];
 

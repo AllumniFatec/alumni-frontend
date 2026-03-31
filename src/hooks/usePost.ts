@@ -5,7 +5,8 @@ import {
 } from "@tanstack/react-query";
 import { PostsApi } from "@/apis/posts";
 import { createOptimisticId } from "@/lib/optimisticId";
-import type { FeedPost, FeedResponse } from "@/models";
+import type { FeedResponse, Post, PostContentPayload } from "@/models";
+import { toast } from "sonner";
 
 const FEED_QUERY_KEY = ["feed"] as const;
 
@@ -26,10 +27,10 @@ type LikeMutationContext = {
  * if the user is already in `likes`, remove them; otherwise append and bump the count.
  */
 function postWithToggledLike(
-  post: FeedPost,
+  post: Post,
   userId: string,
   userName: string,
-): FeedPost {
+): Post {
   const alreadyLiked = post.likes.some((like) => like.user_id === userId);
 
   if (alreadyLiked) {
@@ -118,4 +119,88 @@ export function usePostLikeMutation() {
       queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
     },
   });
+}
+
+export function useCreatePostMutation() {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (payload: PostContentPayload) => PostsApi.createPost(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY }); 
+      toast.success("Post criado com sucesso", {
+        description: "Seu post foi criado com sucesso.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: (error) => {
+      console.error("Error creating post:", error);
+      toast.error("Erro ao criar post", {
+        description: "Verifique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
+  });
+  return { mutateAsync, isPending };
+} 
+
+export function useUpdatePostMutation() {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (payload: PostContentPayload) => PostsApi.updatePost(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
+      toast.success("Post atualizado com sucesso", {
+        description: "Seu post foi atualizado com sucesso.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating post:", error);
+      toast.error("Erro ao atualizar post", {
+        description: "Verifique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
+  });
+  return { mutateAsync, isPending };
+} 
+
+export function useDeletePostMutation() {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (postId: string) => PostsApi.deletePost(postId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
+      toast.success("Post deletado com sucesso", {
+        description: "Seu post foi deletado com sucesso.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: (error) => {
+      console.error("Error deleting post:", error);
+      toast.error("Erro ao deletar post", {
+        description: "Verifique seus dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
+  });
+  return { mutateAsync, isPending };
 }

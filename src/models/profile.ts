@@ -9,10 +9,11 @@ export interface ProfilePhoto {
   public_id: string;
 }
 
-/** Curso no payload de GET /my-profile (sem `course_id` / `abbreviation` obrigatórios). */
+/** Curso no payload de GET /my-profile / GET /user/:id (`abbreviation` quando a API envia). */
 export interface ProfileCourse {
   course_name: string;
   enrollmentYear: number;
+  abbreviation?: string;
 }
 
 export interface ProfileWorkplaceCompany {
@@ -51,46 +52,6 @@ export interface ProfileEventSummary {
   status: string;
 }
 
-export interface ProfilePostAuthorCourse {
-  abbreviation: string;
-  enrollmentYear: number;
-}
-
-export interface ProfilePostAuthor {
-  user_id: string;
-  name: string;
-  perfil_photo: string | null;
-  user_status: string;
-  courses: ProfilePostAuthorCourse[];
-}
-
-export interface ProfilePostComment {
-  content: string;
-  comment_id: string;
-  create_date: string;
-  author: ProfilePostAuthor;
-}
-
-export interface ProfilePostLike {
-  like_id: string;
-  create_date: string;
-  author: ProfilePostAuthor;
-}
-
-/**
- * Post em GET /my-profile: alinha com `Post` nos campos comuns;
- * `create_date` em string (JSON), comentários/likes com autor aninhado (≠ `Post`/`FeedPost`).
- * `post_id` é o mesmo identificador que `FeedPost.id` nas rotas de like/comentário do feed.
- */
-export type ProfilePost = Pick<
-  Post,
-  "post_id" | "content" | "images" | "comments_count" | "likes_count"
-> & {
-  create_date: string;
-  comments: ProfilePostComment[];
-  likes: ProfilePostLike[];
-};
-
 /**
  * Resposta de GET /my-profile.
  * Não reutiliza `User` direto: sem senha/token e com campos e aninhamentos específicos da API.
@@ -108,10 +69,33 @@ export interface MyProfile {
   events: ProfileEventSummary[];
   /** Oportunidades publicadas na plataforma — mesmo shape que GET /job (listagem). */
   jobs: JobListItem[];
-  posts: ProfilePost[];
+  /** Mesmo formato que GET /feed (`Post`). */
+  posts: Post[];
   gender: UserGender | string;
   email: string;
   receive_notifications: boolean;
+}
+
+/**
+ * Campos necessários para o formulário de edição (PUT /my-profile).
+ * Usado por `ProfileInformationEditDialog` em vez de acoplar a `MyProfile` inteiro.
+ */
+export type ProfileInformationEditable = Pick<
+  MyProfile,
+  "name" | "gender" | "biography" | "receive_notifications"
+>;
+
+/** Constrói o payload do diálogo a partir de qualquer perfil que traga estes campos. */
+export function toProfileInformationEditable(
+  profile: Pick<MyProfile, "name" | "gender" | "biography"> &
+    Partial<Pick<MyProfile, "receive_notifications">>,
+): ProfileInformationEditable {
+  return {
+    name: profile.name,
+    gender: profile.gender,
+    biography: profile.biography ?? "",
+    receive_notifications: profile.receive_notifications ?? false,
+  };
 }
 
 /** Corpo de PUT /my-profile — todos opcionais para updates parciais. */

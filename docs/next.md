@@ -275,3 +275,29 @@ Para a maioria dos sites, a melhor abordagem é **combinar múltiplas estratégi
 6. **Dashboards administrativos** → SSR ou CSR
 
 Isso garante o melhor de cada mundo: performance, SEO, dados atualizados e ótima experiência do usuário! 🚀
+
+---
+
+<a id="form-html-vs-form-do-nextjs"></a>
+
+## Form HTML vs `<Form>` do Next.js (`next/form`)
+
+### `<form>` HTML (e no React)
+
+- É o elemento **nativo** do navegador.
+- Com **`method="get"`** e **`action`**, o envio costuma ser **navegação completa** (nova requisição de página), salvo se você interceptar com JavaScript (`preventDefault`) e tratar como SPA (fetch, estado, etc.).
+- Com **`method="post"`** no modelo clássico (sem JS), o fluxo também segue o comportamento tradicional do servidor.
+- No React, o padrão é **`onSubmit`**, validação (ex.: Zod) e envio com **`fetch`**, **React Query** ou **Server Actions** — o comportamento depende do que você implementou.
+
+### `<Form>` do Next.js (`import Form from "next/form"`)
+
+- É um **wrapper em cima do `<form>`**; não substitui a semântica de formulário nem resolve validação/estado sozinho.
+- Integra melhor o formulário com o **App Router**: em cenários como **GET com query string** (busca, filtros), pode usar **navegação client-side** em vez de recarregar a página inteira “no modo clássico”, com **prefetch** onde fizer sentido.
+- Continua acessível como um `<form>`; a diferença está na **navegação e na integração com o Next**, não em “outro tipo de formulário” para validação (isso continua com React Hook Form, Zod, Server Actions, etc.).
+
+### Quando usar o quê
+
+- **Login, cadastro, esqueci senha, modais com RHF + Zod:** em geral um **`<form>`** normal + `onSubmit` ou Server Action é suficiente.
+- **Filtros/busca que mudam a URL (GET):** o **`<Form>`** do Next pode ajudar na experiência de rota.
+
+Documentação oficial: [Form Component (Next.js)](https://nextjs.org/docs/app/api-reference/components/form).

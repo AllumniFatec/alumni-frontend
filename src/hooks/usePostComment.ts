@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { CommentsApi } from "@/apis/comments";
 import { createOptimisticId } from "@/lib/optimisticId";
-import type { FeedPost, FeedPostComment, FeedResponse } from "@/models";
+import type { FeedResponse, Post, PostComment } from "@/models";
 
 const FEED_QUERY_KEY = ["feed"] as const;
 
@@ -22,9 +22,9 @@ type CommentMutationContext = {
 };
 
 function optimisticComment(
-  post: FeedPost,
-  comment: FeedPostComment,
-): FeedPost {
+  post: Post,
+  comment: PostComment,
+): Post {
   return {
     ...post,
     comments: [comment, ...post.comments],
@@ -35,7 +35,7 @@ function optimisticComment(
 function feedWithNewComment(
   feed: InfiniteData<FeedResponse>,
   postId: string,
-  comment: FeedPostComment,
+  comment: PostComment,
 ): InfiniteData<FeedResponse> {
   const newPages = feed.pages.map((page) => {
     const index = page.posts.findIndex((p) => p.id === postId);
@@ -64,7 +64,7 @@ export function usePostCommentMutation() {
         FEED_QUERY_KEY,
       );
 
-      const comment: FeedPostComment = {
+      const comment: PostComment = {
         id: createOptimisticId("optimistic-comment"),
         content: variables.content,
         create_date: new Date(),

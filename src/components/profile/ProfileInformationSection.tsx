@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Bell, FileText, Mail, User } from "lucide-react";
-import type { MyProfile } from "@/models/profile";
+import { type MyProfile, toProfileInformationEditable } from "@/models/profile";
 
 import { UserGender } from "@/models/users";
 import { useCanManageProfile } from "@/hooks/useCanManageProfile";
@@ -15,15 +15,29 @@ const genderLabel: Record<string, string> = {
   [UserGender.OTHERS]: "Outro",
 };
 
-export function ProfileInformationSection({ profile }: { profile: MyProfile }) {
+type ProfileInformationModel = Pick<
+  MyProfile,
+  "user_id" | "name" | "gender" | "biography"
+> &
+  Partial<Pick<MyProfile, "email" | "receive_notifications">>;
+
+export function ProfileInformationSection({
+  profile,
+  variant = "full",
+}: {
+  profile: ProfileInformationModel;
+  /** `full`: dados da conta (email, notificações) — típico de GET /my-profile. `public`: visitante. */
+  variant?: "full" | "public";
+}) {
   const [editOpen, setEditOpen] = useState(false);
   const canManage = useCanManageProfile(profile.user_id);
+  const isAccountView = variant === "full";
 
   return (
     <section className="mt-6">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-foreground">Informações</h3>
-        {canManage && (
+        {canManage && isAccountView && (
           <Button
             type="button"
             size="sm"
@@ -36,11 +50,13 @@ export function ProfileInformationSection({ profile }: { profile: MyProfile }) {
       </div>
 
       <div className="space-y-2 rounded-xl border border-border/60 bg-card/50 p-4">
-        <div className="flex items-center gap-3 text-sm">
-          <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
-          <span className="text-muted-foreground">Email:</span>
-          <span className="font-medium text-foreground">{profile.email}</span>
-        </div>
+        {isAccountView && profile.email != null && (
+          <div className="flex items-center gap-3 text-sm">
+            <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <span className="text-muted-foreground">Email:</span>
+            <span className="font-medium text-foreground">{profile.email}</span>
+          </div>
+        )}
         <div className="flex items-center gap-3 text-sm">
           <User className="h-4 w-4 shrink-0 text-muted-foreground" />
           <span className="text-muted-foreground">Gênero:</span>
@@ -57,18 +73,20 @@ export function ProfileInformationSection({ profile }: { profile: MyProfile }) {
             </span>
           </div>
         )}
-        <div className="flex items-center gap-3 text-sm">
-          <Bell className="h-4 w-4 shrink-0 text-muted-foreground" />
-          <span className="text-muted-foreground">Notificações:</span>
-          <span className="font-medium text-foreground">
-            {profile.receive_notifications ? "Ativadas" : "Desativadas"}
-          </span>
-        </div>
+        {isAccountView && profile.receive_notifications !== undefined && (
+          <div className="flex items-center gap-3 text-sm">
+            <Bell className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <span className="text-muted-foreground">Notificações:</span>
+            <span className="font-medium text-foreground">
+              {profile.receive_notifications ? "Ativadas" : "Desativadas"}
+            </span>
+          </div>
+        )}
       </div>
 
-      {canManage && (
+      {canManage && isAccountView && (
         <ProfileInformationEditDialog
-          profile={profile}
+          profile={toProfileInformationEditable(profile)}
           open={editOpen}
           onOpenChange={setEditOpen}
         />

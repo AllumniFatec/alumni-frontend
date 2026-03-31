@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUpdateMyProfile } from "@/hooks/useProfile";
-import type { MyProfile } from "@/models/profile";
+import type { ProfileInformationEditable } from "@/models/profile";
 import { UserGender } from "@/models/users";
 import {
   profileInformationFormSchema,
@@ -37,7 +37,9 @@ const genderOptions: { value: UserGender; label: string }[] = [
   { value: UserGender.OTHERS, label: "Outro" },
 ];
 
-function profileToFormValues(profile: MyProfile): ProfileInformationFormValues {
+function profileToFormValues(
+  profile: ProfileInformationEditable,
+): ProfileInformationFormValues {
   const g = profile.gender;
   const gender = Object.values(UserGender).includes(g as UserGender)
     ? (g as UserGender)
@@ -56,7 +58,7 @@ export function ProfileInformationEditDialog({
   open,
   onOpenChange,
 }: {
-  profile: MyProfile;
+  profile: ProfileInformationEditable;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {

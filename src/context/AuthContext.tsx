@@ -13,6 +13,7 @@ export interface AuthUser {
   id: string;
   name: string;
   email: string;
+  user_type: string;
   admin: boolean;
   perfil_photo: { url: string } | null;
 }

@@ -48,6 +48,7 @@ export const signUpSchema = z
     gender: z.enum([UserGender.MALE, UserGender.FEMALE, UserGender.OTHERS], {
       message: "Selecione um gênero válido",
     }),
+    studentId: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas não coincidem",
@@ -64,6 +65,7 @@ export type SignUpData = {
   confirmPassword: string;
   userType: UserType;
   gender: UserGender;
+  studentId?: string;
 };
 
 const SignUpPage = () => {
@@ -87,6 +89,7 @@ const SignUpPage = () => {
       confirmPassword: "",
       userType: "" as any,
       gender: "" as any,
+      studentId: "",
     },
   });
 
@@ -125,6 +128,7 @@ const SignUpPage = () => {
       userType: data.userType,
       course: data.course,
       enrollmentYear: data.enrollmentYear,
+      ...(data.studentId && { studentId: data.studentId }),
     };
 
     signUpMutation.mutate(newUser);
@@ -188,6 +192,15 @@ const SignUpPage = () => {
                 error={errors.enrollmentYear?.message}
                 label="Ano de ingresso"
                 maxLength={4}
+              />
+
+              {/* Student ID */}
+              <Input
+                {...register("studentId")}
+                type="text"
+                placeholder="ID do estudante (opcional)"
+                error={errors.studentId?.message}
+                label="ID do estudante"
               />
             </div>
 

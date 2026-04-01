@@ -66,10 +66,7 @@ export function ProfilePageContent({
           )}
 
           <ProfileSummarySection profile={profile} />
-          <ProfileInformationSection
-            profile={profile}
-            variant={infoVariant}
-          />
+          <ProfileInformationSection profile={profile} variant={infoVariant} />
           <ProfileCoursesSection courses={profile.courses} />
           <ProfileWorkplaceHistorySection
             profileUserId={profile.user_id}

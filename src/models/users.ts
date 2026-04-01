@@ -72,6 +72,7 @@ export interface NewUser {
   userType: UserType;
   course: string;
   enrollmentYear: string;
+  studentId?: string;
 }
 
 export interface UpdateUser {

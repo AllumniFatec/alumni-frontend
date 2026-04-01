@@ -51,7 +51,7 @@ export function ProfilePageContent({
               />
             ) : (
               <div className="size-20 rounded-full border-4 border-white bg-primary/10 flex items-center justify-center text-primary text-3xl font-black shadow">
-                {profile.name.trim().charAt(0).toUpperCase() || "?"}
+                {profile.name?.trim().charAt(0).toUpperCase() || "?"}
               </div>
             )}
           </div>

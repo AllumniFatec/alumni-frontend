@@ -179,6 +179,27 @@ export default function JobDetailPage() {
                   </div>
                 </div>
 
+                {job.url && (
+                  <div className="space-y-4">
+                    <h3 className="text-2xl font-bold border-b border-slate-200 dark:border-slate-800 pb-2">
+                      Link da Vaga
+                    </h3>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full md:w-auto"
+                    >
+                      <a
+                        href={job.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Acessar Vaga
+                      </a>
+                    </Button>
+                  </div>
+                )}
+
                 {isAuthor && (
                   <div className="flex gap-3 pt-4 border-t border-slate-200">
                     <Link href={`/jobs/${id}/edit`}>

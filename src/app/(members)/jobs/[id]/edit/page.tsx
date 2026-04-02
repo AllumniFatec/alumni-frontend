@@ -41,6 +41,7 @@ export default function JobEditPage() {
         seniority_level: (job.seniority_level ??
           SeniorityLevel.Junior) as SeniorityLevel,
         work_model: job.work_model as WorkModel,
+        url: job.url,
       }
     : undefined;
 

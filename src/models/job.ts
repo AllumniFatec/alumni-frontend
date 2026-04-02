@@ -87,6 +87,7 @@ export interface JobDetail extends JobListItem {
   author_course_enrollmentYear?: number;
   country: string;
   seniority_level?: SeniorityLevel;
+  url?: string;
 }
 
 /** Body para POST /job e PATCH /job/:id */
@@ -100,4 +101,5 @@ export interface JobPayload {
   seniority_level: SeniorityLevel;
   work_model: WorkModel;
   workplace_name: string;
+  url?: string;
 }

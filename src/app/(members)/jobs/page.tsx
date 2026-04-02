@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Section } from "@/components/Section";
 import { JobCard } from "@/components/Jobs/JobCard";
@@ -9,7 +9,6 @@ import { ErrorState } from "@/components/ErrorState";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Spinner } from "@/components/ui/spinner";
 import {
   Select,
   SelectContent,
@@ -119,7 +118,6 @@ export default function JobsPage() {
   const [search, setSearch] = useState("");
   const [workModel, setWorkModel] = useState<string>("all");
   const [employmentType, setEmploymentType] = useState<string>("all");
-  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const {
     data,
@@ -135,27 +133,6 @@ export default function JobsPage() {
     () => data?.pages.flatMap((page) => page.jobs) ?? [],
     [data],
   );
-
-  useEffect(() => {
-    const el = loadMoreRef.current;
-    if (!el || !hasNextPage || isLoading) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (
-          entries[0]?.isIntersecting &&
-          hasNextPage &&
-          !isFetchingNextPage
-        ) {
-          fetchNextPage();
-        }
-      },
-      { rootMargin: "120px" },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage, isLoading]);
 
   const filteredJobs = useMemo(() => {
     return allJobs.filter((job) => {
@@ -209,12 +186,14 @@ export default function JobsPage() {
           <JobsGrid jobs={filteredJobs} />
 
           {hasNextPage && (
-            <div ref={loadMoreRef} className="h-4 w-full shrink-0" aria-hidden />
-          )}
-
-          {isFetchingNextPage && (
-            <div className="flex justify-center mt-6">
-              <Spinner className="size-4" />
+            <div className="flex justify-center mt-8">
+              <Button
+                variant="outline"
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+              >
+                {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+              </Button>
             </div>
           )}
         </>

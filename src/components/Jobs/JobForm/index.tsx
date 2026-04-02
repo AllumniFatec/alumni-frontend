@@ -43,6 +43,7 @@ const jobSchema = z.object({
   work_model: z.nativeEnum(WorkModel, {
     error: "Modelo de trabalho é obrigatório",
   }),
+  url: z.string().url("URL inválida").optional().or(z.literal("")),
 });
 
 export type JobFormValues = z.infer<typeof jobSchema>;
@@ -144,6 +145,13 @@ export function JobForm({
           </span>
         </div>
       </div>
+
+      <Input
+        label="URL da vaga (opcional)"
+        placeholder="https://exemplo.com/vaga"
+        error={errors.url?.message}
+        {...register("url")}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Controller

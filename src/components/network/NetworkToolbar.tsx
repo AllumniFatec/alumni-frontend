@@ -50,7 +50,7 @@ export function NetworkToolbar({
 
       <div className="flex flex-col gap-3 w-full md:flex-row md:w-auto md:items-center">
         <Select value={selectedCourse} onValueChange={onCourseChange}>
-          <SelectTrigger className="h-10 min-w-[180px] bg-muted">
+          <SelectTrigger className="h-10 min-w-[180px]">
             <SelectValue placeholder="Todos os cursos" />
           </SelectTrigger>
           <SelectContent>
@@ -64,7 +64,7 @@ export function NetworkToolbar({
         </Select>
 
         <Select value={selectedWorkplace} onValueChange={onWorkplaceChange}>
-          <SelectTrigger className="h-10 min-w-[180px] bg-muted">
+          <SelectTrigger className="h-10 min-w-[180px]">
             <SelectValue placeholder="Todas as empresas" />
           </SelectTrigger>
           <SelectContent>

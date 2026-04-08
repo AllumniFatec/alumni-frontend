@@ -1,9 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
-import { apiBase } from "@/lib/axiosInstance";
 import { Section } from "@/components/Section";
 import { ErrorState } from "@/components/ErrorState";
 import { Spinner } from "@/components/ui/spinner";
@@ -11,19 +9,9 @@ import { Button } from "@/components/ui/button";
 import { NetworkToolbar } from "@/components/network/NetworkToolbar";
 import { ProfileCard } from "@/components/users/ProfileCard";
 import { useUsersPage, useUserSearch } from "@/hooks/useUsers";
+import { useCourses, useWorkplaces } from "@/hooks/useNetwork";
 
 const SEARCH_DEBOUNCE_MS = 320;
-
-type CourseItem = {
-  course_id: string;
-  name: string;
-  abbreviation: string;
-};
-
-type WorkplaceItem = {
-  workplace_id: string;
-  company: string;
-};
 
 export default function NetworkPage() {
   const [page, setPage] = useState(1);
@@ -37,27 +25,14 @@ export default function NetworkPage() {
   const hasActiveFilter =
     selectedCourse !== "all" || selectedWorkplace !== "all";
 
-  const { data: courses } = useQuery<CourseItem[]>({
-    queryKey: ["courses"],
-    queryFn: async () => {
-      const response = await apiBase.get<CourseItem[]>("/course");
-      return response.data;
-    },
-  });
-
-  const { data: workplaces } = useQuery<WorkplaceItem[]>({
-    queryKey: ["workplaces"],
-    queryFn: async () => {
-      const response = await apiBase.get<WorkplaceItem[]>("/workplace");
-      return response.data;
-    },
-  });
-
   const listQuery = useUsersPage(page, { enabled: !isSearchMode });
   const searchQuery = useUserSearch(searchTerm);
 
   const activeQuery = isSearchMode ? searchQuery : listQuery;
   const { data, isLoading, isError, refetch, isFetching } = activeQuery;
+
+  const courses = useCourses();
+  const workplaces = useWorkplaces();
 
   const rows = data ?? [];
 
@@ -75,18 +50,18 @@ export default function NetworkPage() {
 
   const isEmpty = filteredRows.length === 0;
 
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchInput(value);
+  const handleSearchChange = useCallback((search: string) => {
+    setSearchInput(search);
     setPage(1);
   }, []);
 
-  const handleCourseChange = useCallback((value: string) => {
-    setSelectedCourse(value);
+  const handleCourseChange = useCallback((course: string) => {
+    setSelectedCourse(course);
     setPage(1);
   }, []);
 
-  const handleWorkplaceChange = useCallback((value: string) => {
-    setSelectedWorkplace(value);
+  const handleWorkplaceChange = useCallback((workplace: string) => {
+    setSelectedWorkplace(workplace);
     setPage(1);
   }, []);
 
@@ -171,11 +146,11 @@ export default function NetworkPage() {
           </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredRows.map((u) => (
+            {filteredRows.map((user) => (
               <ProfileCard
-                key={u.user_id}
-                user={u}
-                headlineWorkplace={u.workplace_history[0] ?? null}
+                key={user.user_id}
+                user={user}
+                headlineWorkplace={user.workplace_history[0] ?? null}
               />
             ))}
           </div>

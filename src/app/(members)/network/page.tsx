@@ -69,8 +69,8 @@ export default function NetworkPage() {
     return (
       <div>
         <Section title="Rede de Alumni">
-          <p className="text-slate-500 text-sm mb-6">
-            Conecte-se com egressos da FATEC Sorocaba
+          <p className="text-info text-sm mb-6">
+            Faça uma busca por nome, ano de matrícula ou habilidades
           </p>
           <NetworkToolbar
             searchInput={searchInput}
@@ -94,8 +94,8 @@ export default function NetworkPage() {
     return (
       <div>
         <Section title="Rede de Alumni">
-          <p className="text-slate-500 text-sm mb-6">
-            Conecte-se com egressos da FATEC Sorocaba
+          <p className="text-info text-sm mb-6">
+            Faça uma busca por nome, ano de matrícula ou habilidades
           </p>
           <NetworkToolbar
             searchInput={searchInput}
@@ -120,8 +120,8 @@ export default function NetworkPage() {
   return (
     <div>
       <Section title="Rede de Alumni">
-        <p className="text-slate-500 text-sm mb-6">
-          Conecte-se com egressos da FATEC Sorocaba
+        <p className="text-info text-sm mb-6">
+          Faça uma busca por nome, ano de matrícula ou habilidades
         </p>
         <NetworkToolbar
           searchInput={searchInput}

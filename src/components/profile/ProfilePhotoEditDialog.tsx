@@ -127,6 +127,9 @@ export function ProfilePhotoEditDialog({
                   <Upload className="size-4" />
                   {imageUrl ? "Trocar imagem" : "Selecionar imagem"}
                 </Button>
+                <p className="text-xs text-slate-500">
+                  {selectedFileName ?? "Nenhuma imagem selecionada"}
+                </p>
               </div>
             </div>
 

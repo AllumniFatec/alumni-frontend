@@ -10,15 +10,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, MapPin, ArrowLeft, User } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import {
-  useEventById,
-  useDeleteEvent,
-  useCloseEvent,
-} from "@/hooks/useEvents";
+import { useEventById, useDeleteEvent, useCloseEvent } from "@/hooks/useEvents";
 import { useCanManageEvents } from "@/hooks/useCanManageEvents";
 import { DeleteEventConfirmationDialog } from "@/components/Events/DeleteEventConfirmationDialog";
 import { EventStatus } from "@/models/event";
-import { isAxiosError } from "axios";
 import { CloseEventConfirmationDialog } from "@/components/Events/CloseEventConfirmationDialog";
 
 export default function EventDetailPage() {
@@ -26,7 +21,7 @@ export default function EventDetailPage() {
   const router = useRouter();
   const id = params.id as string;
 
-  const { data: event, isLoading, isError, refetch, error } = useEventById(id);
+  const { data: event, isLoading, isError, refetch } = useEventById(id);
   const { mutateAsync: deleteEvent, isPending: isDeleting } = useDeleteEvent();
   const { mutateAsync: closeEvent, isPending: isClosing } = useCloseEvent(id);
   const { canManageEvents } = useCanManageEvents();

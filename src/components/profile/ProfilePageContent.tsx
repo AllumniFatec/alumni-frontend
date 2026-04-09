@@ -12,6 +12,7 @@ import { ProfileSkillsSection } from "@/components/profile/ProfileSkillsSection"
 import { ProfileJobsSection } from "@/components/profile/ProfileJobsSection";
 import { ProfileEventsSection } from "@/components/profile/ProfileEventsSection";
 import { ProfilePostsSection } from "@/components/profile/ProfilePostsSection";
+import { ProfilePhotoEditDialog } from "@/components/profile/ProfilePhotoEditDialog";
 
 export type ProfilePageContentProps = {
   profile: MyProfile | UserPublicProfileDetail;
@@ -41,23 +42,27 @@ export function ProfilePageContent({
 
         <div className="px-6 pb-6">
           <div className="flex items-end gap-4 -mt-10 mb-4">
-            {photoUrl ? (
-              <Image
-                src={photoUrl}
-                alt={profile.name}
-                width={80}
-                height={80}
-                className="size-20 rounded-full border-4 border-white object-cover shadow"
-              />
-            ) : (
-              <div className="size-20 rounded-full border-4 border-white bg-primary/10 flex items-center justify-center text-primary text-3xl font-black shadow">
-                {profile.name?.trim().charAt(0).toUpperCase() || "?"}
-              </div>
-            )}
+            <div className="relative">
+              {photoUrl ? (
+                <Image
+                  src={photoUrl}
+                  alt={profile.name}
+                  width={80}
+                  height={80}
+                  className="size-20 rounded-full border-4 border-white object-cover shadow"
+                />
+              ) : (
+                <div className="size-20 rounded-full border-4 border-white bg-primary/10 flex items-center justify-center text-primary text-3xl font-black shadow">
+                  {profile.name?.trim().charAt(0).toUpperCase() || "?"}
+                </div>
+              )}
+
+              {isOwnProfile && <ProfilePhotoEditDialog />}
+            </div>
           </div>
 
           <h2 className="text-xl font-bold text-slate-800">{profile.name}</h2>
-          <p className="text-sm text-slate-500 mb-1">{profile.user_type}</p>
+          {/*<p className="text-sm text-slate-500 mb-1">{profile.user_type}</p>*/}
 
           {profile.biography && (
             <p className="text-sm text-slate-600 mt-3 leading-relaxed">

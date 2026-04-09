@@ -15,7 +15,7 @@ const UserCard = ({ user, className, isLoading = false }: UserCardProps) => {
       <div
         className={cn(
           `bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow`,
-          className
+          className,
         )}
       >
         {/* Nome */}
@@ -32,11 +32,12 @@ const UserCard = ({ user, className, isLoading = false }: UserCardProps) => {
       </div>
     );
   }
+  const firstCourse = user.courses?.[0];
   return (
     <div
       className={cn(
         `bg-white border border-gray-200 rounded-lg p-4 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow `,
-        className
+        className,
       )}
     >
       <div className="min-h-20 flex flex-col justify-center">
@@ -45,11 +46,13 @@ const UserCard = ({ user, className, isLoading = false }: UserCardProps) => {
 
         {/* Corpo do post */}
       </div>
-      <p className="text-foreground text-sm ">{user.userType}</p>
+      <p className="text-foreground text-sm ">{user.user_type}</p>
       <div className="mt-3 pt-2 border-t border-gray-100 justify-end">
-        <p className="text-destructive text-md ">{user?.course}</p>
         <p className="text-destructive text-md ">
-          Ano de matricula: {user?.enrollmentYear}
+          {firstCourse?.course_name ?? "-"}
+        </p>
+        <p className="text-destructive text-md ">
+          Ano de matricula: {firstCourse?.enrollmentYear ?? "-"}
         </p>
       </div>
     </div>

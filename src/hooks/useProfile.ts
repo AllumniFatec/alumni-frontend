@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ProfileApi } from "@/apis/profile";
+import { useAuth } from "@/context/AuthContext";
 import type {
   MyProfileProfessionalHistoryCreatePayload,
   MyProfileProfessionalHistoryDeletePayload,
@@ -11,6 +12,7 @@ import type {
   MyProfileSocialDeletePayload,
   MyProfileSocialUpdatePayload,
   UpdateMyProfilePayload,
+  UpdateProfilePhotoPayload,
 } from "@/models/profile";
 
 export const PROFILE_QUERY_KEY = ["profile", "me"] as const;
@@ -60,10 +62,13 @@ export function useUpdateMyProfile() {
 
 export function useUpdateProfilePhoto() {
   const invalidate = useInvalidateMyProfile();
+  const { refreshUser } = useAuth();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (image: File) => ProfileApi.updateProfilePhoto(image),
-    onSuccess: () => {
+    mutationFn: (payload: UpdateProfilePhotoPayload) =>
+      ProfileApi.updateProfilePhoto(payload),
+    onSuccess: async () => {
       invalidate();
+      await refreshUser();
       toast.success("Foto atualizada", {
         description: "Sua foto de perfil foi alterada.",
         duration: 5000,

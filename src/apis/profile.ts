@@ -43,6 +43,11 @@ export class ProfileApi {
       const response = await apiBase.patch<ProfileMutationMessage>(
         "/my-profile/profile-photo",
         formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
       );
       return response.data;
     } catch (error) {

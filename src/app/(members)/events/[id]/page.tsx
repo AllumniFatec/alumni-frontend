@@ -10,11 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, MapPin, ArrowLeft, User } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import {
-  useEventById,
-  useDeleteEvent,
-  useCloseEvent,
-} from "@/hooks/useEvents";
+import { useEventById, useDeleteEvent, useCloseEvent } from "@/hooks/useEvents";
 import { useCanManageEvents } from "@/hooks/useCanManageEvents";
 import { DeleteEventConfirmationDialog } from "@/components/Events/DeleteEventConfirmationDialog";
 import { EventStatus } from "@/models/event";

@@ -13,7 +13,7 @@ type WorkplaceItem = {
 };
 
 export function useCourses() {
-  const { data: courses } = useQuery<CourseItem[]>({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["courses"],
     queryFn: async () => {
       const response = await apiBase.get<CourseItem[]>("/course");
@@ -21,11 +21,11 @@ export function useCourses() {
     },
   });
 
-  return courses;
+  return { data, isLoading, isError, refetch };
 }
 
 export function useWorkplaces() {
-  const { data: workplaces } = useQuery<WorkplaceItem[]>({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["workplaces"],
     queryFn: async () => {
       const response = await apiBase.get<WorkplaceItem[]>("/workplace");
@@ -33,5 +33,5 @@ export function useWorkplaces() {
     },
   });
 
-  return workplaces;
+  return { data, isLoading, isError, refetch };
 }

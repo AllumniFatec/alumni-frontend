@@ -31,8 +31,18 @@ export default function NetworkPage() {
   const activeQuery = isSearchMode ? searchQuery : listQuery;
   const { data, isLoading, isError, refetch, isFetching } = activeQuery;
 
-  const courses = useCourses();
-  const workplaces = useWorkplaces();
+  const {
+    data: coursesData,
+    isLoading: isLoadingCourses,
+    isError: isErrorCourses,
+    refetch: refetchCourses,
+  } = useCourses();
+  const {
+    data: workplacesData,
+    isLoading: isLoadingWorkplaces,
+    isError: isErrorWorkplaces,
+    refetch: refetchWorkplaces,
+  } = useWorkplaces();
 
   const rows = data ?? [];
 
@@ -65,12 +75,12 @@ export default function NetworkPage() {
     setPage(1);
   }, []);
 
-  if (isLoading) {
+  if (isLoading || isLoadingCourses || isLoadingWorkplaces) {
     return (
       <div>
         <Section title="Rede de Alumni">
-          <p className="text-slate-500 text-sm mb-6">
-            Conecte-se com egressos da FATEC Sorocaba
+          <p className="text-info text-sm mb-6">
+            Faça uma busca por nome, ano de matrícula ou habilidades
           </p>
           <NetworkToolbar
             searchInput={searchInput}
@@ -79,8 +89,8 @@ export default function NetworkPage() {
             onCourseChange={handleCourseChange}
             selectedWorkplace={selectedWorkplace}
             onWorkplaceChange={handleWorkplaceChange}
-            courses={courses ?? []}
-            workplaces={workplaces ?? []}
+            courses={coursesData ?? []}
+            workplaces={workplacesData ?? []}
           />
           <div className="flex justify-center py-16">
             <Spinner className="size-8 text-primary" />
@@ -90,12 +100,12 @@ export default function NetworkPage() {
     );
   }
 
-  if (isError) {
+  if (isError || isErrorCourses || isErrorWorkplaces) {
     return (
       <div>
         <Section title="Rede de Alumni">
-          <p className="text-slate-500 text-sm mb-6">
-            Conecte-se com egressos da FATEC Sorocaba
+          <p className="text-info text-sm mb-6">
+            Faça uma busca por nome, ano de matrícula ou habilidades
           </p>
           <NetworkToolbar
             searchInput={searchInput}
@@ -104,8 +114,8 @@ export default function NetworkPage() {
             onCourseChange={handleCourseChange}
             selectedWorkplace={selectedWorkplace}
             onWorkplaceChange={handleWorkplaceChange}
-            courses={courses ?? []}
-            workplaces={workplaces ?? []}
+            courses={coursesData ?? []}
+            workplaces={workplacesData ?? []}
           />
           <ErrorState
             title="Não foi possível carregar a rede"
@@ -120,8 +130,8 @@ export default function NetworkPage() {
   return (
     <div>
       <Section title="Rede de Alumni">
-        <p className="text-slate-500 text-sm mb-6">
-          Conecte-se com egressos da FATEC Sorocaba
+        <p className="text-info text-sm mb-6">
+          Faça uma busca por nome, ano de matrícula ou habilidades
         </p>
         <NetworkToolbar
           searchInput={searchInput}
@@ -130,8 +140,8 @@ export default function NetworkPage() {
           onCourseChange={handleCourseChange}
           selectedWorkplace={selectedWorkplace}
           onWorkplaceChange={handleWorkplaceChange}
-          courses={courses ?? []}
-          workplaces={workplaces ?? []}
+          courses={coursesData ?? []}
+          workplaces={workplacesData ?? []}
         />
 
         {isFetching && (

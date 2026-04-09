@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { Instagram, Facebook } from "lucide-react";
 
 export default function Footer() {
   return (
     <footer className="bg-slate-900 text-slate-300">
       <div className="max-w-7xl mx-auto px-6 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+          {/* Coluna 1: Logo e Redes */}
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-3xl">
@@ -22,36 +24,33 @@ export default function Footer() {
             </p>
 
             <div className="flex gap-4">
-              {/* Trocado de <a> para <Link> conforme review do Nicolas */}
               <Link
                 className="w-10 h-10 rounded-[10px] bg-white/5 flex items-center justify-center hover:bg-primary transition-colors"
-                href="https://fatecsorocaba.cps.sp.gov.br/"
+                href="https://www.instagram.com/fatecsorocaba/"
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Site Institucional"
+                title="Instagram FATEC Sorocaba"
               >
-                <span className="material-symbols-outlined text-xl">
-                  language
-                </span>
+                <Instagram className="w-5 h-5" />
               </Link>
               <Link
                 className="w-10 h-10 rounded-[10px] bg-white/5 flex items-center justify-center hover:bg-primary transition-colors"
-                href="https://fatecsorocaba.cps.sp.gov.br/fale-conosco/"
+                href="https://www.facebook.com/fatecsorocaba/?locale=pt_BR"
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Fale Conosco"
+                title="Facebook FATEC Sorocaba"
               >
-                <span className="material-symbols-outlined text-xl">mail</span>
+                <Facebook className="w-5 h-5" />
               </Link>
             </div>
           </div>
 
-          <div>
+          {/* Coluna 2: Institucional */}
+          <div className="md:justify-self-center">
             <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-xs">
               Institucional
             </h4>
             <ul className="flex flex-col gap-4 text-sm">
-              {/* Todos os <a> desta seção foram trocados para <Link> */}
               <li>
                 <Link
                   className="hover:text-white transition-colors"
@@ -95,7 +94,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
+          {/* Coluna 3: Comunidade */}
+          <div className="md:justify-self-center">
             <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-xs">
               Comunidade
             </h4>
@@ -124,54 +124,6 @@ export default function Footer() {
                   Eventos
                 </Link>
               </li>
-              <li>
-                <Link
-                  className="hover:text-white transition-colors"
-                  href="/mentorship"
-                >
-                  Mentoria
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-xs">
-              Suporte
-            </h4>
-            <ul className="flex flex-col gap-4 text-sm">
-              <li>
-                <Link
-                  className="hover:text-white transition-colors"
-                  href="/privacy"
-                >
-                  Privacidade
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="hover:text-white transition-colors"
-                  href="/terms"
-                >
-                  Termos de Uso
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="hover:text-white transition-colors"
-                  href="/contact"
-                >
-                  Contato
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="hover:text-white transition-colors"
-                  href="/faq"
-                >
-                  FAQ
-                </Link>
-              </li>
             </ul>
           </div>
         </div>
@@ -186,11 +138,32 @@ export default function Footer() {
             <p className="text-slate-400">Feito com orgulho em Sorocaba/SP</p>
             <p className="text-[11px] text-slate-500">
               Desenvolvido por:{" "}
-              <span className="text-slate-300">Gabriel Silva Bellato</span>{" "}
+              <Link
+                href="https://www.linkedin.com/in/gabriel-silva-bellato/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-300 hover:text-white transition-colors"
+              >
+                Gabriel Silva Bellato
+              </Link>{" "}
               &bull;{" "}
-              <span className="text-slate-300">Leonardo Barbosa da Silva</span>{" "}
+              <Link
+                href="https://www.linkedin.com/in/leonardo-barbosa-da-silva-085858230/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-300 hover:text-white transition-colors"
+              >
+                Leonardo Barbosa da Silva
+              </Link>{" "}
               &bull;{" "}
-              <span className="text-slate-300">Nicolas Alexandrino Ferro</span>
+              <Link
+                href="https://www.linkedin.com/in/nicolas-alexandrino-ferro/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-300 hover:text-white transition-colors"
+              >
+                Nicolas Alexandrino Ferro
+              </Link>
             </p>
           </div>
         </div>

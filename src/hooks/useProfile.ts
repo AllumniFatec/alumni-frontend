@@ -12,6 +12,7 @@ import type {
   MyProfileSocialDeletePayload,
   MyProfileSocialUpdatePayload,
   UpdateMyProfilePayload,
+  UpdateProfilePhotoPayload,
 } from "@/models/profile";
 
 export const PROFILE_QUERY_KEY = ["profile", "me"] as const;
@@ -63,7 +64,8 @@ export function useUpdateProfilePhoto() {
   const invalidate = useInvalidateMyProfile();
   const { refreshUser } = useAuth();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (image: File) => ProfileApi.updateProfilePhoto(image),
+    mutationFn: (payload: UpdateProfilePhotoPayload) =>
+      ProfileApi.updateProfilePhoto(payload),
     onSuccess: async () => {
       invalidate();
       await refreshUser();

@@ -155,3 +155,11 @@ export type MyProfileSocialDeletePayload = Pick<
 
 /** Respostas genéricas de mutação de perfil. */
 export type ProfileMutationMessage = { message: string };
+
+/**
+ * Upload de `PATCH /my-profile/profile-photo`: o servidor usa Multer em `image`
+ * (`multipart/form-data`), não JSON — o cliente monta `FormData` a partir disto.
+ */
+export type UpdateProfilePhotoPayload = {
+  image: File;
+};

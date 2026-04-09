@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import {useState, useRef, useEffect} from "react";
 import Cropper, { type Area } from "react-easy-crop";
 import { Pencil, Upload } from "lucide-react";
 
@@ -24,20 +25,20 @@ export function ProfilePhotoEditDialog({
 }: ProfilePhotoEditDialogProps) {
   const { mutateAsync, isPending } = useUpdateProfilePhoto();
 
-  const [open, setOpen] = React.useState(false);
-  const [imageUrl, setImageUrl] = React.useState<string | null>(null);
-  const [selectedFileName, setSelectedFileName] = React.useState<string | null>(
+  const [open, setOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(
     null,
   );
-  const [crop, setCrop] = React.useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = React.useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = React.useState<Area | null>(
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(
     null,
   );
 
-  const inputRef = React.useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       if (imageUrl) URL.revokeObjectURL(imageUrl);
     };
@@ -53,7 +54,7 @@ export function ProfilePhotoEditDialog({
     if (inputRef.current) inputRef.current.value = "";
   }
 
-  async function onSave() {
+  async function onSaveProfilePhoto() {
     if (!imageUrl || !croppedAreaPixels) return;
 
     const blob = await cropImageToBlob(imageUrl, croppedAreaPixels, {
@@ -63,7 +64,7 @@ export function ProfilePhotoEditDialog({
     });
 
     const file = new File([blob], "profile-photo.jpg", { type: blob.type });
-    await mutateAsync(file);
+    await mutateAsync({ image: file });
 
     setOpen(false);
     resetState();
@@ -186,7 +187,7 @@ export function ProfilePhotoEditDialog({
             </Button>
             <Button
               type="button"
-              onClick={onSave}
+              onClick={onSaveProfilePhoto}
               disabled={!imageUrl || !croppedAreaPixels || isPending}
             >
               {isPending ? "Salvando..." : "Salvar"}

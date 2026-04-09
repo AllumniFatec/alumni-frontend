@@ -20,6 +20,15 @@ apiBase.interceptors.request.use((requestConfig) => {
     requestConfig.headers.Authorization = `Bearer ${token}`;
   }
 
+  /**
+   * A instância define `Content-Type: application/json` por padrão. Para `FormData`,
+   * o motor (XHR/fetch) precisa definir `multipart/form-data` **com** o `boundary`;
+   * se mandarmos `application/json`, o servidor (ex.: Multer) não recebe arquivo.
+   */
+  if (requestConfig.data instanceof FormData) {
+    requestConfig.headers.delete("Content-Type");
+  }
+
   return requestConfig;
 });
 

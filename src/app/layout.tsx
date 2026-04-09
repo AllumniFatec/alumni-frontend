@@ -30,6 +30,7 @@ export default function RootLayout({
     <html lang="pt-BR" className="h-full">
       <body
         className={`${robotoSlab.variable} ${roboto.variable} antialiased flex flex-col min-h-screen bg-slate-50`}
+        suppressHydrationWarning={true}
       >
         <Providers>
           <main className="flex-1 w-full flex flex-col">{children}</main>

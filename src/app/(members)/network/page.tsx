@@ -9,16 +9,21 @@ import { Button } from "@/components/ui/button";
 import { NetworkToolbar } from "@/components/network/NetworkToolbar";
 import { ProfileCard } from "@/components/users/ProfileCard";
 import { useUsersPage, useUserSearch } from "@/hooks/useUsers";
+import { useCourses, useWorkplaces } from "@/hooks/useNetwork";
 
 const SEARCH_DEBOUNCE_MS = 320;
 
 export default function NetworkPage() {
   const [page, setPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState("all");
+  const [selectedWorkplace, setSelectedWorkplace] = useState("all");
   const [debouncedSearch] = useDebounce(searchInput, SEARCH_DEBOUNCE_MS);
 
   const searchTerm = debouncedSearch.trim();
   const isSearchMode = searchTerm.length > 0;
+  const hasActiveFilter =
+    selectedCourse !== "all" || selectedWorkplace !== "all";
 
   const listQuery = useUsersPage(page, { enabled: !isSearchMode });
   const searchQuery = useUserSearch(searchTerm);
@@ -26,31 +31,66 @@ export default function NetworkPage() {
   const activeQuery = isSearchMode ? searchQuery : listQuery;
   const { data, isLoading, isError, refetch, isFetching } = activeQuery;
 
+  const {
+    data: coursesData,
+    isLoading: isLoadingCourses,
+    isError: isErrorCourses,
+    refetch: refetchCourses,
+  } = useCourses();
+  const {
+    data: workplacesData,
+    isLoading: isLoadingWorkplaces,
+    isError: isErrorWorkplaces,
+    refetch: refetchWorkplaces,
+  } = useWorkplaces();
+
   const rows = data ?? [];
-  const isEmpty = rows.length === 0;
 
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchInput(value);
+  const filteredRows = rows.filter((user) => {
+    const courseMatches =
+      selectedCourse === "all" ||
+      user.courses.some((course) => course.course_name === selectedCourse);
+    const workplaceMatches =
+      selectedWorkplace === "all" ||
+      user.workplace_history.some(
+        (entry) => entry.workplace.company === selectedWorkplace,
+      );
+    return courseMatches && workplaceMatches;
+  });
+
+  const isEmpty = filteredRows.length === 0;
+
+  const handleSearchChange = useCallback((search: string) => {
+    setSearchInput(search);
     setPage(1);
   }, []);
 
-  const handleClear = useCallback(() => {
-    setSearchInput("");
+  const handleCourseChange = useCallback((course: string) => {
+    setSelectedCourse(course);
     setPage(1);
   }, []);
 
-  if (isLoading) {
+  const handleWorkplaceChange = useCallback((workplace: string) => {
+    setSelectedWorkplace(workplace);
+    setPage(1);
+  }, []);
+
+  if (isLoading || isLoadingCourses || isLoadingWorkplaces) {
     return (
       <div>
         <Section title="Rede de Alumni">
-          <p className="text-slate-500 text-sm mb-6">
-            Conecte-se com egressos da FATEC Sorocaba
+          <p className="text-info text-sm mb-6">
+            Faça uma busca por nome, ano de matrícula ou habilidades
           </p>
           <NetworkToolbar
             searchInput={searchInput}
             onSearchChange={handleSearchChange}
-            isSearchMode={isSearchMode}
-            onClear={handleClear}
+            selectedCourse={selectedCourse}
+            onCourseChange={handleCourseChange}
+            selectedWorkplace={selectedWorkplace}
+            onWorkplaceChange={handleWorkplaceChange}
+            courses={coursesData ?? []}
+            workplaces={workplacesData ?? []}
           />
           <div className="flex justify-center py-16">
             <Spinner className="size-8 text-primary" />
@@ -60,18 +100,22 @@ export default function NetworkPage() {
     );
   }
 
-  if (isError) {
+  if (isError || isErrorCourses || isErrorWorkplaces) {
     return (
       <div>
         <Section title="Rede de Alumni">
-          <p className="text-slate-500 text-sm mb-6">
-            Conecte-se com egressos da FATEC Sorocaba
+          <p className="text-info text-sm mb-6">
+            Faça uma busca por nome, ano de matrícula ou habilidades
           </p>
           <NetworkToolbar
             searchInput={searchInput}
             onSearchChange={handleSearchChange}
-            isSearchMode={isSearchMode}
-            onClear={handleClear}
+            selectedCourse={selectedCourse}
+            onCourseChange={handleCourseChange}
+            selectedWorkplace={selectedWorkplace}
+            onWorkplaceChange={handleWorkplaceChange}
+            courses={coursesData ?? []}
+            workplaces={workplacesData ?? []}
           />
           <ErrorState
             title="Não foi possível carregar a rede"
@@ -86,14 +130,18 @@ export default function NetworkPage() {
   return (
     <div>
       <Section title="Rede de Alumni">
-        <p className="text-slate-500 text-sm mb-6">
-          Conecte-se com egressos da FATEC Sorocaba
+        <p className="text-info text-sm mb-6">
+          Faça uma busca por nome, ano de matrícula ou habilidades
         </p>
         <NetworkToolbar
           searchInput={searchInput}
           onSearchChange={handleSearchChange}
-          isSearchMode={isSearchMode}
-          onClear={handleClear}
+          selectedCourse={selectedCourse}
+          onCourseChange={handleCourseChange}
+          selectedWorkplace={selectedWorkplace}
+          onWorkplaceChange={handleWorkplaceChange}
+          courses={coursesData ?? []}
+          workplaces={workplacesData ?? []}
         />
 
         {isFetching && (
@@ -102,17 +150,17 @@ export default function NetworkPage() {
 
         {isEmpty ? (
           <p className="text-sm text-slate-500 py-8 text-center">
-            {isSearchMode
+            {isSearchMode || hasActiveFilter
               ? "Nenhum resultado para essa busca."
               : "Nenhum usuário encontrado nesta página."}
           </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {rows.map((u) => (
+            {filteredRows.map((user) => (
               <ProfileCard
-                key={u.user_id}
-                user={u}
-                headlineWorkplace={u.workplace_history[0] ?? null}
+                key={user.user_id}
+                user={user}
+                headlineWorkplace={user.workplace_history[0] ?? null}
               />
             ))}
           </div>

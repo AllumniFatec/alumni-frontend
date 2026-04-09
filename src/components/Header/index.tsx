@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bell, MessageCircle, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
 
 interface NavItem {
   label: string;
@@ -19,6 +20,8 @@ const navItems: NavItem[] = [
 
 export function Header() {
   const pathname = usePathname();
+
+  const { user } = useAuth();
 
   const navLinks = (
     <>
@@ -77,8 +80,12 @@ export function Header() {
             <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
 
             <Link href="/profile" className="flex items-center gap-2">
-              <div className="size-9 rounded-full border-2 border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
-                U
+              <div className="size-11 rounded-full border-2 border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
+                <img
+                  src={user?.perfil_photo?.url}
+                  alt="Perfil"
+                  className="size-full rounded-full object-cover shadow-sm"
+                />
               </div>
             </Link>
           </div>

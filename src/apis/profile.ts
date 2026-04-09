@@ -1,4 +1,5 @@
 import { apiBase } from "@/lib/axiosInstance";
+import { toProfilePhotoFormData } from "@/lib/profilePhotoFormData";
 import type {
   MyProfile,
   MyProfileProfessionalHistoryCreatePayload,
@@ -11,6 +12,7 @@ import type {
   MyProfileSocialUpdatePayload,
   ProfileMutationMessage,
   UpdateMyProfilePayload,
+  UpdateProfilePhotoPayload,
 } from "@/models/profile";
 
 export class ProfileApi {
@@ -35,14 +37,12 @@ export class ProfileApi {
   }
 
   static async updateProfilePhoto(
-    image: File,
+    payload: UpdateProfilePhotoPayload,
   ): Promise<ProfileMutationMessage> {
     try {
-      const formData = new FormData();
-      formData.append("image", image);
       const response = await apiBase.patch<ProfileMutationMessage>(
         "/my-profile/profile-photo",
-        formData,
+        toProfilePhotoFormData(payload),
       );
       return response.data;
     } catch (error) {

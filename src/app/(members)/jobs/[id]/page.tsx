@@ -58,10 +58,10 @@ export default function JobDetailPage() {
   async function confirmClose() {
     try {
       await closeJob(id);
-      toast.success("Vaga excluída com sucesso!");
+      toast.success("Vaga encerrada com sucesso!");
       router.push("/jobs");
     } catch {
-      toast.error("Erro ao excluir a vaga", {
+      toast.error("Erro ao encerrar a vaga", {
         description: "Tente novamente.",
       });
     }

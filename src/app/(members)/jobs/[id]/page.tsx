@@ -18,7 +18,7 @@ import {
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useJobById, useDeleteJob } from "@/hooks/useJobs";
+import { useJobById, useDeleteJob, useCloseJob } from "@/hooks/useJobs";
 import { toast } from "sonner";
 import {
   EmploymentTypeLabel,
@@ -30,6 +30,7 @@ import { SocialMediaPublicLinkCard } from "@/components/profile/social-media/Soc
 import { SocialMediaType } from "@/models/users";
 
 import { DeleteJobConfirmationDialog } from "@/components/Jobs/DeleteJobConfirmationDialog";
+import { CloseJobConfirmationDialog } from "@/components/Jobs/CloseJobConfirmationDialog";
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -39,11 +40,24 @@ export default function JobDetailPage() {
   const { user } = useAuth();
   const { data: job, isLoading, isError, refetch } = useJobById(id);
   const { mutateAsync: deleteJob, isPending: isDeletingJob } = useDeleteJob();
+  const { mutateAsync: closeJob, isPending: isClosingJob } = useCloseJob();
   const isAuthor = !!job && !!user && job.author_id === user.id;
 
   async function confirmDelete() {
     try {
       await deleteJob(id);
+      toast.success("Vaga excluída com sucesso!");
+      router.push("/jobs");
+    } catch {
+      toast.error("Erro ao excluir a vaga", {
+        description: "Tente novamente.",
+      });
+    }
+  }
+
+  async function confirmClose() {
+    try {
+      await closeJob(id);
       toast.success("Vaga excluída com sucesso!");
       router.push("/jobs");
     } catch {
@@ -202,6 +216,10 @@ export default function JobDetailPage() {
                     <Link href={`/jobs/${id}/edit`}>
                       <Button variant="outline">Editar</Button>
                     </Link>
+                    <CloseJobConfirmationDialog
+                      onConfirm={confirmClose}
+                      isLoading={isClosingJob}
+                    />
                     <DeleteJobConfirmationDialog
                       onConfirm={confirmDelete}
                       isLoading={isDeletingJob}

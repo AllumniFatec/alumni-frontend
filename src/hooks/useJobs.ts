@@ -88,3 +88,16 @@ export function useDeleteJob() {
 
   return { mutateAsync, isPending };
 }
+
+export function useCloseJob() {
+  const qc = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (id: string) => {
+      await JobApi.closeJob(id);
+      qc.invalidateQueries({ queryKey: ["jobs", "detail", id] });
+      qc.invalidateQueries({ queryKey: ["jobs", "list"] });
+    },
+  });
+
+  return { mutateAsync, isPending };
+}

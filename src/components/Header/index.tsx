@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, MessageCircle, GraduationCap } from "lucide-react";
+import { MessageCircle, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
+import { NotificationBell } from "./NotificationBell";
 
 interface NavItem {
   label: string;
@@ -68,10 +69,7 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-4">
-            <button className="relative p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
-              <Bell className="size-5" />
-              <span className="absolute top-2 right-2 size-2 bg-primary rounded-full border-2 border-white dark:border-slate-900" />
-            </button>
+            <NotificationBell />
 
             <button className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
               <MessageCircle className="size-5" />

@@ -6,6 +6,7 @@ export * from "./workplace";
 export * from "./course";
 export * from "./event";
 export * from "./job";
+export * from "./notification";
 export * from "./skill";
 export * from "./userSkill";
 export * from "./profile";

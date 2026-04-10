@@ -11,6 +11,8 @@ import { PostCardActionsMenu } from "@/components/Posts/PostCardActionsMenu";
 import { EditPostDialog } from "@/components/Posts/EditPostDialog";
 import { useCanManageContent } from "@/hooks/useCanManageContent";
 import { useDeletePostMutation } from "@/hooks/usePost";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export interface PostCardProps {
   user?: AuthUser | null;
@@ -59,17 +61,13 @@ export const PostCard = ({
 
   const commentCount = useMemo(
     () =>
-      commentsCount !== undefined
-        ? commentsCount
-        : (post?.comments_count ?? 0),
+      commentsCount !== undefined ? commentsCount : (post?.comments_count ?? 0),
     [commentsCount, post?.comments_count],
   );
 
   const authorLabel = useMemo(() => {
     if (!post) return "";
-    return post.user_name
-      ? `Por ${post.user_name}`
-      : `Autor #${post.user_id}`;
+    return post.user_name ? `De ${post.user_name}` : `Autor #${post.user_id}`;
   }, [post]);
 
   const handleSubmitComment = () => {
@@ -151,7 +149,32 @@ export const PostCard = ({
       )}
 
       <div className="mt-3 pt-2 border-t border-gray-100 flex items-center justify-between gap-3 flex-wrap">
-        <span className="text-xs text-gray-400">{authorLabel}</span>
+        <div className="size-80 max-h-10 max-w-80 flex items-center justify">
+          <div className="size-10 rounded-full border-2 border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
+            {post.user_perfil_photo ? (
+              <img
+                src={post.user_perfil_photo}
+                alt="Perfil"
+                className="size-full rounded-full object-cover shadow-sm"
+              />
+            ) : (
+              <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
+                <span className="text-sm font-semibold text-white">
+                  {post.user_name?.[0] || "N"}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-400 ml-3">{authorLabel}</span>
+            <span className="text-xs text-gray-400 ml-3">
+              {formatDistanceToNow(new Date(post.create_date), {
+                addSuffix: true,
+                locale: ptBR,
+              })}
+            </span>
+          </div>
+        </div>
 
         <div className="flex items-center gap-1 sm:gap-2">
           <Button
@@ -209,7 +232,9 @@ export const PostCard = ({
         <div className="mt-3 pt-3 border-t border-gray-100 space-y-3">
           <ul className="space-y-2 max-h-48 overflow-y-auto">
             {post.comments.length === 0 ? (
-              <li className="text-xs text-gray-400">Nenhum comentário ainda.</li>
+              <li className="text-xs text-gray-400">
+                Nenhum comentário ainda.
+              </li>
             ) : (
               post.comments.map((c) => (
                 <li key={c.id} className="text-sm">

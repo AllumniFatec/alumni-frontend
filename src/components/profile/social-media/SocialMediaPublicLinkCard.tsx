@@ -24,6 +24,7 @@ export function SocialMediaPublicLinkCard({
   return (
     <Link
       href={socialMedia.url}
+      target="_blank"
       className={cn(
         "group flex items-center gap-3 rounded-xl border border-border/60 bg-card/40 p-3 sm:p-3.5",
         "transition-colors hover:border-primary/25 hover:bg-primary/[0.04]",
@@ -49,4 +50,3 @@ export function SocialMediaPublicLinkCard({
     </Link>
   );
 }
-

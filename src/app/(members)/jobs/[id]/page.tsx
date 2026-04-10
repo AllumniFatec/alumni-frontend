@@ -26,6 +26,8 @@ import {
   WorkModelLabel,
 } from "@/models/job";
 import { useAuth } from "@/context/AuthContext";
+import { SocialMediaPublicLinkCard } from "@/components/profile/social-media/SocialMediaPublicLinkCard";
+import { SocialMediaType } from "@/models/users";
 
 import { DeleteJobConfirmationDialog } from "@/components/Jobs/DeleteJobConfirmationDialog";
 
@@ -184,19 +186,14 @@ export default function JobDetailPage() {
                     <h3 className="text-2xl font-bold border-b border-slate-200 dark:border-slate-800 pb-2">
                       Link da Vaga
                     </h3>
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="w-full md:w-auto"
-                    >
-                      <a
-                        href={job.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Acessar Vaga
-                      </a>
-                    </Button>
+                    <SocialMediaPublicLinkCard
+                      className="w-lg"
+                      socialMedia={{
+                        id: `job-url-${id}`,
+                        type: SocialMediaType.Website,
+                        url: job.url,
+                      }}
+                    />
                   </div>
                 )}
 
@@ -208,7 +205,7 @@ export default function JobDetailPage() {
                     <DeleteJobConfirmationDialog
                       onConfirm={confirmDelete}
                       isLoading={isDeletingJob}
-                                          />
+                    />
                   </div>
                 )}
               </div>

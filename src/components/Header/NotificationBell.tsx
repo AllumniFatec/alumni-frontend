@@ -19,7 +19,13 @@ import {
 import { useNotificationSocket } from "@/hooks/useNotificationSocket";
 import type { NotificationItem } from "@/models/notification";
 
-function navigateFromLink(link: string, router: ReturnType<typeof useRouter>) {
+function navigateFromLink(
+  link: string | null | undefined,
+  router: ReturnType<typeof useRouter>,
+) {
+  if (link == null || link === "") {
+    return;
+  }
   try {
     const url = link.startsWith("http")
       ? new URL(link)

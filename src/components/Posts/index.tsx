@@ -9,8 +9,11 @@ import { cn } from "@/lib/utils";
 import { AuthUser } from "@/context/AuthContext";
 import { PostCardActionsMenu } from "@/components/Posts/PostCardActionsMenu";
 import { EditPostDialog } from "@/components/Posts/EditPostDialog";
-import { useCanManageContent } from "@/hooks/useCanManageContent";
+import { EditCommentDialog } from "@/components/Posts/EditCommentDialog";
+import { PostCommentRow } from "@/components/Posts/PostCommentRow";
+import { canUserManageContent, useCanManageContent } from "@/hooks/useCanManageContent";
 import { useDeletePostMutation } from "@/hooks/usePost";
+import { useDeleteCommentMutation } from "@/hooks/usePostComment";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -41,9 +44,18 @@ export const PostCard = ({
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [draft, setDraft] = useState("");
   const [editOpen, setEditOpen] = useState(false);
+  const [editingComment, setEditingComment] = useState<{
+    id: string;
+    content: string;
+  } | null>(null);
   const lastLikeAtRef = useRef(0);
   const { mutateAsync: deletePost, isPending: isDeletePending } =
     useDeletePostMutation();
+  const {
+    mutateAsync: deleteComment,
+    isPending: isDeleteCommentPending,
+    variables: deleteCommentVariables,
+  } = useDeleteCommentMutation();
 
   const authorId = post?.user_id ?? "";
   const postId = post?.id ?? "";
@@ -67,7 +79,7 @@ export const PostCard = ({
 
   const authorLabel = useMemo(() => {
     if (!post) return "";
-    return post.user_name ? `De ${post.user_name}` : `Autor #${post.user_id}`;
+    return post.user_name ? `${post.user_name}` : `Autor #${post.user_id}`;
   }, [post]);
 
   const handleSubmitComment = () => {
@@ -117,8 +129,37 @@ export const PostCard = ({
         className,
       )}
     >
+      <div className="size-80 max-h-10 max-w-80 flex items-center justify">
+        <div className="size-10 rounded-full border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
+          {post.user_perfil_photo ? (
+            <img
+              src={post.user_perfil_photo}
+              alt="Perfil"
+              className="size-full rounded-full object-cover shadow-sm"
+            />
+          ) : (
+            <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
+              <span className="text-sm font-semibold text-white">
+                {post.user_name?.[0]}
+              </span>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <span className="text-sm text-black font-medium ml-3">
+            {authorLabel}
+          </span>
+          <span className="text-xs text-gray-400 ml-3">
+            {formatDistanceToNow(new Date(post.create_date), {
+              addSuffix: true,
+              locale: ptBR,
+            })}
+          </span>
+        </div>
+      </div>
+
       {canManageContent && (
-        <div className="absolute top-2 right-2 z-10">
+        <div className="absolute top-5 right-2 z-10">
           <PostCardActionsMenu
             authorId={authorId}
             onEdit={() => setEditOpen(true)}
@@ -130,51 +171,24 @@ export const PostCard = ({
         </div>
       )}
 
-      <p
-        className={cn(
-          "text-gray-700 text-sm leading-relaxed mb-3",
-          canManageContent && "pr-10",
+      <div className="mt-3 pt-2 border-t border-gray-200 flex flex-col items-end justify-center gap-3 flex-wrap">
+        <p
+          className={cn(
+            "text-gray-700 mt-3 text-sm leading-relaxed mb-2 w-full",
+            canManageContent && "pr-10",
+          )}
+        >
+          {post.content}
+        </p>
+
+        {canManageContent && (
+          <EditPostDialog
+            open={editOpen}
+            onOpenChange={setEditOpen}
+            postId={postId}
+            initialContent={post.content}
+          />
         )}
-      >
-        {post.content}
-      </p>
-
-      {canManageContent && (
-        <EditPostDialog
-          open={editOpen}
-          onOpenChange={setEditOpen}
-          postId={postId}
-          initialContent={post.content}
-        />
-      )}
-
-      <div className="mt-3 pt-2 border-t border-gray-100 flex items-center justify-between gap-3 flex-wrap">
-        <div className="size-80 max-h-10 max-w-80 flex items-center justify">
-          <div className="size-10 rounded-full border-2 border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
-            {post.user_perfil_photo ? (
-              <img
-                src={post.user_perfil_photo}
-                alt="Perfil"
-                className="size-full rounded-full object-cover shadow-sm"
-              />
-            ) : (
-              <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
-                <span className="text-sm font-semibold text-white">
-                  {post.user_name?.[0] || "N"}
-                </span>
-              </div>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xs text-gray-400 ml-3">{authorLabel}</span>
-            <span className="text-xs text-gray-400 ml-3">
-              {formatDistanceToNow(new Date(post.create_date), {
-                addSuffix: true,
-                locale: ptBR,
-              })}
-            </span>
-          </div>
-        </div>
 
         <div className="flex items-center gap-1 sm:gap-2">
           <Button
@@ -238,10 +252,20 @@ export const PostCard = ({
             ) : (
               post.comments.map((c) => (
                 <li key={c.id} className="text-sm">
-                  <span className="font-medium text-gray-800">
-                    {c.user_name}
-                  </span>
-                  <p className="text-gray-600 leading-snug">{c.content}</p>
+                  <PostCommentRow
+                    comment={c}
+                    canManage={canUserManageContent(user, c.user_id)}
+                    onEdit={() =>
+                      setEditingComment({ id: c.id, content: c.content })
+                    }
+                    onDelete={async () => {
+                      await deleteComment({ commentId: c.id });
+                    }}
+                    isDeleting={
+                      isDeleteCommentPending &&
+                      deleteCommentVariables?.commentId === c.id
+                    }
+                  />
                 </li>
               ))
             )}
@@ -267,6 +291,17 @@ export const PostCard = ({
                 {isCommentPending ? "Enviando…" : "Comentar"}
               </Button>
             </div>
+          )}
+
+          {editingComment && (
+            <EditCommentDialog
+              open
+              onOpenChange={(open) => {
+                if (!open) setEditingComment(null);
+              }}
+              commentId={editingComment.id}
+              initialContent={editingComment.content}
+            />
           )}
         </div>
       )}

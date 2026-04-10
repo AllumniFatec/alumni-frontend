@@ -78,12 +78,20 @@ export function Header() {
             <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
 
             <Link href="/profile" className="flex items-center gap-2">
-              <div className="size-11 rounded-full border-2 border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
-                <img
-                  src={user?.perfil_photo?.url}
-                  alt="Perfil"
-                  className="size-full rounded-full object-cover shadow-sm"
-                />
+              <div className="size-11 rounded-full border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
+                {user?.perfil_photo ? (
+                  <img
+                    src={user?.perfil_photo?.url}
+                    alt="Perfil"
+                    className="size-full rounded-full object-cover shadow-sm"
+                  />
+                ) : (
+                  <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-white">
+                      {user?.name?.[0]}
+                    </span>
+                  </div>
+                )}
               </div>
             </Link>
           </div>

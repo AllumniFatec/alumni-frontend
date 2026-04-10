@@ -28,10 +28,7 @@ export class JobApi {
     id: string,
     data: Partial<JobPayload>,
   ): Promise<{ message: string }> {
-    const response = await apiBase.patch<{ message: string }>(
-      `/job/${id}`,
-      data,
-    );
+    const response = await apiBase.put<{ message: string }>(`/job/${id}`, data);
     return response.data;
   }
 

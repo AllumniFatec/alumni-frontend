@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import { Section } from "@/components/Section";
 import { ErrorState } from "@/components/ErrorState";
@@ -8,13 +9,13 @@ import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { NetworkToolbar } from "@/components/network/NetworkToolbar";
 import { ProfileCard } from "@/components/users/ProfileCard";
-import { useUsersPage, useUserSearch } from "@/hooks/useUsers";
+import { useUsersList, useUserSearch, usersQueryKeys } from "@/hooks/useUsers";
 import { useCourses, useWorkplaces } from "@/hooks/useNetwork";
 
 const SEARCH_DEBOUNCE_MS = 320;
 
 export default function NetworkPage() {
-  const [page, setPage] = useState(1);
+  const queryClient = useQueryClient();
   const [searchInput, setSearchInput] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("all");
   const [selectedWorkplace, setSelectedWorkplace] = useState("all");
@@ -25,11 +26,23 @@ export default function NetworkPage() {
   const hasActiveFilter =
     selectedCourse !== "all" || selectedWorkplace !== "all";
 
-  const listQuery = useUsersPage(page, { enabled: !isSearchMode });
+  const listQuery = useUsersList({ enabled: !isSearchMode });
   const searchQuery = useUserSearch(searchTerm);
 
   const activeQuery = isSearchMode ? searchQuery : listQuery;
-  const { data, isLoading, isError, refetch, isFetching } = activeQuery;
+  const { isLoading, isError, refetch, isFetching } = activeQuery;
+
+  const allUsers = useMemo(
+    () =>
+      (listQuery.data?.pages ?? []).flatMap((page) => page.users),
+    [listQuery.data?.pages],
+  );
+
+  const allSearchUsers = useMemo(
+    () =>
+      (searchQuery.data?.pages ?? []).flatMap((page) => page.users),
+    [searchQuery.data?.pages],
+  );
 
   const {
     data: coursesData,
@@ -44,7 +57,7 @@ export default function NetworkPage() {
     refetch: refetchWorkplaces,
   } = useWorkplaces();
 
-  const rows = data ?? [];
+  const rows = isSearchMode ? allSearchUsers : allUsers;
 
   const filteredRows = rows.filter((user) => {
     const courseMatches =
@@ -60,20 +73,36 @@ export default function NetworkPage() {
 
   const isEmpty = filteredRows.length === 0;
 
-  const handleSearchChange = useCallback((search: string) => {
-    setSearchInput(search);
-    setPage(1);
-  }, []);
+  const loadMoreQuery = isSearchMode ? searchQuery : listQuery;
 
-  const handleCourseChange = useCallback((course: string) => {
-    setSelectedCourse(course);
-    setPage(1);
-  }, []);
+  const handleSearchChange = useCallback(
+    (search: string) => {
+      setSearchInput(search);
+      if (search.trim() === "") {
+        void queryClient.resetQueries({ queryKey: usersQueryKeys.list });
+        void queryClient.resetQueries({ queryKey: ["users", "search"] });
+      }
+    },
+    [queryClient],
+  );
 
-  const handleWorkplaceChange = useCallback((workplace: string) => {
-    setSelectedWorkplace(workplace);
-    setPage(1);
-  }, []);
+  const handleCourseChange = useCallback(
+    (course: string) => {
+      setSelectedCourse(course);
+      void queryClient.resetQueries({ queryKey: usersQueryKeys.list });
+      void queryClient.resetQueries({ queryKey: ["users", "search"] });
+    },
+    [queryClient],
+  );
+
+  const handleWorkplaceChange = useCallback(
+    (workplace: string) => {
+      setSelectedWorkplace(workplace);
+      void queryClient.resetQueries({ queryKey: usersQueryKeys.list });
+      void queryClient.resetQueries({ queryKey: ["users", "search"] });
+    },
+    [queryClient],
+  );
 
   if (isLoading || isLoadingCourses || isLoadingWorkplaces) {
     return (
@@ -166,28 +195,17 @@ export default function NetworkPage() {
           </div>
         )}
 
-        {!isSearchMode && listQuery.hasNextPage && (
-          <div className="flex justify-center gap-2 mt-10">
+        {loadMoreQuery.hasNextPage && (
+          <div className="flex justify-center mt-8">
             <Button
               type="button"
               variant="outline"
-              size="sm"
-              disabled={page <= 1}
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              onClick={() => loadMoreQuery.fetchNextPage()}
+              disabled={loadMoreQuery.isFetchingNextPage}
             >
-              Anterior
-            </Button>
-            <span className="flex items-center px-3 text-sm text-slate-600">
-              Página {page}
-            </span>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              disabled={!listQuery.hasNextPage}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Próxima
+              {loadMoreQuery.isFetchingNextPage
+                ? "Carregando..."
+                : "Carregar mais"}
             </Button>
           </div>
         )}

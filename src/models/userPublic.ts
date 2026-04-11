@@ -24,6 +24,22 @@ export interface PublicUserListItem {
   social_media?: ProfileSocialMedia[];
 }
 
+/** Metadados de paginação em GET /user */
+export interface UsersListPagination {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+/** Envelope retornado por GET /user */
+export interface UsersListResponse {
+  users: PublicUserListItem[];
+  pagination: UsersListPagination;
+}
+
 /** Resposta de `GET /user/:userId` — mesmo núcleo que `/my-profile`, sem email nem preferências. */
 export type UserPublicProfileDetail = Omit<
   MyProfile,

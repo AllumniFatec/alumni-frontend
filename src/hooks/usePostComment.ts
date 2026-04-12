@@ -6,7 +6,14 @@ import {
 } from "@tanstack/react-query";
 import { CommentsApi } from "@/apis/comments";
 import { createOptimisticId } from "@/lib/optimisticId";
-import type { FeedResponse, Post, PostComment } from "@/models";
+import type {
+  FeedResponse,
+  Post,
+  PostComment,
+  DeleteCommentVariables,
+  UpdateCommentVariables,
+  PostCommentVariables,
+} from "@/models";
 import { PROFILE_QUERY_KEY } from "@/hooks/useProfile";
 import { toast } from "sonner";
 
@@ -17,22 +24,12 @@ function invalidateFeedAndProfile(queryClient: QueryClient) {
   void queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
 }
 
-export type PostCommentVariables = {
-  postId: string;
-  content: string;
-  userId: string;
-  userName: string;
-};
-
 type CommentMutationContext = {
   previousFeed: InfiniteData<FeedResponse> | undefined;
   variables: PostCommentVariables;
 };
 
-function optimisticComment(
-  post: Post,
-  comment: PostComment,
-): Post {
+function optimisticComment(post: Post, comment: PostComment): Post {
   return {
     ...post,
     comments: [comment, ...post.comments],
@@ -68,9 +65,8 @@ export function usePostCommentMutation() {
     onMutate: async (variables) => {
       await queryClient.cancelQueries({ queryKey: FEED_QUERY_KEY });
 
-      const previousFeed = queryClient.getQueryData<InfiniteData<FeedResponse>>(
-        FEED_QUERY_KEY,
-      );
+      const previousFeed =
+        queryClient.getQueryData<InfiniteData<FeedResponse>>(FEED_QUERY_KEY);
 
       const comment: PostComment = {
         id: createOptimisticId("optimistic-comment"),
@@ -100,11 +96,6 @@ export function usePostCommentMutation() {
   });
 }
 
-export type UpdateCommentVariables = {
-  commentId: string;
-  content: string;
-};
-
 export function useUpdateCommentMutation() {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
@@ -133,10 +124,6 @@ export function useUpdateCommentMutation() {
   });
   return { mutateAsync, isPending };
 }
-
-export type DeleteCommentVariables = {
-  commentId: string;
-};
 
 export function useDeleteCommentMutation() {
   const queryClient = useQueryClient();

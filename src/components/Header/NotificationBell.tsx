@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Bell, Loader2 } from "lucide-react";
 import {
   DropdownMenu,
@@ -18,31 +17,9 @@ import {
 } from "@/hooks/useNotifications";
 import { useNotificationSocket } from "@/hooks/useNotificationSocket";
 import type { NotificationItem } from "@/models/notification";
-
-function navigateFromLink(
-  link: string | null | undefined,
-  router: ReturnType<typeof useRouter>,
-) {
-  if (link == null || link === "") {
-    return;
-  }
-  try {
-    const url = link.startsWith("http")
-      ? new URL(link)
-      : new URL(link, window.location.origin);
-    if (url.origin === window.location.origin) {
-      router.push(`${url.pathname}${url.search}${url.hash}`);
-    } else {
-      window.location.href = url.href;
-    }
-  } catch {
-    const path = link.startsWith("/") ? link : `/${link}`;
-    router.push(path);
-  }
-}
+import Link from "next/link";
 
 export function NotificationBell() {
-  const router = useRouter();
   const { user } = useAuth();
   const enabled = !!user;
 
@@ -56,19 +33,13 @@ export function NotificationBell() {
     hasUnread,
   } = useNotifications(enabled);
 
-  const { mutateAsync: markAsRead } = useMarkNotificationRead();
+  const { mutate: markNotificationRead } = useMarkNotificationRead();
 
   useNotificationSocket(enabled);
 
-  async function handleNotificationClick(notification: NotificationItem) {
-    try {
-      if (!notification.is_read) {
-        await markAsRead(notification.notification_id);
-      }
-    } catch {
-      // Lista será reconciliada pelo onError da mutation se necessário
-    }
-    navigateFromLink(notification.link, router);
+  function handleNotificationClick(notification: NotificationItem) {
+    if (notification.is_read) return;
+    markNotificationRead(notification.notification_id);
   }
 
   return (
@@ -115,22 +86,26 @@ export function NotificationBell() {
             notifications.map((notification) => (
               <DropdownMenuItem
                 key={notification.notification_id}
+                asChild
                 className={cn(
                   "flex cursor-pointer flex-col items-stretch gap-1 rounded-none px-3 py-2.5 whitespace-normal border-b border-slate-100 dark:border-slate-800 last:border-b-0",
                   notification.is_read
                     ? "bg-white dark:bg-slate-900 focus:bg-slate-50 dark:focus:bg-slate-800"
                     : "bg-red-50 dark:bg-red-950/30 focus:bg-red-100 dark:focus:bg-red-950/40",
                 )}
-                onSelect={() => {
-                  void handleNotificationClick(notification);
-                }}
               >
-                <span className="font-semibold text-sm text-slate-900 dark:text-slate-100">
-                  {notification.title}
-                </span>
-                <span className="text-xs text-slate-600 dark:text-slate-400 leading-snug">
-                  {notification.message}
-                </span>
+                <Link
+                  href={notification.link ? notification.link : ""}
+                  className="outline-none"
+                  onClick={() => handleNotificationClick(notification)}
+                >
+                  <span className="font-semibold text-sm text-slate-900 dark:text-slate-100">
+                    {notification.title}
+                  </span>
+                  <span className="text-xs text-slate-600 dark:text-slate-400 leading-snug">
+                    {notification.message}
+                  </span>
+                </Link>
               </DropdownMenuItem>
             ))
           )}

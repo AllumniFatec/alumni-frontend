@@ -9,12 +9,10 @@ import { NOTIFICATIONS_QUERY_KEY } from "@/hooks/useNotifications";
 
 export function useNotificationSocket(enabled: boolean) {
   const queryClient = useQueryClient();
+  const token = AuthStorage.getToken();
 
   useEffect(() => {
     if (!enabled || typeof window === "undefined") return;
-
-    const token = AuthStorage.getToken();
-    if (!token) return;
 
     const socket = io(getSocketOrigin(), {
       auth: { token },
@@ -29,5 +27,5 @@ export function useNotificationSocket(enabled: boolean) {
     return () => {
       socket.disconnect();
     };
-  }, [enabled, queryClient]);
+  }, [enabled, queryClient, token]);
 }

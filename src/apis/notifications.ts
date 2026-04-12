@@ -2,18 +2,20 @@ import { apiBase } from "@/lib/axiosInstance";
 import { NotificationsListResponse } from "@/models/notification";
 
 export class NotificationApi {
-  static async getNotifications(
-    page = 1,
-    limit = 10,
-  ): Promise<NotificationsListResponse> {
+  static async getNotifications(page = 1): Promise<NotificationsListResponse> {
     const response = await apiBase.get<NotificationsListResponse>(
       "/notification",
-      { params: { page, limit } },
+      { params: { page } },
     );
     return response.data;
   }
 
   static async markAsRead(id: string): Promise<void> {
-    await apiBase.patch(`/notification/${id}`);
+    try {
+      await apiBase.patch(`/notification/${id}`);
+    } catch (error) {
+      console.error("Error mark notification as read:", error);
+      throw error;
+    }
   }
 }

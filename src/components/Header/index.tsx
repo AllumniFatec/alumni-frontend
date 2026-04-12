@@ -5,11 +5,14 @@ import { usePathname } from "next/navigation";
 import { MessageCircle, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
+import type { AuthUser } from "@/context/AuthContext";
 import { NotificationBell } from "./NotificationBell";
 
 interface NavItem {
   label: string;
   href: string;
+  /** Se definido, o link só aparece quando retornar true */
+  condition?: (user: AuthUser | null) => boolean;
 }
 
 const navItems: NavItem[] = [
@@ -17,6 +20,11 @@ const navItems: NavItem[] = [
   { label: "Vagas", href: "/jobs" },
   { label: "Eventos", href: "/events" },
   { label: "Rede", href: "/network" },
+  {
+    label: "Administração",
+    href: "/admin",
+    condition: (user) => Boolean(user?.admin),
+  },
 ];
 
 export function Header() {
@@ -27,6 +35,8 @@ export function Header() {
   const navLinks = (
     <>
       {navItems.map((item) => {
+        if (item.condition && !item.condition(user)) return null;
+
         const isActive =
           pathname === item.href || pathname.startsWith(item.href + "/");
         return (

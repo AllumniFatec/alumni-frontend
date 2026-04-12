@@ -1,11 +1,22 @@
 "use client";
 
+import { startTransition, useCallback, useMemo, useState } from "react";
+import {
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+  type SortingState,
+  type Updater,
+} from "@tanstack/react-table";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useAdminUsers } from "@/hooks/useAdmin";
 import type { PublicUserListItem } from "@/models/userPublic";
 import type { ProfilePhoto } from "@/models/profile";
 import { Button } from "@/components/ui/button";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import {
   Table,
   TableBody,
@@ -30,6 +41,8 @@ function formatCourses(user: PublicUserListItem) {
 }
 
 export default function AdminUsersPage() {
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const {
     data,
     isLoading,
@@ -41,8 +54,88 @@ export default function AdminUsersPage() {
     isFetchingNextPage,
   } = useAdminUsers();
 
-  const users =
-    data?.pages.flatMap((page) => page.users) ?? [];
+  /** Referência estável: evita que o TanStack Table trate os dados como “novos” a cada render. */
+  const users = useMemo(
+    () => data?.pages.flatMap((page) => page.users) ?? [],
+    [data],
+  );
+
+  const onSortingChange = useCallback((updater: Updater<SortingState>) => {
+    startTransition(() => {
+      setSorting(updater);
+    });
+  }, []);
+
+  const columns = useMemo<ColumnDef<PublicUserListItem>[]>(
+    () => [
+      {
+        accessorKey: "name",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Utilizador" />
+        ),
+        cell: ({ row }) => {
+          const user = row.original;
+          const src = profilePhotoSrc(user.perfil_photo);
+          return (
+            <div className="flex items-center gap-3">
+              <div className="relative size-10 shrink-0 overflow-hidden rounded-full">
+                {src ? (
+                  <Image
+                    src={src}
+                    alt={user.name}
+                    width={40}
+                    height={40}
+                    className="size-full rounded-full border border-border object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="flex size-full items-center justify-center rounded-full border-2 border-white bg-primary/10 text-sm font-black text-primary shadow-sm">
+                    {getUserInitials(user.name)}
+                  </div>
+                )}
+              </div>
+              <span className="font-medium text-foreground">{user.name}</span>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "user_type",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Tipo" />
+        ),
+        cell: ({ row }) => (
+          <span className="inline-flex rounded-full border border-secondary/20 bg-secondary/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-secondary">
+            {row.original.user_type}
+          </span>
+        ),
+      },
+      {
+        id: "courses",
+        accessorFn: (row) => formatCourses(row),
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Cursos" />
+        ),
+        cell: ({ row }) => (
+          <span className="text-sm text-foreground">
+            {formatCourses(row.original)}
+          </span>
+        ),
+        sortingFn: "alphanumeric",
+      },
+    ],
+    [],
+  );
+
+  const table = useReactTable({
+    data: users,
+    columns,
+    state: { sorting },
+    onSortingChange,
+    getRowId: (row) => row.user_id,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  });
 
   return (
     <div className="space-y-8">
@@ -75,17 +168,26 @@ export default function AdminUsersPage() {
       <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow className="bg-muted/40 hover:bg-muted/40">
-              <TableHead className="px-4 py-3 text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
-                Utilizador
-              </TableHead>
-              <TableHead className="px-4 py-3 text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
-                Tipo
-              </TableHead>
-              <TableHead className="min-w-[14rem] px-4 py-3 text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
-                Cursos
-              </TableHead>
-            </TableRow>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow
+                key={headerGroup.id}
+                className="bg-muted/40 hover:bg-muted/40"
+              >
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className="px-4 py-3 text-left align-middle"
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
           </TableHeader>
           <TableBody>
             {isLoading && (
@@ -109,44 +211,25 @@ export default function AdminUsersPage() {
               </TableRow>
             )}
             {!isLoading &&
-              users.map((user) => {
-                const src = profilePhotoSrc(user.perfil_photo);
-                return (
-                  <TableRow key={user.user_id} className="hover:bg-muted/30">
-                    <TableCell className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <div className="relative size-10 shrink-0 overflow-hidden rounded-full">
-                          {src ? (
-                            <Image
-                              src={src}
-                              alt={user.name}
-                              width={40}
-                              height={40}
-                              className="size-full rounded-full border border-border object-cover"
-                              unoptimized
-                            />
-                          ) : (
-                            <div className="flex size-full items-center justify-center rounded-full border-2 border-white bg-primary/10 text-sm font-black text-primary shadow-sm">
-                              {getUserInitials(user.name)}
-                            </div>
-                          )}
-                        </div>
-                        <span className="font-medium text-foreground">
-                          {user.name}
-                        </span>
-                      </div>
+              users.length > 0 &&
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.original.user_id}
+                  className="hover:bg-muted/30"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className="whitespace-normal px-4 py-3 align-middle"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </TableCell>
-                    <TableCell className="px-4 py-3">
-                      <span className="inline-flex rounded-full border border-secondary/20 bg-secondary/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-secondary">
-                        {user.user_type}
-                      </span>
-                    </TableCell>
-                    <TableCell className="whitespace-normal px-4 py-3 text-sm text-foreground">
-                      {formatCourses(user)}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                  ))}
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
 

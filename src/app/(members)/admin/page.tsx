@@ -1,7 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { type ComponentType } from "react";
+import {
+  startTransition,
+  useCallback,
+  useMemo,
+  useState,
+  type ComponentType,
+} from "react";
+import {
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+  type SortingState,
+  type Updater,
+} from "@tanstack/react-table";
 import {
   Briefcase,
   CheckCircle2,
@@ -17,6 +32,7 @@ import {
 } from "@/hooks/useAdmin";
 import type { AdminPendingUserRow } from "@/models/admin";
 import { Button } from "@/components/ui/button";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import {
   Table,
   TableBody,
@@ -33,6 +49,8 @@ function formatCourses(row: AdminPendingUserRow) {
 }
 
 export default function AdminPage() {
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const { data, isLoading, isError, error, refetch } = useAdminDashboard();
   const {
     mutate: approveUser,
@@ -46,6 +64,162 @@ export default function AdminPage() {
   } = useRefuseUser();
 
   const busy = approvePending || refusePending;
+
+  const pendingRows = useMemo(
+    () => data?.usersInAnalysis ?? [],
+    [data],
+  );
+
+  const onSortingChange = useCallback((updater: Updater<SortingState>) => {
+    startTransition(() => {
+      setSorting(updater);
+    });
+  }, []);
+
+  const columns = useMemo<ColumnDef<AdminPendingUserRow>[]>(
+    () => [
+      {
+        accessorKey: "name",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Nome" />
+        ),
+        cell: ({ row }) => (
+          <div className="flex items-center gap-3">
+            <div
+              className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary"
+              aria-hidden
+            >
+              {getUserInitials(row.original.name)}
+            </div>
+            <span className="font-medium text-foreground">{row.original.name}</span>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "email",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="E-mail" />
+        ),
+        cell: ({ row }) => (
+          <span className="block max-w-[14rem] truncate text-sm text-muted-foreground">
+            {row.original.email}
+          </span>
+        ),
+      },
+      {
+        id: "student_id",
+        accessorFn: (row) => row.student_id ?? "",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="RA" />
+        ),
+        cell: ({ row }) => (
+          <span className="font-mono text-sm text-muted-foreground">
+            {row.original.student_id ?? "—"}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "gender",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Gênero" />
+        ),
+        cell: ({ row }) => (
+          <span className="text-sm text-muted-foreground">
+            {row.original.gender}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "user_type",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Tipo" />
+        ),
+        cell: ({ row }) => (
+          <span className="inline-flex rounded-full border border-primary/20 bg-primary/5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">
+            {row.original.user_type}
+          </span>
+        ),
+      },
+      {
+        id: "courses",
+        accessorFn: (row) => formatCourses(row),
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Curso" />
+        ),
+        cell: ({ row }) => (
+          <span className="max-w-xs whitespace-normal text-sm text-foreground">
+            {formatCourses(row.original)}
+          </span>
+        ),
+        sortingFn: "alphanumeric",
+      },
+      {
+        id: "actions",
+        enableSorting: false,
+        header: () => (
+          <div className="flex w-full justify-end text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
+            Ações
+          </div>
+        ),
+        cell: ({ row }) => {
+          const id = row.original.user_id;
+          return (
+            <div className="flex justify-end gap-1">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                className="text-green-700 hover:bg-green-100 dark:text-green-400 dark:hover:bg-green-950/40"
+                title="Aprovar"
+                disabled={busy}
+                onClick={() => approveUser(id)}
+              >
+                {approvePending && approveUserId === id ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <CheckCircle2 className="size-4" />
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                className="text-destructive hover:bg-destructive/10"
+                title="Recusar"
+                disabled={busy}
+                onClick={() => refuseUser(id)}
+              >
+                {refusePending && refuseUserId === id ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <XCircle className="size-4" />
+                )}
+              </Button>
+            </div>
+          );
+        },
+      },
+    ],
+    [
+      busy,
+      approveUser,
+      refuseUser,
+      approvePending,
+      refusePending,
+      approveUserId,
+      refuseUserId,
+    ],
+  );
+
+  const table = useReactTable({
+    data: pendingRows,
+    columns,
+    state: { sorting },
+    onSortingChange,
+    getRowId: (row) => row.user_id,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  });
 
   return (
     <div className="space-y-10">
@@ -122,29 +296,30 @@ export default function AdminPage() {
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-muted/40 hover:bg-muted/40">
-                <TableHead className="px-6 py-3 text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
-                  Nome
-                </TableHead>
-                <TableHead className="px-6 py-3 text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
-                  E-mail
-                </TableHead>
-                <TableHead className="px-6 py-3 text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
-                  RA
-                </TableHead>
-                <TableHead className="px-6 py-3 text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
-                  Gênero
-                </TableHead>
-                <TableHead className="px-6 py-3 text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
-                  Tipo
-                </TableHead>
-                <TableHead className="min-w-[12rem] px-6 py-3 text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
-                  Curso
-                </TableHead>
-                <TableHead className="px-6 py-3 text-right text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
-                  Ações
-                </TableHead>
-              </TableRow>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow
+                  key={headerGroup.id}
+                  className="bg-muted/40 hover:bg-muted/40"
+                >
+                  {headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      className={cn(
+                        "min-w-0 px-6 py-3 align-middle",
+                        header.column.id === "actions" && "text-right",
+                        header.column.id === "courses" && "min-w-[12rem]",
+                      )}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
             </TableHeader>
             <TableBody>
               {isLoading && (
@@ -170,72 +345,26 @@ export default function AdminPage() {
                   </TableRow>
                 )}
               {!isLoading &&
-                data?.usersInAnalysis?.map((row) => (
-                  <TableRow key={row.user_id} className="hover:bg-muted/30">
-                    <TableCell className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary"
-                          aria-hidden
-                        >
-                          {getUserInitials(row.name)}
-                        </div>
-                        <span className="font-medium text-foreground">
-                          {row.name}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="max-w-[14rem] truncate px-6 py-4 text-sm text-muted-foreground">
-                      {row.email}
-                    </TableCell>
-                    <TableCell className="px-6 py-4 font-mono text-sm text-muted-foreground">
-                      {row.student_id ?? "—"}
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-sm text-muted-foreground">
-                      {row.gender}
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      <span className="inline-flex rounded-full border border-primary/20 bg-primary/5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">
-                        {row.user_type}
-                      </span>
-                    </TableCell>
-                    <TableCell className="max-w-xs whitespace-normal px-6 py-4 text-sm text-foreground">
-                      {formatCourses(row)}
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-right">
-                      <div className="flex justify-end gap-1">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon-sm"
-                          className="text-green-700 hover:bg-green-100 dark:text-green-400 dark:hover:bg-green-950/40"
-                          title="Aprovar"
-                          disabled={busy}
-                          onClick={() => approveUser(row.user_id)}
-                        >
-                          {approvePending && approveUserId === row.user_id ? (
-                            <Loader2 className="size-4 animate-spin" />
-                          ) : (
-                            <CheckCircle2 className="size-4" />
-                          )}
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon-sm"
-                          className="text-destructive hover:bg-destructive/10"
-                          title="Recusar"
-                          disabled={busy}
-                          onClick={() => refuseUser(row.user_id)}
-                        >
-                          {refusePending && refuseUserId === row.user_id ? (
-                            <Loader2 className="size-4 animate-spin" />
-                          ) : (
-                            <XCircle className="size-4" />
-                          )}
-                        </Button>
-                      </div>
-                    </TableCell>
+                pendingRows.length > 0 &&
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.original.user_id}
+                    className="hover:bg-muted/30"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={cn(
+                          "min-w-0 px-6 py-4 align-middle",
+                          cell.column.id === "actions" && "text-right",
+                        )}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
                   </TableRow>
                 ))}
             </TableBody>

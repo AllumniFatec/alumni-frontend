@@ -25,18 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
-
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((p) => p[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-}
+import { cn, getUserInitials } from "@/lib/utils";
 
 function formatCourses(row: AdminPendingUserRow) {
   if (!row.courses?.length) return "—";
@@ -189,7 +178,7 @@ export default function AdminPage() {
                           className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary"
                           aria-hidden
                         >
-                          {initials(row.name)}
+                          {getUserInitials(row.name)}
                         </div>
                         <span className="font-medium text-foreground">
                           {row.name}

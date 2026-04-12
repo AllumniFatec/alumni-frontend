@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getUserInitials } from "@/lib/utils";
 
 function profilePhotoSrc(
   photo: PublicUserListItem["perfil_photo"],
@@ -114,19 +115,19 @@ export default function AdminUsersPage() {
                   <TableRow key={user.user_id} className="hover:bg-muted/30">
                     <TableCell className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="relative size-10 shrink-0 overflow-hidden rounded-full border border-border bg-muted">
+                        <div className="relative size-10 shrink-0 overflow-hidden rounded-full">
                           {src ? (
                             <Image
                               src={src}
                               alt={user.name}
                               width={40}
                               height={40}
-                              className="size-full object-cover"
+                              className="size-full rounded-full border border-border object-cover"
                               unoptimized
                             />
                           ) : (
-                            <div className="flex size-full items-center justify-center text-xs font-bold text-muted-foreground">
-                              {user.name.slice(0, 2).toUpperCase()}
+                            <div className="flex size-full items-center justify-center rounded-full border-2 border-white bg-primary/10 text-sm font-black text-primary shadow-sm">
+                              {getUserInitials(user.name)}
                             </div>
                           )}
                         </div>

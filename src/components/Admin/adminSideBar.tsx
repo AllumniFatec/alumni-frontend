@@ -38,7 +38,7 @@ export function AdminSideBar() {
     <Sidebar
       collapsible="none"
       className={cn(
-        "w-full shrink-0 border-b border-sidebar-border bg-sidebar md:h-full md:w-64 md:border-r md:border-b-0",
+        "w-full shrink-0 border-b border-sidebar-border md:h-full md:w-64 md:border-r md:border-b-0",
       )}
     >
       <SidebarHeader className="gap-1 px-4 py-4">
@@ -74,17 +74,7 @@ export function AdminSideBar() {
           })}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="p-4">
-        <Button
-          type="button"
-          variant="secondary"
-          className="w-full shadow-sm"
-          disabled
-          title="Em breve"
-        >
-          Exportar relatórios
-        </Button>
-      </SidebarFooter>
+      
     </Sidebar>
   );
 }

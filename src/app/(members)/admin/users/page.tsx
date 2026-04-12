@@ -1,6 +1,8 @@
 "use client";
 
 import { startTransition, useCallback, useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useDebounce } from "use-debounce";
 import {
   flexRender,
   getCoreRowModel,
@@ -10,9 +12,13 @@ import {
   type SortingState,
   type Updater,
 } from "@tanstack/react-table";
-import { Loader2 } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import Image from "next/image";
-import { useAdminUsers } from "@/hooks/useAdmin";
+import {
+  ADMIN_USERS_LIST_QUERY_KEY,
+  useAdminSearchUsers,
+  useAdminUsers,
+} from "@/hooks/useAdmin";
 import type { PublicUserListItem } from "@/models/userPublic";
 import type { ProfilePhoto } from "@/models/profile";
 import { Button } from "@/components/ui/button";
@@ -25,7 +31,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getUserInitials } from "@/lib/utils";
+import { cn, getUserInitials } from "@/lib/utils";
+
+const SEARCH_DEBOUNCE_MS = 600;
 
 function profilePhotoSrc(
   photo: PublicUserListItem["perfil_photo"],
@@ -41,8 +49,17 @@ function formatCourses(user: PublicUserListItem) {
 }
 
 export default function AdminUsersPage() {
+  const queryClient = useQueryClient();
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch] = useDebounce(searchInput, SEARCH_DEBOUNCE_MS);
 
+  const isSearchMode = debouncedSearch.trim().length > 0;
+
+  const listQuery = useAdminUsers({ enabled: !isSearchMode });
+  const searchQuery = useAdminSearchUsers(debouncedSearch);
+
+  const activeQuery = isSearchMode ? searchQuery : listQuery;
   const {
     data,
     isLoading,
@@ -52,12 +69,24 @@ export default function AdminUsersPage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useAdminUsers();
+    isFetching,
+  } = activeQuery;
 
   /** Referência estável: evita que o TanStack Table trate os dados como “novos” a cada render. */
   const users = useMemo(
     () => data?.pages.flatMap((page) => page.users) ?? [],
     [data],
+  );
+
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setSearchInput(value);
+      if (value.trim() === "") {
+        void queryClient.resetQueries({ queryKey: ADMIN_USERS_LIST_QUERY_KEY });
+        void queryClient.resetQueries({ queryKey: ["admin", "users", "search"] });
+      }
+    },
+    [queryClient],
   );
 
   const onSortingChange = useCallback((updater: Updater<SortingState>) => {
@@ -148,6 +177,25 @@ export default function AdminUsersPage() {
         </h1>
       </header>
 
+      <div className="relative max-w-lg">
+        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <input
+          type="search"
+          value={searchInput}
+          onChange={(e) => handleSearchChange(e.target.value)}
+          placeholder="Buscar por nome"
+          className={cn(
+            "h-10 w-full rounded-lg border border-border bg-card pl-10 pr-4 text-sm text-foreground shadow-sm",
+            "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30",
+          )}
+          aria-label="Buscar utilizadores"
+        />
+      </div>
+
+      {isFetching && !isLoading && (
+        <p className="text-xs text-muted-foreground">A atualizar…</p>
+      )}
+
       {isError && (
         <div
           className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
@@ -206,7 +254,9 @@ export default function AdminUsersPage() {
                   colSpan={3}
                   className="px-4 py-12 text-center text-muted-foreground"
                 >
-                  Nenhum utilizador encontrado.
+                  {isSearchMode
+                    ? "Nenhum resultado para essa busca."
+                    : "Nenhum utilizador encontrado."}
                 </TableCell>
               </TableRow>
             )}

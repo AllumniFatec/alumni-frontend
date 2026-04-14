@@ -13,6 +13,7 @@ import { ProfileJobsSection } from "@/components/profile/ProfileJobsSection";
 import { ProfileEventsSection } from "@/components/profile/ProfileEventsSection";
 import { ProfilePostsSection } from "@/components/profile/ProfilePostsSection";
 import { ProfilePhotoEditDialog } from "@/components/profile/ProfilePhotoEditDialog";
+import { getUserInitials } from "@/lib/utils";
 
 export type ProfilePageContentProps = {
   profile: MyProfile | UserPublicProfileDetail;
@@ -53,7 +54,7 @@ export function ProfilePageContent({
                 />
               ) : (
                 <div className="size-20 rounded-full border-4 border-white bg-primary/10 flex items-center justify-center text-primary text-3xl font-black shadow">
-                  {profile.name?.trim().charAt(0).toUpperCase() || "?"}
+                  {getUserInitials(profile.name)}
                 </div>
               )}
 

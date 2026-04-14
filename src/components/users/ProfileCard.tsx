@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ProfileSkillBadge } from "@/components/profile/skills/ProfileSkillBadge";
 import type { PublicUserListItem } from "@/models/userPublic";
 import type { ProfileWorkplaceHistoryEntry } from "@/models/profile";
-import { cn } from "@/lib/utils";
+import { cn, getUserInitials } from "@/lib/utils";
 
 const MAX_SKILLS = 4;
 
@@ -61,8 +61,8 @@ function ProfileCardComponent({
               className="w-full h-full object-cover rounded-full"
             />
           ) : (
-            <div className="w-full h-full rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl font-black">
-              {user.name.trim().charAt(0).toUpperCase() || "?"}
+            <div className="flex h-full w-full items-center justify-center rounded-full bg-primary/10 text-2xl font-black text-primary">
+              {getUserInitials(user.name)}
             </div>
           )}
         </div>

@@ -8,6 +8,26 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Iniciais (até 2 caracteres): primeiras letras das duas primeiras palavras.
+ * Uma só palavra: só a primeira letra desse token (igual ao painel admin).
+ */
+export function getUserInitials(name: string | null | undefined): string {
+  const trimmed = name?.trim();
+  if (!trimmed) return "?";
+
+  const letters = trimmed
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  return letters || "?";
+}
+
+/**
  * ISO 8601 ou `Date` → data por extenso em pt-BR (ex.: 29 de janeiro de 2026).
  */
 export function formatDateDayMonthYear(value: string | Date): string {

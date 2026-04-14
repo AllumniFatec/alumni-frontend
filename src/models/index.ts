@@ -10,6 +10,7 @@ export * from "./notification";
 export * from "./skill";
 export * from "./userSkill";
 export * from "./profile";
+export * from "./admin";
 
 export interface FeedUser {
   id: string;

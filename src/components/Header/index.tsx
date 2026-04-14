@@ -5,11 +5,14 @@ import { usePathname } from "next/navigation";
 import { MessageCircle, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
+import type { AuthUser } from "@/context/AuthContext";
 import { NotificationBell } from "./NotificationBell";
 
 interface NavItem {
   label: string;
   href: string;
+  /** Se definido, o link só aparece quando retornar true */
+  condition?: (user: AuthUser | null) => boolean;
 }
 
 const navItems: NavItem[] = [
@@ -17,6 +20,11 @@ const navItems: NavItem[] = [
   { label: "Vagas", href: "/jobs" },
   { label: "Eventos", href: "/events" },
   { label: "Rede", href: "/network" },
+  {
+    label: "Administração",
+    href: "/admin",
+    condition: (user) => Boolean(user?.admin),
+  },
 ];
 
 export function Header() {
@@ -27,6 +35,8 @@ export function Header() {
   const navLinks = (
     <>
       {navItems.map((item) => {
+        if (item.condition && !item.condition(user)) return null;
+
         const isActive =
           pathname === item.href || pathname.startsWith(item.href + "/");
         return (
@@ -78,12 +88,20 @@ export function Header() {
             <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
 
             <Link href="/profile" className="flex items-center gap-2">
-              <div className="size-11 rounded-full border-2 border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
-                <img
-                  src={user?.perfil_photo?.url}
-                  alt="Perfil"
-                  className="size-full rounded-full object-cover shadow-sm"
-                />
+              <div className="size-11 rounded-full border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
+                {user?.perfil_photo ? (
+                  <img
+                    src={user?.perfil_photo?.url}
+                    alt="Perfil"
+                    className="size-full rounded-full object-cover shadow-sm"
+                  />
+                ) : (
+                  <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-white">
+                      {user?.name?.[0]}
+                    </span>
+                  </div>
+                )}
               </div>
             </Link>
           </div>

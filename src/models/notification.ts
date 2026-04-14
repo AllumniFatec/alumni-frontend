@@ -3,7 +3,8 @@ export interface NotificationItem {
   notification_id: string;
   title: string;
   message: string;
-  link: string;
+  /** Pode vir null da API em alguns tipos de notificação */
+  link: string | null;
   is_read: boolean;
 }
 

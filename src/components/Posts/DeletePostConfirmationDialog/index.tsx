@@ -19,6 +19,10 @@ interface DeletePostConfirmationDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   isLoading?: boolean;
+  /** Substitui o título padrão (“Confirmar exclusão”). */
+  title?: string;
+  /** Substitui a descrição padrão (publicação). */
+  description?: string;
 }
 
 export function DeletePostConfirmationDialog({
@@ -27,6 +31,8 @@ export function DeletePostConfirmationDialog({
   open,
   onOpenChange,
   isLoading,
+  title = "Confirmar exclusão",
+  description = "Tem certeza que deseja excluir esta publicação?",
 }: DeletePostConfirmationDialogProps) {
   const dialogProps: Partial<React.ComponentProps<typeof Dialog>> = {};
   if (open !== undefined) dialogProps.open = open;
@@ -48,10 +54,8 @@ export function DeletePostConfirmationDialog({
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Confirmar exclusão</DialogTitle>
-          <DialogDescription>
-            Tem certeza que deseja excluir esta publicação?
-          </DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>

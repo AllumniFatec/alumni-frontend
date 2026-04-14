@@ -1,37 +1,45 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { UserApi } from "@/apis/users";
 
 export const usersQueryKeys = {
-  list: (page: number) => ["users", "list", page] as const,
+  list: ["users", "list"] as const,
   search: (term: string) => ["users", "search", term] as const,
   detail: (userId: string) => ["users", "detail", userId] as const,
 };
 
-export function useUsersPage(
-  page: number,
-  options?: { enabled?: boolean },
-) {
-  const { data, isLoading, isError, refetch, isFetching } = useQuery({
-    queryKey: usersQueryKeys.list(page),
-    queryFn: () => UserApi.getUsersPage(page),
+export function useUsersList(options?: { enabled?: boolean }) {
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetching,
+  } = useInfiniteQuery({
+    queryKey: usersQueryKeys.list,
+    queryFn: ({ pageParam = 1 }) => UserApi.getUsersPage(pageParam as number),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.pagination.hasNextPage
+        ? lastPage.pagination.page + 1
+        : undefined,
     enabled: options?.enabled ?? true,
   });
-
-  const hasNextPage = useMemo(
-    () => (data?.length ?? 0) >= UserApi.PAGE_SIZE,
-    [data?.length],
-  );
 
   return {
     data,
     isLoading,
     isError,
     refetch,
-    isFetching,
+    fetchNextPage,
     hasNextPage,
+    isFetchingNextPage,
+    isFetching,
   };
 }
 
@@ -39,9 +47,24 @@ export function useUserSearch(search: string) {
   const trimmed = search.trim();
   const enabled = trimmed.length > 0;
 
-  const { data, isLoading, isError, refetch, isFetching } = useQuery({
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetching,
+  } = useInfiniteQuery({
     queryKey: usersQueryKeys.search(trimmed),
-    queryFn: () => UserApi.searchUsers(trimmed),
+    queryFn: ({ pageParam = 1 }) =>
+      UserApi.searchUsers(trimmed, pageParam as number),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.pagination.hasNextPage
+        ? lastPage.pagination.page + 1
+        : undefined,
     enabled,
   });
 
@@ -50,6 +73,9 @@ export function useUserSearch(search: string) {
     isLoading,
     isError,
     refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     isFetching,
     isSearchMode: enabled,
   };

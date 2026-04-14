@@ -16,6 +16,11 @@ interface PostCardActionsMenuProps {
   onEdit: () => void;
   onDelete: () => void | Promise<void>;
   isDeleting?: boolean;
+  /** Texto do diálogo de exclusão (padrão: publicação). */
+  deleteDialogTitle?: string;
+  deleteDialogDescription?: string;
+  /** Rótulo de acessibilidade do botão “⋯”. */
+  triggerAriaLabel?: string;
 }
 
 export function PostCardActionsMenu({
@@ -23,6 +28,9 @@ export function PostCardActionsMenu({
   onEdit,
   onDelete,
   isDeleting = false,
+  deleteDialogTitle,
+  deleteDialogDescription,
+  triggerAriaLabel = "Ações da publicação",
 }: PostCardActionsMenuProps) {
   const { canManageContent } = useCanManageContent(authorId);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -36,7 +44,7 @@ export function PostCardActionsMenu({
           type="button"
           onClick={(e) => e.preventDefault()}
           className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          aria-label="Ações da publicação"
+          aria-label={triggerAriaLabel}
         >
           <MoreHorizontal className="w-4 h-4 text-slate-500" />
         </DropdownMenuTrigger>
@@ -73,6 +81,8 @@ export function PostCardActionsMenu({
         }}
         isLoading={isDeleting}
         trigger={null}
+        title={deleteDialogTitle}
+        description={deleteDialogDescription}
       />
     </>
   );

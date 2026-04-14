@@ -5,12 +5,31 @@ import { cn } from "@/lib/utils";
 import { BaseLabel } from "@/components/BaseLabel";
 import { Eye, EyeOff } from "lucide-react";
 
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
+import { useWorkplaces } from "@/hooks/useNetwork";
+
 interface InputProps extends React.ComponentProps<"input"> {
   error?: string;
   label?: string;
+  dataList?: boolean;
 }
 
-function Input({ className, type, error, label, id, ...props }: InputProps) {
+function Input({
+  className,
+  type,
+  error,
+  label,
+  dataList,
+  id,
+  ...props
+}: InputProps) {
   const generatedId = useId();
   const inputId = id || `input-${generatedId}`;
   const [showPassword, setShowPassword] = useState(false);
@@ -18,18 +37,42 @@ function Input({ className, type, error, label, id, ...props }: InputProps) {
   const isPassword = type === "password";
   const inputType = isPassword && showPassword ? "text" : type;
 
+  const {
+    data: workplacesData,
+    isLoading: isLoadingWorkplaces,
+    isError: isErrorWorkplaces,
+  } = useWorkplaces();
+
   return (
     <div className="w-full">
       {label && <BaseLabel htmlFor={inputId}>{label}</BaseLabel>}
-      <div className="relative">
+      {dataList ? (
+        <Combobox
+          items={workplacesData?.map((workplace) => workplace.company) ?? []}
+        >
+          <ComboboxInput
+            placeholder="Selecione uma empresa"
+            className="mt-4 rounded-lg border-0"
+          />
+          <ComboboxContent className=" bg-white rounded-lg border border-gray-200 shadow-lg">
+            <ComboboxEmpty>Nenhum empresa encontrada</ComboboxEmpty>
+            <ComboboxList>
+              {(item) => (
+                <ComboboxItem key={item} value={item}>
+                  {item}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
+      ) : (
         <input
           id={inputId}
           type={inputType}
           className={cn(
             "w-full h-10 px-3 py-2 border-0 rounded-lg text-sm text-foreground",
             "placeholder:text-xs placeholder:text-muted-foreground/60",
-            // AQUI ESTAVA O ERRO: mudamos de "bg-primary-foreground sm:bg-muted" para apenas "bg-muted"
-            "bg-muted",
+            "bg-primary-foreground sm:bg-muted",
             "focus:outline-none focus:ring-2",
             "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
             "transition-colors",
@@ -41,21 +84,7 @@ function Input({ className, type, error, label, id, ...props }: InputProps) {
           )}
           {...props}
         />
-        {isPassword && (
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-            tabIndex={-1}
-          >
-            {showPassword ? (
-              <Eye className="h-4 w-4" />
-            ) : (
-              <EyeOff className="h-4 w-4" />
-            )}
-          </button>
-        )}
-      </div>
+      )}
       <div className="h-4 mt-1">
         {error && <p className="text-red-500 text-xs leading-none">{error}</p>}
       </div>

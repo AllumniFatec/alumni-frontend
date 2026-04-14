@@ -122,6 +122,7 @@ export function JobForm({
           label="Empresa"
           placeholder="Nome exato da empresa cadastrada no sistema"
           error={errors.workplace_name?.message}
+          dataList={true}
           {...register("workplace_name")}
         />
       </div>

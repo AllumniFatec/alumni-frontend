@@ -21,13 +21,9 @@ function Select({ error, label, children, ...props }: SelectProps) {
       <SelectPrimitive.Root data-slot="select" {...props}>
         {children}
       </SelectPrimitive.Root>
-      {error ? (
-        <div className="h-4 mt-1">
-          {error && (
-            <p className="text-red-500 text-xs leading-none">{error}</p>
-          )}
-        </div>
-      ) : null}
+      <div className="h-4 mt-1">
+        {error && <p className="text-red-500 text-xs leading-none">{error}</p>}
+      </div>
     </div>
   );
 }

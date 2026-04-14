@@ -13,7 +13,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       {/* A div principal agora é um container flex normal. 
           Ela vai crescer o quanto o formulário pedir.
       */}
-      <main className="flex-1 flex items-center justify-center p-6 py-16 md:py-24">
+      <main className="flex-1 flex items-center justify-center p-6 py-16 md:py-12">
         <div className="w-full max-w-3xl bg-white rounded-[40px] shadow-2xl p-8 md:p-16 border border-white/10">
           {children}
         </div>

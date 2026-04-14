@@ -36,4 +36,9 @@ export class JobApi {
     const response = await apiBase.delete<{ message: string }>(`/job/${id}`);
     return response.data;
   }
+
+  static async closeJob(id: string): Promise<{ message: string }> {
+    const response = await apiBase.patch<{ message: string }>(`/job/${id}`);
+    return response.data;
+  }
 }

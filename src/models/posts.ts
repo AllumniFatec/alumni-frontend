@@ -69,3 +69,19 @@ export interface UpdatePostResponse {
   message: string;
   post: Post;
 }
+
+export interface DeleteCommentVariables {
+  commentId: string;
+}
+
+export interface UpdateCommentVariables {
+  commentId: string;
+  content: string;
+}
+
+export interface PostCommentVariables {
+  postId: string;
+  content: string;
+  userId: string;
+  userName: string;
+}

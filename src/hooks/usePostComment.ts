@@ -1,30 +1,35 @@
 import {
   type InfiniteData,
+  type QueryClient,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
 import { CommentsApi } from "@/apis/comments";
 import { createOptimisticId } from "@/lib/optimisticId";
-import type { FeedResponse, Post, PostComment } from "@/models";
+import type {
+  FeedResponse,
+  Post,
+  PostComment,
+  DeleteCommentVariables,
+  UpdateCommentVariables,
+  PostCommentVariables,
+} from "@/models";
+import { PROFILE_QUERY_KEY } from "@/hooks/useProfile";
+import { toast } from "sonner";
 
 const FEED_QUERY_KEY = ["feed"] as const;
 
-export type PostCommentVariables = {
-  postId: string;
-  content: string;
-  userId: string;
-  userName: string;
-};
+function invalidateFeedAndProfile(queryClient: QueryClient) {
+  void queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
+  void queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
+}
 
 type CommentMutationContext = {
   previousFeed: InfiniteData<FeedResponse> | undefined;
   variables: PostCommentVariables;
 };
 
-function optimisticComment(
-  post: Post,
-  comment: PostComment,
-): Post {
+function optimisticComment(post: Post, comment: PostComment): Post {
   return {
     ...post,
     comments: [comment, ...post.comments],
@@ -60,9 +65,8 @@ export function usePostCommentMutation() {
     onMutate: async (variables) => {
       await queryClient.cancelQueries({ queryKey: FEED_QUERY_KEY });
 
-      const previousFeed = queryClient.getQueryData<InfiniteData<FeedResponse>>(
-        FEED_QUERY_KEY,
-      );
+      const previousFeed =
+        queryClient.getQueryData<InfiniteData<FeedResponse>>(FEED_QUERY_KEY);
 
       const comment: PostComment = {
         id: createOptimisticId("optimistic-comment"),
@@ -87,7 +91,65 @@ export function usePostCommentMutation() {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
+      invalidateFeedAndProfile(queryClient);
     },
   });
+}
+
+export function useUpdateCommentMutation() {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: ({ commentId, content }: UpdateCommentVariables) =>
+      CommentsApi.updateComment(commentId, content),
+    onSuccess: () => {
+      invalidateFeedAndProfile(queryClient);
+      toast.success("Comentário atualizado", {
+        description: "O comentário foi salvo com sucesso.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating comment:", error);
+      toast.error("Erro ao atualizar comentário", {
+        description: "Tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
+  });
+  return { mutateAsync, isPending };
+}
+
+export function useDeleteCommentMutation() {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending, variables } = useMutation({
+    mutationFn: ({ commentId }: DeleteCommentVariables) =>
+      CommentsApi.deleteComment(commentId),
+    onSuccess: () => {
+      invalidateFeedAndProfile(queryClient);
+      toast.success("Comentário excluído", {
+        description: "O comentário foi removido.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+    },
+    onError: (error) => {
+      console.error("Error deleting comment:", error);
+      toast.error("Erro ao excluir comentário", {
+        description: "Tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
+  });
+  return { mutateAsync, isPending, variables };
 }

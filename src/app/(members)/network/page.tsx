@@ -48,13 +48,11 @@ export default function NetworkPage() {
     data: coursesData,
     isLoading: isLoadingCourses,
     isError: isErrorCourses,
-    refetch: refetchCourses,
   } = useCourses();
   const {
     data: workplacesData,
     isLoading: isLoadingWorkplaces,
     isError: isErrorWorkplaces,
-    refetch: refetchWorkplaces,
   } = useWorkplaces();
 
   const rows = isSearchMode ? allSearchUsers : allUsers;

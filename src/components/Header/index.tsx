@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLogout } from "@/hooks/useLogout";
+import Image from "next/image";
 
 interface NavItem {
   label: string;
@@ -107,13 +108,16 @@ export function Header() {
                 >
                   <div className="size-11 rounded-full border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm overflow-hidden">
                     {user?.perfil_photo ? (
-                      <img
-                        src={user?.perfil_photo?.url}
+                      <Image
+                        src={user.perfil_photo.url}
                         alt="Perfil"
-                        className="size-full rounded-full object-cover shadow-sm"
+                        width={44}
+                        height={44}
+                        className="size-full rounded-full object-cover shadow-sm hover:cursor-pointer"
+                        unoptimized
                       />
                     ) : (
-                      <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
+                      <div className="size-full rounded-full bg-gray-300 flex items-center justify-center hover:cursor-pointer">
                         <span className="text-sm font-semibold text-white">
                           {user?.name?.[0]}
                         </span>

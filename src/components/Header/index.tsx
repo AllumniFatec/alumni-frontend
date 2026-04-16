@@ -2,11 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MessageCircle, GraduationCap } from "lucide-react";
+import { MessageCircle, GraduationCap, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import type { AuthUser } from "@/context/AuthContext";
 import { NotificationBell } from "./NotificationBell";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useLogout } from "@/hooks/useLogout";
 
 interface NavItem {
   label: string;
@@ -31,6 +39,7 @@ export function Header() {
   const pathname = usePathname();
 
   const { user } = useAuth();
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
 
   const navLinks = (
     <>
@@ -81,29 +90,60 @@ export function Header() {
           <div className="flex items-center gap-4">
             <NotificationBell />
 
+            {/* 
             <button className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
               <MessageCircle className="size-5" />
             </button>
+            */}
 
             <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
 
-            <Link href="/profile" className="flex items-center gap-2">
-              <div className="size-11 rounded-full border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
-                {user?.perfil_photo ? (
-                  <img
-                    src={user?.perfil_photo?.url}
-                    alt="Perfil"
-                    className="size-full rounded-full object-cover shadow-sm"
-                  />
-                ) : (
-                  <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
-                    <span className="text-sm font-semibold text-white">
-                      {user?.name?.[0]}
-                    </span>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className="flex items-center gap-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                  aria-label="Abrir menu do perfil"
+                >
+                  <div className="size-11 rounded-full border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm overflow-hidden">
+                    {user?.perfil_photo ? (
+                      <img
+                        src={user?.perfil_photo?.url}
+                        alt="Perfil"
+                        className="size-full rounded-full object-cover shadow-sm"
+                      />
+                    ) : (
+                      <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
+                        <span className="text-sm font-semibold text-white">
+                          {user?.name?.[0]}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </Link>
+                </button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end" className="w-44">
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="cursor-pointer">
+                    <User />
+                    Perfil
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  disabled={isLoggingOut}
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    logout();
+                  }}
+                >
+                  <LogOut />
+                  {isLoggingOut ? "Saindo..." : "Sair"}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 

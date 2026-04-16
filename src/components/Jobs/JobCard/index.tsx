@@ -4,13 +4,30 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { EmploymentTypeLabel, JobListItem, WorkModelLabel } from "@/models/job";
+import {
+  EmploymentTypeLabel,
+  JobListItem,
+  JobStatus,
+  JobStatusLabel,
+  WorkModelLabel,
+} from "@/models/job";
 import { CardActionsMenu } from "@/components/Jobs/CardActionsMenuJobs";
 import { useDeleteJob } from "@/hooks/useJobs";
 import { toast } from "sonner";
 
 interface JobCardProps {
   job: JobListItem;
+}
+
+function getStatusBadgeClass(status: string): string {
+  switch (status) {
+    case JobStatus.Active:
+      return "bg-green-100 text-green-700";
+    case JobStatus.Closed:
+      return "bg-red-100 text-red-700";
+    default:
+      return "bg-slate-100 text-slate-600";
+  }
 }
 
 export function JobCard({ job }: JobCardProps) {
@@ -55,6 +72,11 @@ export function JobCard({ job }: JobCardProps) {
             </span>
             <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-medium">
               {EmploymentTypeLabel[job.employment_type] ?? job.employment_type}
+            </span>
+            <span
+              className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${getStatusBadgeClass(job.status)}`}
+            >
+              {JobStatusLabel[job.status as JobStatus] ?? job.status}
             </span>
           </div>
         </div>

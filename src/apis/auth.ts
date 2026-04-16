@@ -61,14 +61,17 @@ export class AuthApi {
   }
 
   static async resetPassword(
-    newPassword: string,
+    password: string,
+    confirmPassword: string,
     token: string,
   ): Promise<{ message: string }> {
     try {
       const response = await apiBase.patch<{ message: string }>(
         `/password/reset-password/${token}`,
-        { password: newPassword },
+        { password: password, confirmPassword: confirmPassword },
       );
+
+      console.log("resetPassword response: ", response.data);
       return response.data;
     } catch (error) {
       console.error("resetPassword error", error);

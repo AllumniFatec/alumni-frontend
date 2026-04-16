@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { AuthApi } from "@/apis/auth";
+import { toast } from "sonner";
 
 export const resetPasswordSchema = z
   .object({
@@ -18,7 +19,7 @@ export const resetPasswordSchema = z
       .max(100, "A senha deve ter no máximo 100 caracteres")
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,
-        "senha inválida"
+        "senha inválida",
       ),
     confirmPassword: z.string(),
   })
@@ -50,13 +51,22 @@ const ResetPasswordTokenPage = () => {
   // Mutation para reset de senha
   const resetPasswordMutation = useMutation({
     mutationFn: ({
-      newPassword,
+      password,
+      confirmPassword,
       token,
     }: {
-      newPassword: string;
+      password: string;
+      confirmPassword: string;
       token: string;
-    }) => AuthApi.resetPassword(newPassword, token),
+    }) => AuthApi.resetPassword(password, confirmPassword, token),
     onSuccess: () => {
+      toast.success("Senha redefinida com sucesso", {
+        description: "Você já pode fazer login.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
       router.push("/sign-in");
     },
     onError: (error: any) => {
@@ -72,7 +82,8 @@ const ResetPasswordTokenPage = () => {
     }
 
     resetPasswordMutation.mutate({
-      newPassword: data.password,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
       token: token,
     });
   };

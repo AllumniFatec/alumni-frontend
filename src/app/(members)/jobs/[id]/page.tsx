@@ -22,6 +22,8 @@ import { useJobById, useDeleteJob, useCloseJob } from "@/hooks/useJobs";
 import { toast } from "sonner";
 import {
   EmploymentTypeLabel,
+  JobStatus,
+  JobStatusLabel,
   SeniorityLevelLabel,
   WorkModelLabel,
 } from "@/models/job";
@@ -31,6 +33,17 @@ import { SocialMediaType } from "@/models/users";
 
 import { DeleteJobConfirmationDialog } from "@/components/Jobs/DeleteJobConfirmationDialog";
 import { CloseJobConfirmationDialog } from "@/components/Jobs/CloseJobConfirmationDialog";
+
+function getStatusBadgeClass(status: string): string {
+  switch (status) {
+    case JobStatus.Active:
+      return "bg-green-100 text-green-700";
+    case JobStatus.Closed:
+      return "bg-red-100 text-red-700";
+    default:
+      return "bg-slate-100 text-slate-600";
+  }
+}
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -97,15 +110,17 @@ export default function JobDetailPage() {
             <>
               <div className="mb-8">
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                    Vaga de Emprego
-                  </span>
                   <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-medium">
                     {WorkModelLabel[job.work_model] ?? job.work_model}
                   </span>
                   <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-medium">
                     {EmploymentTypeLabel[job.employment_type] ??
                       job.employment_type}
+                  </span>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadgeClass(job.status)}`}
+                  >
+                    {JobStatusLabel[job.status as JobStatus] ?? job.status}
                   </span>
                   {job.seniority_level && (
                     <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-medium">

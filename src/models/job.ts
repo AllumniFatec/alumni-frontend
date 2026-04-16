@@ -46,6 +46,16 @@ export const WorkModelLabel: Record<WorkModel, string> = {
   [WorkModel.Hybrid]: "Híbrido",
 };
 
+export enum JobStatus {
+  Active = "Active",
+  Closed = "Closed",
+}
+
+export const JobStatusLabel: Record<JobStatus, string> = {
+  [JobStatus.Active]: "Ativa",
+  [JobStatus.Closed]: "Encerrada",
+};
+
 /** Shape retornado por GET /job (listagem) */
 export interface JobListItem {
   id: string;

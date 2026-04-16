@@ -31,7 +31,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { mapUserType } from "@/hooks/mapUserType";
 import { cn, getUserInitials } from "@/lib/utils";
+import type { UserType } from "@/models/users";
 
 const SEARCH_DEBOUNCE_MS = 600;
 
@@ -135,7 +137,8 @@ export default function AdminUsersPage() {
         ),
         cell: ({ row }) => (
           <span className="inline-flex rounded-full border border-secondary/20 bg-secondary/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-secondary">
-            {row.original.user_type}
+            {mapUserType(row.original.user_type as UserType) ||
+              row.original.user_type}
           </span>
         ),
       },

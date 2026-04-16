@@ -8,6 +8,14 @@ export enum EventStatus {
   DELETED = "Deleted",
 }
 
+export const EventStatusLabel: Record<EventStatus, string> = {
+  [EventStatus.ACTIVE]: "Ativo",
+  [EventStatus.INACTIVE]: "Inativo",
+  [EventStatus.CLOSED]: "Encerrado",
+  [EventStatus.CANCELED]: "Cancelado",
+  [EventStatus.DELETED]: "Excluído",
+};
+
 /** Resposta GET /event — itens resumidos */
 export interface EventListItem {
   id: string;
@@ -15,6 +23,7 @@ export interface EventListItem {
   local: string;
   /** ISO 8601 */
   date_start: string;
+  status?: EventStatus | string;
 }
 
 export interface EventPagination {

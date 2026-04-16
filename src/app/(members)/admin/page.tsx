@@ -42,6 +42,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn, getUserInitials } from "@/lib/utils";
+import { mapGender, mapUserType } from "@/hooks/mapUserType";
+import type { UserGender, UserType } from "@/models/users";
 
 function formatCourses(row: AdminPendingUserRow) {
   if (!row.courses?.length) return "—";
@@ -125,7 +127,7 @@ export default function AdminPage() {
         ),
         cell: ({ row }) => (
           <span className="text-sm text-muted-foreground">
-            {row.original.gender}
+            {mapGender(row.original.gender as UserGender) || row.original.gender}
           </span>
         ),
       },
@@ -136,7 +138,8 @@ export default function AdminPage() {
         ),
         cell: ({ row }) => (
           <span className="inline-flex rounded-full border border-primary/20 bg-primary/5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">
-            {row.original.user_type}
+            {mapUserType(row.original.user_type as UserType) ||
+              row.original.user_type}
           </span>
         ),
       },

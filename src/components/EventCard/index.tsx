@@ -4,6 +4,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Calendar, MapPin } from "lucide-react";
+import { EventStatus, EventStatusLabel } from "@/models/event";
 
 /** Item de lista ou detalhe mínimo para o card */
 export type EventCardModel = {
@@ -11,12 +12,29 @@ export type EventCardModel = {
   title: string;
   local: string;
   date_start: string;
+  status?: string;
   description?: string;
   images?: Record<string, unknown>[] | null;
 };
 
 interface EventCardProps {
   event: EventCardModel;
+}
+
+function getStatusBadgeClass(status: string): string {
+  switch (status) {
+    case EventStatus.ACTIVE:
+      return "bg-green-100 text-green-700";
+    case EventStatus.CLOSED:
+      return "bg-red-100 text-red-700";
+    default:
+      return "bg-slate-100 text-slate-600";
+  }
+}
+
+function getStatusLabel(status?: string): string {
+  if (!status) return "Status indisponível";
+  return EventStatusLabel[status as EventStatus] ?? status;
 }
 
 export function EventCard({ event }: EventCardProps) {
@@ -32,7 +50,7 @@ export function EventCard({ event }: EventCardProps) {
       href={`/events/${event.id}`}
       className="min-w-[320px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden group shrink-0"
     >
-      <div className="h-44 relative bg-gradient-to-br from-primary/20 to-primary/5">
+      {/* <div className="h-44 relative bg-gradient-to-br from-primary/20 to-primary/5">
         {event.images && event.images.length > 0 ? (
           <img
             alt={event.title}
@@ -44,17 +62,22 @@ export function EventCard({ event }: EventCardProps) {
             <Calendar className="w-16 h-16 text-primary/30" />
           </div>
         )}
-      </div>
+      </div> */}
 
       <div className="p-5">
+        <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 leading-tight mb-4 line-clamp-2">
+          {event.title}
+        </h3>
         <div className="flex items-center gap-2 mb-2">
           <span className="text-primary text-[11px] font-bold uppercase tracking-wider">
             {formattedDate} • {formattedTime}
           </span>
+          <span
+            className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${getStatusBadgeClass(event.status ?? "")}`}
+          >
+            {getStatusLabel(event.status)}
+          </span>
         </div>
-        <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 leading-tight mb-4 line-clamp-2">
-          {event.title}
-        </h3>
         {event.description ? (
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">
             {event.description}

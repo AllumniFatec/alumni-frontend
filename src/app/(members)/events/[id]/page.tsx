@@ -13,8 +13,19 @@ import { ptBR } from "date-fns/locale";
 import { useEventById, useDeleteEvent, useCloseEvent } from "@/hooks/useEvents";
 import { useCanManageEvents } from "@/hooks/useCanManageEvents";
 import { DeleteEventConfirmationDialog } from "@/components/Events/DeleteEventConfirmationDialog";
-import { EventStatus } from "@/models/event";
+import { EventStatus, EventStatusLabel } from "@/models/event";
 import { CloseEventConfirmationDialog } from "@/components/Events/CloseEventConfirmationDialog";
+
+function getStatusBadgeClass(status: string): string {
+  switch (status) {
+    case EventStatus.ACTIVE:
+      return "bg-green-100 text-green-700";
+    case EventStatus.CLOSED:
+      return "bg-red-100 text-red-700";
+    default:
+      return "bg-slate-100 text-slate-600";
+  }
+}
 
 export default function EventDetailPage() {
   const params = useParams();
@@ -83,7 +94,7 @@ export default function EventDetailPage() {
 
           {!isLoading && !isError && event && (
             <>
-              <div className="w-full h-[400px] bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl shadow-lg mb-8 overflow-hidden flex items-center justify-center">
+              {/* <div className="w-full h-[400px] bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl shadow-lg mb-8 overflow-hidden flex items-center justify-center">
                 {event.images && event.images.length > 0 ? (
                   <img
                     className="w-full h-full object-cover"
@@ -93,16 +104,16 @@ export default function EventDetailPage() {
                 ) : (
                   <Calendar className="w-32 h-32 text-primary/30" />
                 )}
-              </div>
+              </div> */}
 
               <div className="space-y-8">
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                      Evento
-                    </span>
-                    <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-medium">
-                      {event.status}
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadgeClass(event.status)}`}
+                    >
+                      {EventStatusLabel[event.status as EventStatus] ??
+                        event.status}
                     </span>
                   </div>
                   <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight">

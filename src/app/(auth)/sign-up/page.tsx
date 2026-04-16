@@ -19,8 +19,9 @@ import { UserType, UserGender, NewUser } from "@/models/users";
 import { AuthApi } from "@/apis/auth";
 import { mapUserType, mapGender } from "@/hooks/mapUserType";
 import { toast } from "sonner";
+import { useCourses } from "@/hooks/useNetwork";
 
-// Schema
+// Funçao refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
 export const signUpSchema = z
   .object({
     fullName: z.string().min(4, "Nome completo é obrigatório"),
@@ -29,8 +30,8 @@ export const signUpSchema = z
     course: z.string().nonempty("Selecione um curso"),
     password: z
       .string()
-      .min(8, "Mínimo 8 caracteres")
-      .max(100, "Máximo 100 caracteres")
+      .min(8, "A senha deve ter no mínimo 8 caracteres")
+      .max(100, "A senha deve ter no máximo 100 caracteres")
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,
         "Senha inválida",
@@ -38,7 +39,7 @@ export const signUpSchema = z
     confirmPassword: z.string(),
     userType: z.enum(
       [UserType.STUDENT, UserType.ALUMNI, UserType.TEACHER, UserType.ADMIN],
-      { message: "Selecione um tipo válido" },
+      { message: "Selecione um tipo de usuário válido" },
     ),
     gender: z.enum([UserGender.MALE, UserGender.FEMALE, UserGender.OTHERS], {
       message: "Selecione um gênero válido",
@@ -64,6 +65,13 @@ export type SignUpData = {
 
 const SignUpPage = () => {
   const router = useRouter();
+
+  const {
+    data: courses,
+    isLoading: isLoadingCourses,
+    isError: isErrorCourses,
+    refetch: isFetchingCourses,
+  } = useCourses();
 
   const {
     register,
@@ -92,11 +100,19 @@ const SignUpPage = () => {
       router.push("/sign-in");
       toast.success("Usuário registrado com sucesso", {
         description: "Você já pode fazer login.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
       });
     },
     onError: () => {
       toast.error("Erro ao registrar", {
         description: "Verifique os dados e tente novamente.",
+        duration: 5000,
+        position: "top-center",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
       });
     },
   });
@@ -106,7 +122,7 @@ const SignUpPage = () => {
       name: data.fullName,
       email: data.email,
       password: data.password,
-      gender: data.gender,
+      gender: data.gender as UserGender,
       userType: data.userType,
       course: data.course,
       enrollmentYear: data.enrollmentYear,
@@ -224,23 +240,21 @@ const SignUpPage = () => {
                     <SelectValue placeholder="Selecione seu curso" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ADS">
-                      Análise e Desenvolvimento de Sistemas
-                    </SelectItem>
-                    <SelectItem value="GTI">
-                      Gestão da Tecnologia da Informação
-                    </SelectItem>
-                    <SelectItem value="Logística">Logística</SelectItem>
-                    <SelectItem value="Processos Gerenciais">
-                      Processos Gerenciais
-                    </SelectItem>
+                    {courses?.map((course) => (
+                      <SelectItem
+                        key={course.course_id}
+                        value={course.course_id}
+                      >
+                        {course.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               )}
             />
           </div>
 
-          {/* 🔥 RA (full width + condicional) */}
+          {/* Campo RA do estudante em 2 colunas */}
           <div className="md:col-span-2 ">
             <Input
               {...register("studentId")}

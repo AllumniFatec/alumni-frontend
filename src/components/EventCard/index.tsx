@@ -38,7 +38,6 @@ function getStatusLabel(status?: string): string {
 }
 
 export function EventCard({ event }: EventCardProps) {
-  console.log(event);
   const formattedDate = format(new Date(event.date_start), "dd MMM", {
     locale: ptBR,
   });

@@ -101,17 +101,17 @@ const ForgotPasswordPage = () => {
       {/* Links */}
       <div className="flex items-center justify-center gap-4 text-sm">
         <a
+          href="/sign-in"
+          className="text-primary hover:text-primary/80 transition-colors font-medium"
+        >
+          Login
+        </a>
+        <span className="text-muted-foreground">|</span>
+        <a
           href="/sign-up"
           className="text-primary hover:text-primary/80 transition-colors font-medium"
         >
           Criar Conta
-        </a>
-        <span className="text-muted-foreground">|</span>
-        <a
-          href="/forgot-password"
-          className="text-primary hover:text-primary/80 transition-colors font-medium"
-        >
-          Esqueci a Senha
         </a>
       </div>
     </div>

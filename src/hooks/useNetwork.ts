@@ -1,36 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
-import { apiBase } from "@/lib/axiosInstance";
-
-type CourseItem = {
-  course_id: string;
-  name: string;
-  abbreviation: string;
-};
-
-type WorkplaceItem = {
-  workplace_id: string;
-  company: string;
-};
+import { CoursesApi } from "@/apis/courses";
+import { WorkplacesApi } from "@/apis/workplaces";
 
 export function useCourses() {
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["courses"],
-    queryFn: async () => {
-      const response = await apiBase.get<CourseItem[]>("/course");
-      return response.data;
-    },
+    queryKey: ["courses", "list"],
+    queryFn: () => CoursesApi.getCourses(),
   });
 
-  return { data, isLoading, isError, refetch };
+  return {
+    data,
+    isLoading,
+    isError,
+    refetch,
+  };
 }
 
 export function useWorkplaces() {
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["workplaces"],
-    queryFn: async () => {
-      const response = await apiBase.get<WorkplaceItem[]>("/workplace");
-      return response.data;
-    },
+    queryKey: ["workplaces", "list"],
+    queryFn: () => WorkplacesApi.getWorkplaces(),
   });
 
   return { data, isLoading, isError, refetch };

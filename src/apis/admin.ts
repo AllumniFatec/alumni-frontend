@@ -2,6 +2,8 @@ import { apiBase } from "@/lib/axiosInstance";
 import type {
   AdminDashboardResponse,
   AdminMutationMessage,
+  AdminPendingUsersApiRawResponse,
+  AdminPendingUsersResponse,
   AdminUserSearchResult,
   AdminUsersListResponse,
 } from "@/models/admin";
@@ -15,6 +17,49 @@ export class AdminApi {
       return response.data;
     } catch (error) {
       console.error("Error fetching admin dashboard:", error);
+      throw error;
+    }
+  }
+
+  static async getUsersInAnalysis(
+    page: number = 1,
+  ): Promise<AdminPendingUsersResponse> {
+    try {
+      const response = await apiBase.get<AdminPendingUsersApiRawResponse>(
+        "/admin/dashboard",
+        {
+          params: { page },
+        },
+      );
+
+      const raw = response.data;
+      const users = raw.users ?? raw.usersInAnalysis ?? [];
+      const rawPagination = raw.pagination;
+      const pagination =
+        rawPagination && "pagination" in rawPagination
+          ? rawPagination.pagination
+          : rawPagination;
+
+      if (pagination) {
+        return {
+          users,
+          pagination,
+        };
+      }
+
+      return {
+        users,
+        pagination: {
+          page: 1,
+          limit: users.length || 10,
+          totalItems: raw.countUsersInAnalysis ?? users.length,
+          totalPages: 1,
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+      };
+    } catch (error) {
+      console.error("Error listing users in analysis:", page, error);
       throw error;
     }
   }

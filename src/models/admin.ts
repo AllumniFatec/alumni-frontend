@@ -24,10 +24,35 @@ export interface AdminPendingUserRow {
 
 /** Resposta de `GET /admin/dashboard`. */
 export interface AdminDashboardResponse {
-  usersInAnalysis: AdminPendingUserRow[];
-  countUsersInAnalysis: number;
-  countUsersActive: number;
-  countJobsActive: number;
+  usersInAnalysis?: AdminPendingUserRow[];
+  countUsersInAnalysis?: number;
+  countUsersActive?: number;
+  countJobsActive?: number;
+}
+
+export interface AdminPendingUsersPagination {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+export interface AdminPendingUsersResponse {
+  users: AdminPendingUserRow[];
+  pagination: AdminPendingUsersPagination;
+}
+
+export interface AdminPendingUsersApiRawResponse {
+  users?: AdminPendingUserRow[];
+  usersInAnalysis?: AdminPendingUserRow[];
+  pagination?:
+    | AdminPendingUsersPagination
+    | {
+        pagination: AdminPendingUsersPagination;
+      };
+  countUsersInAnalysis?: number;
 }
 
 /** Resposta de `POST /admin/approve/:userId` e `POST /admin/refuse/:userId`. */

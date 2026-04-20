@@ -26,7 +26,7 @@ const BannedUserPage = () => {
       </p>
 
       <p className="text-gray-500 text-sm text-center max-w-md">
-        Voce recebeu um email com mais informações sobre o motivo da suspensão.
+        Você recebeu um email com mais informações sobre o motivo da suspensão.
         Caso tenha dúvidas, entre em contato com a administração.
       </p>
 

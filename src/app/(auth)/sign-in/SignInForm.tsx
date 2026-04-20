@@ -41,9 +41,16 @@ export const SignInForm = () => {
       router.push(MembersRoutes.Members);
     },
     onError: (error: unknown) => {
-      if (axios.isAxiosError(error) && error.response?.status === 403) {
-        router.push(AuthRoutes.PendingApproval);
-        return;
+      if (axios.isAxiosError(error)) {
+        const errorMsg = error.response?.data?.error;
+        if (errorMsg === "Usuário em análise") {
+          router.push(AuthRoutes.PendingApproval);
+          return;
+        }
+        if (errorMsg === "Usuário banido permanentemente") {
+          router.push(AuthRoutes.BannedUser);
+          return;
+        }
       }
       toast.error("Algo deu errado", {
         description: "Verique seus dados e tente novamente.",

@@ -10,6 +10,7 @@ export enum AuthRoutes {
   ResetPassword = "/reset-password",
   SuccessResetPassword = "/sucess-reset-send-password",
   PendingApproval = "/pending-approval",
+  BannedUser = "/banned-user",
 }
 
 export enum MembersRoutes {

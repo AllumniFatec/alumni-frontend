@@ -3,6 +3,7 @@ import type {
   CreatePostResponse,
   PostContentPayload,
   UpdatePostResponse,
+  Post,
 } from "@/models/posts";
 
 export class PostsApi {
@@ -30,6 +31,11 @@ export class PostsApi {
       console.error("Error creating post:", error);
       throw error;
     }
+  }
+
+  static async getPostById(id: string): Promise<Post> {
+    const response = await apiBase.get<Post>(`/post/${id}`);
+    return response.data;
   }
 
   static async updatePost(

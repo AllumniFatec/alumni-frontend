@@ -11,11 +11,15 @@ import { PostCardActionsMenu } from "@/components/Posts/PostCardActionsMenu";
 import { EditPostDialog } from "@/components/Posts/EditPostDialog";
 import { EditCommentDialog } from "@/components/Posts/EditCommentDialog";
 import { PostCommentRow } from "@/components/Posts/PostCommentRow";
-import { canUserManageContent, useCanManageContent } from "@/hooks/useCanManageContent";
+import {
+  canUserManageContent,
+  useCanManageContent,
+} from "@/hooks/useCanManageContent";
 import { useDeletePostMutation } from "@/hooks/usePost";
 import { useDeleteCommentMutation } from "@/hooks/usePostComment";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import Link from "next/link";
 
 export interface PostCardProps {
   user?: AuthUser | null;
@@ -28,6 +32,7 @@ export interface PostCardProps {
   /** Envia um novo comentário (feed); otimista + invalidate no hook. */
   onSubmitComment?: (content: string) => void;
   isCommentPending?: boolean;
+  defaultCommentsOpen?: boolean;
 }
 
 export const PostCard = ({
@@ -40,8 +45,11 @@ export const PostCard = ({
   onClickLike,
   onSubmitComment,
   isCommentPending = false,
+  defaultCommentsOpen,
 }: PostCardProps) => {
-  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [commentsOpen, setCommentsOpen] = useState(
+    defaultCommentsOpen ?? false,
+  );
   const [draft, setDraft] = useState("");
   const [editOpen, setEditOpen] = useState(false);
   const [editingComment, setEditingComment] = useState<{
@@ -149,12 +157,17 @@ export const PostCard = ({
           <span className="text-sm text-black font-medium ml-3">
             {authorLabel}
           </span>
-          <span className="text-xs text-gray-400 ml-3">
-            {formatDistanceToNow(new Date(post.create_date), {
-              addSuffix: true,
-              locale: ptBR,
-            })}
-          </span>
+          <Link
+            href={`/posts/${post.id}`}
+            className="hover:cursor-pointer hover:underline decoration-gray-400"
+          >
+            <span className="text-xs text-gray-400 ml-3">
+              {formatDistanceToNow(new Date(post.create_date), {
+                addSuffix: true,
+                locale: ptBR,
+              })}
+            </span>
+          </Link>
         </div>
       </div>
 

@@ -13,11 +13,12 @@ import { usePostCommentMutation } from "@/hooks/usePostComment";
 interface PostsSectionProps {
   posts: Post[];
   isLoading: boolean;
-  isFetchingNextPage: boolean;
-  hasNextPage: boolean | undefined;
+  isFetchingNextPage?: boolean;
+  hasNextPage?: boolean | undefined;
   fetchNextPage: () => void;
   /** Título da secção (ex.: página dedicada de posts). */
   sectionTitle?: string;
+  postDetails?: boolean;
 }
 
 export function PostsSection({
@@ -27,6 +28,7 @@ export function PostsSection({
   hasNextPage,
   fetchNextPage,
   sectionTitle = "Últimos Posts",
+  postDetails,
 }: PostsSectionProps) {
   const { user } = useAuth();
   const { mutate } = usePostLikeMutation();
@@ -56,7 +58,7 @@ export function PostsSection({
   return (
     <Section title={sectionTitle}>
       <div className="bg-white rounded-xl border shadow-sm flex flex-col gap-4 p-4">
-        <CreatePostComposer />
+        {postDetails ?? <CreatePostComposer />}
 
         {isLoading &&
           Array.from({ length: 3 }).map((_, i) => (
@@ -81,6 +83,7 @@ export function PostsSection({
               isCommentPending={
                 isCommentPending && commentVariables?.postId === p.id
               }
+              defaultCommentsOpen={postDetails}
             />
           ))}
 

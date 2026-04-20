@@ -11,9 +11,8 @@ import type {
 export class AdminApi {
   static async getDashboard(): Promise<AdminDashboardResponse> {
     try {
-      const response = await apiBase.get<AdminDashboardResponse>(
-        "/admin/dashboard",
-      );
+      const response =
+        await apiBase.get<AdminDashboardResponse>("/admin/dashboard");
       return response.data;
     } catch (error) {
       console.error("Error fetching admin dashboard:", error);
@@ -34,12 +33,8 @@ export class AdminApi {
 
       const raw = response.data;
       const users = raw.users ?? raw.usersInAnalysis ?? [];
-      const rawPagination = raw.pagination;
-      const pagination =
-        rawPagination && "pagination" in rawPagination
-          ? rawPagination.pagination
-          : rawPagination;
-
+      //const rawPagination = raw.pagination;
+      const pagination = raw.pagination;
       if (pagination) {
         return {
           users,
@@ -47,15 +42,19 @@ export class AdminApi {
         };
       }
 
+      const totalItems = raw.countUsersInAnalysis ?? users.length;
+      const limit = users.length || 10;
+      const totalPages = Math.ceil(totalItems / limit) || 1;
+
       return {
         users,
         pagination: {
-          page: 1,
-          limit: users.length || 10,
-          totalItems: raw.countUsersInAnalysis ?? users.length,
-          totalPages: 1,
-          hasNextPage: false,
-          hasPreviousPage: false,
+          page,
+          limit,
+          totalItems,
+          totalPages,
+          hasNextPage: page < totalPages,
+          hasPreviousPage: page > 1,
         },
       };
     } catch (error) {
@@ -90,9 +89,12 @@ export class AdminApi {
 
   static async getUsers(page: number = 1): Promise<AdminUsersListResponse> {
     try {
-      const response = await apiBase.get<AdminUsersListResponse>("/admin/users", {
-        params: { page },
-      });
+      const response = await apiBase.get<AdminUsersListResponse>(
+        "/admin/users",
+        {
+          params: { page },
+        },
+      );
       return response.data;
     } catch (error) {
       console.error("Error listing admin users:", page, error);

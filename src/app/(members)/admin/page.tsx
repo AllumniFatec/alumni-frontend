@@ -109,7 +109,9 @@ export default function AdminPage() {
             >
               {getUserInitials(row.original.name)}
             </div>
-            <span className="font-medium text-foreground">{row.original.name}</span>
+            <span className="font-medium text-foreground">
+              {row.original.name}
+            </span>
           </div>
         ),
       },
@@ -143,7 +145,8 @@ export default function AdminPage() {
         ),
         cell: ({ row }) => (
           <span className="text-sm text-muted-foreground">
-            {mapGender(row.original.gender as UserGender) || row.original.gender}
+            {mapGender(row.original.gender as UserGender) ||
+              row.original.gender}
           </span>
         ),
       },
@@ -258,9 +261,10 @@ export default function AdminPage() {
         >
           {dashboardError instanceof Error
             ? dashboardError.message
-            : pendingError instanceof Error
-              ? pendingError.message
-              : "Erro ao carregar dashboard."}
+            : "Erro ao carregar dashboard."}
+          {pendingError instanceof Error
+            ? pendingError.message
+            : "Error ao carregar usuários em análise"}
           <Button
             variant="outline"
             size="sm"
@@ -352,22 +356,21 @@ export default function AdminPage() {
                 <TableRow>
                   <TableCell colSpan={7} className="px-6 py-10 text-center">
                     <span className="inline-flex items-center gap-2 text-muted-foreground">
-                      <Loader2 className="size-5 animate-spin" />
-                      A carregar…
+                      <Loader2 className="size-5 animate-spin" />A carregar…
                     </span>
                   </TableCell>
                 </TableRow>
               )}
               {!pendingIsLoading && pendingRows.length === 0 && (
-                  <TableRow>
-                    <TableCell
-                      colSpan={7}
-                      className="px-6 py-10 text-center text-muted-foreground"
-                    >
-                      Nenhum usuário em análise.
-                    </TableCell>
-                  </TableRow>
-                )}
+                <TableRow>
+                  <TableCell
+                    colSpan={7}
+                    className="px-6 py-10 text-center text-muted-foreground"
+                  >
+                    Nenhum usuário em análise.
+                  </TableCell>
+                </TableRow>
+              )}
               {!pendingIsLoading &&
                 pendingRows.length > 0 &&
                 table.getRowModel().rows.map((row) => (
@@ -398,14 +401,15 @@ export default function AdminPage() {
         {pendingData?.pages[0] && (
           <div className="flex flex-col items-start justify-between gap-3 border-t border-border bg-muted/20 px-6 py-4 sm:flex-row sm:items-center">
             <p className="text-xs text-muted-foreground">
-              Página {pendingData.pages[pendingData.pages.length - 1].pagination.page}{" "}
+              Página{" "}
+              {pendingData.pages[pendingData.pages.length - 1].pagination.page}{" "}
               de{" "}
               {
                 pendingData.pages[pendingData.pages.length - 1].pagination
                   .totalPages
               }{" "}
-              · {pendingRows.length} de {pendingData.pages[0].pagination.totalItems}{" "}
-              em análise
+              · {pendingRows.length} de{" "}
+              {pendingData.pages[0].pagination.totalItems} em análise
             </p>
             {hasNextPage && (
               <Button
@@ -417,8 +421,7 @@ export default function AdminPage() {
               >
                 {isFetchingNextPage ? (
                   <>
-                    <Loader2 className="size-4 animate-spin" />
-                    A carregar…
+                    <Loader2 className="size-4 animate-spin" />A carregar…
                   </>
                 ) : (
                   "Carregar mais"

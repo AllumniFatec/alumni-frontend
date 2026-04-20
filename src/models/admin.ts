@@ -47,11 +47,7 @@ export interface AdminPendingUsersResponse {
 export interface AdminPendingUsersApiRawResponse {
   users?: AdminPendingUserRow[];
   usersInAnalysis?: AdminPendingUserRow[];
-  pagination?:
-    | AdminPendingUsersPagination
-    | {
-        pagination: AdminPendingUsersPagination;
-      };
+  pagination?: AdminPendingUsersPagination;
   countUsersInAnalysis?: number;
 }
 

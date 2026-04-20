@@ -74,20 +74,10 @@ export function useAdminPendingUsers() {
     queryFn: ({ pageParam = 1 }) =>
       AdminApi.getUsersInAnalysis(pageParam as number),
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => {
+    getNextPageParam: (lastPage) => {
       if (lastPage.pagination.hasNextPage) {
         return lastPage.pagination.page + 1;
       }
-
-      const loadedItems = allPages.reduce(
-        (total, page) => total + page.users.length,
-        0,
-      );
-
-      if (loadedItems < lastPage.pagination.totalItems) {
-        return lastPage.pagination.page + 1;
-      }
-
       return undefined;
     },
   });
@@ -174,8 +164,7 @@ export function useAdminUsers(options?: { enabled?: boolean }) {
     isFetching,
   } = useInfiniteQuery({
     queryKey: ADMIN_USERS_LIST_QUERY_KEY,
-    queryFn: ({ pageParam = 1 }) =>
-      AdminApi.getUsers(pageParam as number),
+    queryFn: ({ pageParam = 1 }) => AdminApi.getUsers(pageParam as number),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.pagination.hasNextPage

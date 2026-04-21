@@ -4,6 +4,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import type { AxiosError } from "axios";
 import { PostsApi } from "@/apis/posts";
 import { createOptimisticId } from "@/lib/optimisticId";
 import type { FeedResponse, Post, PostContentPayload } from "@/models";
@@ -207,6 +208,11 @@ export function useGetPostById(id: string) {
     queryKey: ["post", "detail", id],
     queryFn: () => PostsApi.getPostById(id),
     enabled: !!id,
+    retry: (failureCount, error) => {
+      const statusCode = (error as AxiosError)?.response?.status;
+      if (statusCode === 404) return false;
+      return failureCount < 1;
+    },
   });
 
   return { data, isLoading, isError, refetch };

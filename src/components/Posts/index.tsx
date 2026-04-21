@@ -105,6 +105,11 @@ export const PostCard = ({
     onClickLike();
   };
 
+  const handleToggleComments = () => {
+    if (defaultCommentsOpen) return;
+    setCommentsOpen((prev) => !prev);
+  };
+
   if (isLoading || !post) {
     return (
       <div
@@ -236,7 +241,7 @@ export const PostCard = ({
                 "h-8 gap-1.5 px-2 text-gray-500 hover:text-primary",
                 commentsOpen && "text-primary",
               )}
-              onClick={() => setCommentsOpen((prev) => !prev)}
+              onClick={handleToggleComments}
               aria-expanded={commentsOpen}
               aria-label={`${commentCount} comentários — ${commentsOpen ? "recolher" : "ver comentários"}`}
             >
@@ -257,7 +262,12 @@ export const PostCard = ({
 
       {commentsOpen && onSubmitComment && (
         <div className="mt-3 pt-3 border-t border-gray-100 space-y-3">
-          <ul className="space-y-2 max-h-48 overflow-y-auto">
+          <ul
+            className={cn(
+              "space-y-2",
+              !defaultCommentsOpen && "max-h-48 overflow-y-auto",
+            )}
+          >
             {post.comments.length === 0 ? (
               <li className="text-xs text-gray-400">
                 Nenhum comentário ainda.

@@ -34,8 +34,13 @@ export class PostsApi {
   }
 
   static async getPostById(id: string): Promise<Post> {
-    const response = await apiBase.get<Post>(`/post/${id}`);
-    return response.data;
+    try {
+      const response = await apiBase.get<Post>(`/post/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching post by id:", error);
+      throw error;
+    }
   }
 
   static async updatePost(

@@ -58,7 +58,7 @@ export function PostsSection({
   return (
     <Section title={sectionTitle}>
       <div className="bg-white rounded-xl border shadow-sm flex flex-col gap-4 p-4">
-        {postDetails ?? <CreatePostComposer />}
+        {!postDetails && <CreatePostComposer />}
 
         {isLoading &&
           Array.from({ length: 3 }).map((_, i) => (

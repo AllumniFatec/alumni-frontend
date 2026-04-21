@@ -38,10 +38,10 @@ export function ChangeUserTypeDialog(props: {
   const options = useMemo(
     () =>
       [
-        "Student",
-        "Alumni",
-        "Teacher",
-        "Admin",
+        UserType.STUDENT,
+        UserType.ALUMNI,
+        UserType.TEACHER,
+        UserType.ADMIN,
       ] as const satisfies readonly UserType[],
     [],
   );

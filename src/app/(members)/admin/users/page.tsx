@@ -34,6 +34,8 @@ import {
 import { mapUserType } from "@/hooks/mapUserType";
 import { cn, getUserInitials } from "@/lib/utils";
 import type { UserType } from "@/models/users";
+import { ChangeUserTypeDialog } from "@/components/Admin/ChangeUserTypeDialog";
+import { BanUserDialog } from "@/components/Admin/BanUserDialog";
 
 const SEARCH_DEBOUNCE_MS = 600;
 
@@ -55,6 +57,11 @@ export default function AdminUsersPage() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch] = useDebounce(searchInput, SEARCH_DEBOUNCE_MS);
+  const [changeTypeOpen, setChangeTypeOpen] = useState(false);
+  const [banOpen, setBanOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<PublicUserListItem | null>(
+    null,
+  );
 
   const isSearchMode = debouncedSearch.trim().length > 0;
 
@@ -155,6 +162,40 @@ export default function AdminUsersPage() {
         ),
         sortingFn: "alphanumeric",
       },
+      {
+        id: "changeType",
+        header: () => <span className="text-xs font-semibold">Tipo de Usuário</span>,
+        cell: ({ row }) => (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setSelectedUser(row.original);
+              setChangeTypeOpen(true);
+            }}
+          >
+            Alterar 
+          </Button>
+        ),
+      },
+      {
+        id: "ban",
+        header: () => <span className="text-xs font-semibold">Banir Usuário</span>,
+        cell: ({ row }) => (
+          <Button
+            type="button"
+            variant="destructive"
+            size="sm"
+            onClick={() => {
+              setSelectedUser(row.original);
+              setBanOpen(true);
+            }}
+          >
+            Banir
+          </Button>
+        ),
+      },
     ],
     [],
   );
@@ -243,7 +284,7 @@ export default function AdminUsersPage() {
           <TableBody>
             {isLoading && (
               <TableRow>
-                <TableCell colSpan={3} className="px-4 py-12 text-center">
+                <TableCell colSpan={5} className="px-4 py-12 text-center">
                   <span className="inline-flex items-center gap-2 text-muted-foreground">
                     <Loader2 className="size-5 animate-spin" />
                     A carregar…
@@ -254,7 +295,7 @@ export default function AdminUsersPage() {
             {!isLoading && users.length === 0 && !isError && (
               <TableRow>
                 <TableCell
-                  colSpan={3}
+                  colSpan={5}
                   className="px-4 py-12 text-center text-muted-foreground"
                 >
                   {isSearchMode
@@ -315,6 +356,30 @@ export default function AdminUsersPage() {
           </div>
         )}
       </div>
+
+      <ChangeUserTypeDialog
+        open={changeTypeOpen}
+        onOpenChange={setChangeTypeOpen}
+        user={
+          selectedUser
+            ? {
+                user_id: selectedUser.user_id,
+                name: selectedUser.name,
+                user_type: selectedUser.user_type,
+              }
+            : null
+        }
+      />
+
+      <BanUserDialog
+        open={banOpen}
+        onOpenChange={setBanOpen}
+        user={
+          selectedUser
+            ? { user_id: selectedUser.user_id, name: selectedUser.name }
+            : null
+        }
+      />
     </div>
   );
 }

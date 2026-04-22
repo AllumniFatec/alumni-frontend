@@ -3,6 +3,7 @@ import type {
   CreatePostResponse,
   PostContentPayload,
   UpdatePostResponse,
+  Post,
 } from "@/models/posts";
 
 export class PostsApi {
@@ -28,6 +29,16 @@ export class PostsApi {
       return response.data;
     } catch (error) {
       console.error("Error creating post:", error);
+      throw error;
+    }
+  }
+
+  static async getPostById(id: string): Promise<Post> {
+    try {
+      const response = await apiBase.get<Post>(`/post/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching post by id:", error);
       throw error;
     }
   }

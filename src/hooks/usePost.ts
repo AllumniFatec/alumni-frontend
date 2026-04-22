@@ -1,8 +1,10 @@
 import {
   type InfiniteData,
   useMutation,
+  useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import type { AxiosError } from "axios";
 import { PostsApi } from "@/apis/posts";
 import { createOptimisticId } from "@/lib/optimisticId";
 import type { FeedResponse, Post, PostContentPayload } from "@/models";
@@ -72,11 +74,7 @@ function feedWithToggledLike(
     }
 
     const nextPosts = [...page.posts];
-    nextPosts[index] = postWithToggledLike(
-      nextPosts[index],
-      userId,
-      userName,
-    );
+    nextPosts[index] = postWithToggledLike(nextPosts[index], userId, userName);
 
     return { ...page, posts: nextPosts };
   });
@@ -92,15 +90,15 @@ export function usePostLikeMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ postId }: PostLikeVariables) => PostsApi.updatePostLike(postId),
+    mutationFn: ({ postId }: PostLikeVariables) =>
+      PostsApi.updatePostLike(postId),
 
     onMutate: async (variables) => {
       await queryClient.cancelQueries({ queryKey: FEED_QUERY_KEY });
 
       // Snapshot = copy of cache *before* the optimistic edit, so onError can restore it.
-      const previousFeed = queryClient.getQueryData<InfiniteData<FeedResponse>>(
-        FEED_QUERY_KEY,
-      );
+      const previousFeed =
+        queryClient.getQueryData<InfiniteData<FeedResponse>>(FEED_QUERY_KEY);
 
       queryClient.setQueryData<InfiniteData<FeedResponse>>(
         FEED_QUERY_KEY,
@@ -126,7 +124,7 @@ export function useCreatePostMutation() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (payload: PostContentPayload) => PostsApi.createPost(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY }); 
+      queryClient.invalidateQueries({ queryKey: FEED_QUERY_KEY });
       toast.success("Post criado com sucesso", {
         description: "Seu post foi criado com sucesso.",
         duration: 5000,
@@ -147,7 +145,7 @@ export function useCreatePostMutation() {
     },
   });
   return { mutateAsync, isPending };
-} 
+}
 
 export function useUpdatePostMutation() {
   const queryClient = useQueryClient();
@@ -175,7 +173,7 @@ export function useUpdatePostMutation() {
     },
   });
   return { mutateAsync, isPending };
-} 
+}
 
 export function useDeletePostMutation() {
   const queryClient = useQueryClient();
@@ -203,4 +201,19 @@ export function useDeletePostMutation() {
     },
   });
   return { mutateAsync, isPending };
+}
+
+export function useGetPostById(id: string) {
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["post", "detail", id],
+    queryFn: () => PostsApi.getPostById(id),
+    enabled: !!id,
+    retry: (failureCount, error) => {
+      const statusCode = (error as AxiosError)?.response?.status;
+      if (statusCode === 404) return false;
+      return failureCount < 1;
+    },
+  });
+
+  return { data, isLoading, isError, refetch };
 }

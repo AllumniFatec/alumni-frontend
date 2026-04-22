@@ -6,7 +6,9 @@ import type {
   AdminPendingUsersResponse,
   AdminUserSearchResult,
   AdminUsersListResponse,
+  BanReason,
 } from "@/models/admin";
+import type { UserType } from "@/models/users";
 
 export class AdminApi {
   static async getDashboard(): Promise<AdminDashboardResponse> {
@@ -114,6 +116,38 @@ export class AdminApi {
       return response.data;
     } catch (error) {
       console.error("Error searching admin users:", params, error);
+      throw error;
+    }
+  }
+
+  static async changeUserType(
+    userId: string,
+    type: UserType,
+  ): Promise<AdminMutationMessage> {
+    try {
+      const response = await apiBase.patch<AdminMutationMessage>(
+        `/admin/users/changeType/${userId}`,
+        { type },
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error changing user type:", userId, type, error);
+      throw error;
+    }
+  }
+
+  static async banUser(
+    userId: string,
+    payload: { reason: BanReason; description: string },
+  ): Promise<AdminMutationMessage> {
+    try {
+      const response = await apiBase.post<AdminMutationMessage>(
+        `/admin/users/ban/${userId}`,
+        payload,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error banning user:", userId, error);
       throw error;
     }
   }

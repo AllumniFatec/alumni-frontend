@@ -8,6 +8,8 @@ import axios from "axios";
 import { toast } from "sonner";
 import { AdminApi } from "@/apis/admin";
 import type { AdminUsersListResponse } from "@/models/admin";
+import type { BanReason } from "@/models/admin";
+import type { UserType } from "@/models/users";
 
 function adminMutationErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
@@ -223,6 +225,59 @@ export function useRefuseUser() {
     },
     onError: (error) => {
       toast.error("Erro ao recusar usuário", {
+        description: adminMutationErrorMessage(error),
+        ...toastErrorOpts,
+      });
+    },
+  });
+}
+
+export function useChangeUserType() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (vars: { userId: string; type: UserType }) =>
+      AdminApi.changeUserType(vars.userId, vars.type),
+    onSuccess: (data) => {
+      toast.success("Tipo de usuário alterado", {
+        description: data.message,
+        ...toastSuccessOpts,
+      });
+      qc.invalidateQueries({ queryKey: ["admin", "users"] });
+      qc.invalidateQueries({ queryKey: ADMIN_USERS_LIST_QUERY_KEY });
+      qc.invalidateQueries({ queryKey: ["admin", "users", "search"] });
+    },
+    onError: (error) => {
+      toast.error("Erro ao alterar tipo de usuário", {
+        description: adminMutationErrorMessage(error),
+        ...toastErrorOpts,
+      });
+    },
+  });
+}
+
+export function useBanUser() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (vars: {
+      userId: string;
+      reason: BanReason;
+      description: string;
+    }) =>
+      AdminApi.banUser(vars.userId, {
+        reason: vars.reason,
+        description: vars.description,
+      }),
+    onSuccess: (data) => {
+      toast.success("Usuário banido", {
+        description: data.message,
+        ...toastSuccessOpts,
+      });
+      qc.invalidateQueries({ queryKey: ["admin", "users"] });
+      qc.invalidateQueries({ queryKey: ADMIN_USERS_LIST_QUERY_KEY });
+      qc.invalidateQueries({ queryKey: ["admin", "users", "search"] });
+    },
+    onError: (error) => {
+      toast.error("Erro ao banir usuário", {
         description: adminMutationErrorMessage(error),
         ...toastErrorOpts,
       });

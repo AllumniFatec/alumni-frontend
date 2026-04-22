@@ -2,6 +2,24 @@ import type { ProfileCourse } from "./profile";
 import type { PublicUserListItem, UsersListResponse } from "./userPublic";
 import type { UserGender, UserType } from "./users";
 
+export enum BanReason {
+  Spam = "Spam",
+  Harassment = "Harassment",
+  HateSpeech = "HateSpeech",
+  InappropriateContent = "InappropriateContent",
+  Threats = "Threats",
+  Fraud = "Fraud",
+  Scam = "Scam",
+  Impersonation = "Impersonation",
+  PrivacyViolation = "PrivacyViolation",
+  UnauthorizedAdvertisement = "UnauthorizedAdvertisement",
+  MaliciousLink = "MaliciousLink",
+  MaliciousActivity = "MaliciousActivity",
+  MultipleViolations = "MultipleViolations",
+  TermsOfServiceViolation = "TermsOfServiceViolation",
+  Others = "Others",
+}
+
 /** Curso na listagem de usuários em análise (subset do perfil). */
 export type AdminPendingUserCourse = Pick<
   ProfileCourse,

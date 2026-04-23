@@ -7,6 +7,7 @@ services:
         NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
         NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-Alumni Fatec Sorocaba}
         NEXT_PUBLIC_APP_VERSION: ${NEXT_PUBLIC_APP_VERSION:-1.0.0}
+    pull_policy: always
     image: alumni-frontend:latest
     container_name: alumni-frontend
     restart: unless-stopped

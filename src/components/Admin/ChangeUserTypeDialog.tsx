@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { UserType } from "@/models/users";
+import { UserType } from "@/models/users";
 import { mapUserType } from "@/hooks/mapUserType";
 import { useChangeUserType } from "@/hooks/useAdmin";
 import { Button } from "@/components/ui/button";

@@ -44,7 +44,7 @@ import {
 } from "@/components/ui/table";
 import { cn, getUserInitials } from "@/lib/utils";
 import { mapGender, mapUserType } from "@/hooks/mapUserType";
-import type { UserGender, UserType } from "@/models/users";
+import { UserGender, UserType } from "@/models/users";
 
 function formatCourses(row: AdminPendingUserRow) {
   if (!row.courses?.length) return "—";

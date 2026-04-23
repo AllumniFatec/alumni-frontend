@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/table";
 import { mapUserType } from "@/hooks/mapUserType";
 import { cn, getUserInitials } from "@/lib/utils";
-import type { UserType } from "@/models/users";
+import { UserType } from "@/models/users";
 import { ChangeUserTypeDialog } from "@/components/Admin/ChangeUserTypeDialog";
 import { BanUserDialog } from "@/components/Admin/BanUserDialog";
 
@@ -92,7 +92,9 @@ export default function AdminUsersPage() {
       setSearchInput(value);
       if (value.trim() === "") {
         void queryClient.resetQueries({ queryKey: ADMIN_USERS_LIST_QUERY_KEY });
-        void queryClient.resetQueries({ queryKey: ["admin", "users", "search"] });
+        void queryClient.resetQueries({
+          queryKey: ["admin", "users", "search"],
+        });
       }
     },
     [queryClient],
@@ -164,7 +166,9 @@ export default function AdminUsersPage() {
       },
       {
         id: "changeType",
-        header: () => <span className="text-xs font-semibold">Tipo de Usuário</span>,
+        header: () => (
+          <span className="text-xs font-semibold">Tipo de Usuário</span>
+        ),
         cell: ({ row }) => (
           <Button
             type="button"
@@ -175,13 +179,15 @@ export default function AdminUsersPage() {
               setChangeTypeOpen(true);
             }}
           >
-            Alterar 
+            Alterar
           </Button>
         ),
       },
       {
         id: "ban",
-        header: () => <span className="text-xs font-semibold">Banir Usuário</span>,
+        header: () => (
+          <span className="text-xs font-semibold">Banir Usuário</span>
+        ),
         cell: ({ row }) => (
           <Button
             type="button"
@@ -245,7 +251,9 @@ export default function AdminUsersPage() {
           className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
           role="alert"
         >
-          {error instanceof Error ? error.message : "Erro ao carregar utilizadores."}
+          {error instanceof Error
+            ? error.message
+            : "Erro ao carregar utilizadores."}
           <Button
             variant="outline"
             size="sm"
@@ -286,8 +294,7 @@ export default function AdminUsersPage() {
               <TableRow>
                 <TableCell colSpan={5} className="px-4 py-12 text-center">
                   <span className="inline-flex items-center gap-2 text-muted-foreground">
-                    <Loader2 className="size-5 animate-spin" />
-                    A carregar…
+                    <Loader2 className="size-5 animate-spin" />A carregar…
                   </span>
                 </TableCell>
               </TableRow>
@@ -332,8 +339,8 @@ export default function AdminUsersPage() {
             <p className="text-xs text-muted-foreground">
               Página {data.pages[data.pages.length - 1].pagination.page} de{" "}
               {data.pages[data.pages.length - 1].pagination.totalPages} ·{" "}
-              {users.length} de{" "}
-              {data.pages[0].pagination.totalItems} utilizadores
+              {users.length} de {data.pages[0].pagination.totalItems}{" "}
+              utilizadores
             </p>
             {hasNextPage && (
               <Button
@@ -345,8 +352,7 @@ export default function AdminUsersPage() {
               >
                 {isFetchingNextPage ? (
                   <>
-                    <Loader2 className="size-4 animate-spin" />
-                    A carregar…
+                    <Loader2 className="size-4 animate-spin" />A carregar…
                   </>
                 ) : (
                   "Carregar mais"

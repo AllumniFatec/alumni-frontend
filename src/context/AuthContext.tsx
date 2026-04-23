@@ -8,7 +8,7 @@ import React, {
   useState,
 } from "react";
 import { AuthApi } from "@/apis/auth";
-import { AuthStorage } from "@/store/auth";
+//import { AuthStorage } from "@/store/auth";
 
 export interface AuthUser {
   id: string;
@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const clearUser = useCallback(() => {
-    AuthStorage.removeToken();
+    //AuthStorage.removeToken();
     setUser(null);
   }, []);
 

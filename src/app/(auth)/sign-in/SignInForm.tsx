@@ -12,7 +12,6 @@ import { AuthRoutes, MembersRoutes } from "@/config/routes";
 import { toast } from "sonner";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
-import { AuthStorage } from "@/store/auth";
 
 const signInSchema = z.object({
   email: z.email("E-mail inválido"),
@@ -37,24 +36,20 @@ export const SignInForm = () => {
 
   const signInMutation = useMutation({
     mutationFn: (loginData: SignInData) => AuthApi.signIn(loginData),
-    onSuccess: async (data) => {
-      // if (data.token) {
-      //   AuthStorage.setToken(data.token);
-      // }
-      console.log("cheguei ate aqui: ", data);
-      // refreshUser();
-      // router.refresh();
-      router.push(MembersRoutes.Members);
+    onSuccess: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      await refreshUser();
+      router.replace(MembersRoutes.Members);
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
         const errorMsg = error.response?.data?.error;
         if (errorMsg === "Usuário em análise") {
-          router.push(AuthRoutes.PendingApproval);
+          router.replace(AuthRoutes.PendingApproval);
           return;
         }
         if (errorMsg === "Usuário banido permanentemente") {
-          router.push(AuthRoutes.BannedUser);
+          router.replace(AuthRoutes.BannedUser);
           return;
         }
       }

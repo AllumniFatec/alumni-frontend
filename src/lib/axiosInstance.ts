@@ -14,11 +14,13 @@ export const apiBase = axios.create({
 });
 
 apiBase.interceptors.request.use((requestConfig) => {
+  /* removido por enquanto, token é enviado no cookie httpOnly
   const token = AuthStorage.getToken();
 
   if (token) {
     requestConfig.headers.Authorization = `Bearer ${token}`;
   }
+  */
 
   /**
    * A instância define `Content-Type: application/json` por padrão. Para `FormData`,
@@ -50,7 +52,7 @@ apiBase.interceptors.response.use(
       !isAuthRoute &&
       typeof window !== "undefined"
     ) {
-      AuthStorage.removeToken();
+      // AuthStorage.removeToken(); // removido por enquanto, token é enviado no cookie httpOnly
       // Limpa o cookie httpOnly do servidor
       await axios
         .post(`${config.api.baseUrl}/auth/logout`, null, {

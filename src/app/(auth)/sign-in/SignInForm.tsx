@@ -12,6 +12,7 @@ import { AuthRoutes, MembersRoutes } from "@/config/routes";
 import { toast } from "sonner";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
+import { AuthStorage } from "@/store/auth";
 
 const signInSchema = z.object({
   email: z.email("E-mail inválido"),
@@ -36,7 +37,10 @@ export const SignInForm = () => {
 
   const signInMutation = useMutation({
     mutationFn: (loginData: SignInData) => AuthApi.signIn(loginData),
-    onSuccess: async () => {
+    onSuccess: async (data) => {
+      if (data.token) {
+        AuthStorage.setToken(data.token);
+      }
       await refreshUser();
       router.push(MembersRoutes.Members);
     },

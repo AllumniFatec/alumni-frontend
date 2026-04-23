@@ -7,7 +7,7 @@
  * refresh token, que é enviado automaticamente pelo browser.
  */
 
-const TOKEN_COOKIE = "alumni_auth_token";
+const TOKEN_COOKIE = "access_token";
 // Expiração padrão: 1 dia
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24;
 

@@ -37,9 +37,10 @@ export const SignInForm = () => {
   const signInMutation = useMutation({
     mutationFn: (loginData: SignInData) => AuthApi.signIn(loginData),
     onSuccess: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      //await new Promise((resolve) => setTimeout(resolve, 100));
+      //router.replace(MembersRoutes.Members);
       await refreshUser();
-      router.replace(MembersRoutes.Members);
+      window.location.assign(MembersRoutes.Members);
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {

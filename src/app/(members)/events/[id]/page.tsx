@@ -145,6 +145,8 @@ export default function EventDetailPage() {
                     label="Organizado por"
                     title={event.author_name ?? "—"}
                     subtitle=""
+                    profileLink={`/profile/${event.author_id}`}
+                    titleClassName="hover:cursor-pointer hover:underline"
                   />
                 </div>
 

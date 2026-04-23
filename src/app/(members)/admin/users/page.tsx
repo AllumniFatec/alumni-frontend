@@ -36,6 +36,7 @@ import { cn, getUserInitials } from "@/lib/utils";
 import { UserType } from "@/models/users";
 import { ChangeUserTypeDialog } from "@/components/Admin/ChangeUserTypeDialog";
 import { BanUserDialog } from "@/components/Admin/BanUserDialog";
+import Link from "next/link";
 
 const SEARCH_DEBOUNCE_MS = 600;
 
@@ -134,7 +135,12 @@ export default function AdminUsersPage() {
                   </div>
                 )}
               </div>
-              <span className="font-medium text-foreground">{user.name}</span>
+              <Link
+                href={`/profile/${user.user_id}`}
+                className="hover:cursor-pointer hover:underline"
+              >
+                <span className="font-medium text-foreground">{user.name}</span>
+              </Link>
             </div>
           );
         },

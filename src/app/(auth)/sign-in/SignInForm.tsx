@@ -38,11 +38,11 @@ export const SignInForm = () => {
   const signInMutation = useMutation({
     mutationFn: (loginData: SignInData) => AuthApi.signIn(loginData),
     onSuccess: async (data) => {
-      if (data.token) {
-        AuthStorage.setToken(data.token);
-      }
+      // if (data.token) {
+      //   AuthStorage.setToken(data.token);
+      // }
       console.log("cheguei ate aqui: ", data);
-      refreshUser();
+      // refreshUser();
       // router.refresh();
       router.push(MembersRoutes.Members);
     },

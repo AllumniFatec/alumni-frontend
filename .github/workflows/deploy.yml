@@ -48,6 +48,5 @@ jobs:
 
       - name: Trigger deploy no Dokploy via webhook
         run: |
-          curl --fail -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}" \
+          curl --fail -X POST "${{ secrets.DOKPLOY_APP_WEBHOOK_URL }}" \
             -H "Content-Type: application/json" \
-            -d '{"token": "${{ secrets.DOKPLOY_WEBHOOK_TOKEN }}"}'

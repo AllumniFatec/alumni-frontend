@@ -41,8 +41,9 @@ export const SignInForm = () => {
       if (data.token) {
         AuthStorage.setToken(data.token);
       }
-      await refreshUser();
-      router.refresh();
+      console.log("cheguei ate aqui: ", data);
+      refreshUser();
+      // router.refresh();
       router.push(MembersRoutes.Members);
     },
     onError: (error: unknown) => {

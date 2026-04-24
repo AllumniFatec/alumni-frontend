@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { FileText } from "lucide-react";
 import { PostCard } from "@/components/Posts";
 import { EmptyState } from "@/components/EmptyState";
@@ -10,8 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { usePostLikeMutation } from "@/hooks/usePost";
 import { usePostCommentMutation } from "@/hooks/usePostComment";
 import {
-  PROFILE_QUERY_KEY,
-  PROFILE_USER_POSTS_QUERY_KEY,
+  useInvalidateProfilePostsByUser,
   useProfilePostsByUser,
 } from "@/hooks/useProfile";
 import type { ProfilePostsListResponse } from "@/models/profile";
@@ -31,10 +29,10 @@ export function ProfilePostsSection({
   initialPosts,
   isOwnProfile = true,
 }: ProfilePostsSectionProps) {
-  const queryClient = useQueryClient();
   const { user } = useAuth();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useProfilePostsByUser(profileUserId, initialPosts);
+  const invalidateProfileData = useInvalidateProfilePostsByUser(profileUserId);
   const { mutate } = usePostLikeMutation();
   const {
     mutate: commentMutate,
@@ -46,13 +44,6 @@ export function ProfilePostsSection({
     () => data?.pages.flatMap((page) => page.posts) ?? initialPosts.posts,
     [data, initialPosts.posts],
   );
-
-  const invalidateProfileData = () => {
-    void queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
-    void queryClient.invalidateQueries({
-      queryKey: PROFILE_USER_POSTS_QUERY_KEY(profileUserId),
-    });
-  };
 
   const onClickLike = (postId: string) => {
     if (user) {

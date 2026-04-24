@@ -7,14 +7,16 @@ import { Button } from "@/components/ui/button";
 import { useProfileJobsByUser } from "@/hooks/useProfile";
 import type { ProfileJobsListResponse } from "@/models/profile";
 
+interface ProfileJobsSectionProps {
+  profileUserId: string;
+  initialJobs: ProfileJobsListResponse;
+}
+
 /** Oportunidades de emprego publicadas na plataforma por este utilizador (campo `jobs` no GET /my-profile). */
 export function ProfileJobsSection({
   profileUserId,
   initialJobs,
-}: {
-  profileUserId: string;
-  initialJobs: ProfileJobsListResponse;
-}) {
+}: ProfileJobsSectionProps) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useProfileJobsByUser(profileUserId, initialJobs);
 

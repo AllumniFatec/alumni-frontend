@@ -34,6 +34,18 @@ export const PROFILE_USER_JOBS_QUERY_KEY = (userId: string) =>
 export const PROFILE_USER_EVENTS_QUERY_KEY = (userId: string) =>
   ["profile", "user-events", userId] as const;
 
+export function useInvalidateProfilePostsByUser(userId: string | undefined) {
+  const queryClient = useQueryClient();
+
+  return () => {
+    void queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
+    if (!userId) return;
+    void queryClient.invalidateQueries({
+      queryKey: PROFILE_USER_POSTS_QUERY_KEY(userId),
+    });
+  };
+}
+
 export function useMyProfile(options?: { enabled?: boolean }) {
   const { data, isLoading, isError, refetch, isFetching } = useQuery({
     queryKey: PROFILE_QUERY_KEY,

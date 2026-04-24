@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button";
 import { useProfileEventsByUser } from "@/hooks/useProfile";
 import type { ProfileEventsListResponse } from "@/models/profile";
 
+interface ProfileEventsSectionProps {
+  profileUserId: string;
+  initialEvents: ProfileEventsListResponse;
+}
+
 export function ProfileEventsSection({
   profileUserId,
   initialEvents,
-}: {
-  profileUserId: string;
-  initialEvents: ProfileEventsListResponse;
-}) {
+}: ProfileEventsSectionProps) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useProfileEventsByUser(profileUserId, initialEvents);
 

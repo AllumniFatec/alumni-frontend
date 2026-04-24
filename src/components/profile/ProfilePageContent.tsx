@@ -86,10 +86,17 @@ export function ProfilePageContent({
             profileUserId={profile.user_id}
             skills={profile.skills}
           />
-          <ProfileJobsSection jobs={profile.jobs} />
-          <ProfileEventsSection events={profile.events} />
+          <ProfileJobsSection
+            profileUserId={profile.user_id}
+            initialJobs={profile.jobs}
+          />
+          <ProfileEventsSection
+            profileUserId={profile.user_id}
+            initialEvents={profile.events}
+          />
           <ProfilePostsSection
-            posts={profile.posts}
+            profileUserId={profile.user_id}
+            initialPosts={profile.posts}
             isOwnProfile={isOwnProfile}
           />
         </div>

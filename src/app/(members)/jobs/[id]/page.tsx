@@ -133,18 +133,6 @@ export default function JobDetailPage() {
                   {job.title}
                 </h1>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-600 dark:text-slate-400">
-                  <div className="flex items-center gap-1.5 font-semibold text-primary">
-                    <Building2 className="w-5 h-5" />
-                    {job.workplace}
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <User className="w-5 h-5" />
-                    {job.author_name}
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="w-5 h-5" />
-                    {job.city}, {job.state} — {job.country}
-                  </div>
                   {job.create_date && (
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-5 h-5" />
@@ -175,6 +163,8 @@ export default function JobDetailPage() {
                       job.author_course_abbreviation ??
                       ""
                     }
+                    profileLink={`/profile/${job.author_id}`}
+                    titleClassName="hover:cursor-pointer hover:underline"
                   />
                 </div>
 

@@ -60,6 +60,20 @@ export interface Post {
   likes: PostLike[];
 }
 
+export interface PostsPagination {
+  page: number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+export interface PostsListResponse {
+  posts: Post[];
+  pagination: PostsPagination;
+}
+
 export interface CreatePostResponse {
   message: string;
   post: Post;

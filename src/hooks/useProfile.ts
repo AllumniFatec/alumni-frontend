@@ -49,10 +49,10 @@ export function useProfilePostsByUser(
   initialPage?: PostsListResponse,
 ) {
   return useInfiniteQuery({
-    queryKey: PROFILE_USER_POSTS_QUERY_KEY(userId ?? ""),
+    queryKey: PROFILE_USER_POSTS_QUERY_KEY(userId!),
     queryFn: ({ pageParam = 1 }) =>
       PostsApi.getPostsByUserId(userId!, pageParam as number),
-    enabled: Boolean(userId),
+    enabled: !!userId,
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.pagination.hasNextPage
@@ -72,10 +72,10 @@ export function useProfileJobsByUser(
   initialPage?: JobsListResponse,
 ) {
   return useInfiniteQuery({
-    queryKey: PROFILE_USER_JOBS_QUERY_KEY(userId ?? ""),
+    queryKey: PROFILE_USER_JOBS_QUERY_KEY(userId!),
     queryFn: ({ pageParam = 1 }) =>
       JobApi.getJobsByUserId(userId!, pageParam as number),
-    enabled: Boolean(userId),
+    enabled: !!userId,
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.pagination.hasNextPage
@@ -95,10 +95,10 @@ export function useProfileEventsByUser(
   initialPage?: EventsByUserResponse,
 ) {
   return useInfiniteQuery({
-    queryKey: PROFILE_USER_EVENTS_QUERY_KEY(userId ?? ""),
+    queryKey: PROFILE_USER_EVENTS_QUERY_KEY(userId!),
     queryFn: ({ pageParam = 1 }) =>
       EventApi.getEventsByUserId(userId!, pageParam as number),
-    enabled: Boolean(userId),
+    enabled: !!userId,
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.pagination.hasNextPage

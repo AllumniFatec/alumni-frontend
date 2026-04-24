@@ -18,10 +18,18 @@ export class JobApi {
     userId: string,
     page: number = 1,
   ): Promise<JobsListResponse> {
-    const response = await apiBase.get<JobsListResponse>(`/job/user/${userId}`, {
-      params: { page },
-    });
-    return response.data;
+    try {
+      const response = await apiBase.get<JobsListResponse>(
+        `/job/user/${userId}`,
+        {
+          params: { page },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user jobs:", error);
+      throw error;
+    }
   }
 
   static async createJob(data: JobPayload): Promise<{ message: string }> {

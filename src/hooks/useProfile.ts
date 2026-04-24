@@ -1,5 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "sonner";
+import { EventApi } from "@/apis/events";
+import { JobApi } from "@/apis/jobs";
+import { PostsApi } from "@/apis/posts";
 import { ProfileApi } from "@/apis/profile";
 import { useAuth } from "@/context/AuthContext";
 import type {
@@ -14,8 +22,17 @@ import type {
   UpdateMyProfilePayload,
   UpdateProfilePhotoPayload,
 } from "@/models/profile";
+import type { EventsByUserResponse } from "@/apis/events";
+import type { JobsListResponse } from "@/models/job";
+import type { PostsListResponse } from "@/models/posts";
 
 export const PROFILE_QUERY_KEY = ["profile", "me"] as const;
+export const PROFILE_USER_POSTS_QUERY_KEY = (userId: string) =>
+  ["profile", "user-posts", userId] as const;
+export const PROFILE_USER_JOBS_QUERY_KEY = (userId: string) =>
+  ["profile", "user-jobs", userId] as const;
+export const PROFILE_USER_EVENTS_QUERY_KEY = (userId: string) =>
+  ["profile", "user-events", userId] as const;
 
 export function useMyProfile(options?: { enabled?: boolean }) {
   const { data, isLoading, isError, refetch, isFetching } = useQuery({
@@ -25,6 +42,75 @@ export function useMyProfile(options?: { enabled?: boolean }) {
   });
 
   return { data, isLoading, isError, refetch, isFetching };
+}
+
+export function useProfilePostsByUser(
+  userId: string | undefined,
+  initialPage?: PostsListResponse,
+) {
+  return useInfiniteQuery({
+    queryKey: PROFILE_USER_POSTS_QUERY_KEY(userId ?? ""),
+    queryFn: ({ pageParam = 1 }) =>
+      PostsApi.getPostsByUserId(userId!, pageParam as number),
+    enabled: Boolean(userId),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.pagination.hasNextPage
+        ? lastPage.pagination.page + 1
+        : undefined,
+    initialData: initialPage
+      ? {
+          pages: [initialPage],
+          pageParams: [1],
+        }
+      : undefined,
+  });
+}
+
+export function useProfileJobsByUser(
+  userId: string | undefined,
+  initialPage?: JobsListResponse,
+) {
+  return useInfiniteQuery({
+    queryKey: PROFILE_USER_JOBS_QUERY_KEY(userId ?? ""),
+    queryFn: ({ pageParam = 1 }) =>
+      JobApi.getJobsByUserId(userId!, pageParam as number),
+    enabled: Boolean(userId),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.pagination.hasNextPage
+        ? lastPage.pagination.page + 1
+        : undefined,
+    initialData: initialPage
+      ? {
+          pages: [initialPage],
+          pageParams: [1],
+        }
+      : undefined,
+  });
+}
+
+export function useProfileEventsByUser(
+  userId: string | undefined,
+  initialPage?: EventsByUserResponse,
+) {
+  return useInfiniteQuery({
+    queryKey: PROFILE_USER_EVENTS_QUERY_KEY(userId ?? ""),
+    queryFn: ({ pageParam = 1 }) =>
+      EventApi.getEventsByUserId(userId!, pageParam as number),
+    enabled: Boolean(userId),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.pagination.hasNextPage
+        ? lastPage.pagination.page + 1
+        : undefined,
+    initialData: initialPage
+      ? {
+          pages: [initialPage],
+          pageParams: [1],
+        }
+      : undefined,
+  });
 }
 
 function useInvalidateMyProfile() {

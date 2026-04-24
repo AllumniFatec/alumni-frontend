@@ -1,17 +1,24 @@
 "use client";
 
+import { useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { FileText } from "lucide-react";
 import { PostCard } from "@/components/Posts";
 import { EmptyState } from "@/components/EmptyState";
-import type { Post } from "@/models/posts";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { usePostLikeMutation } from "@/hooks/usePost";
 import { usePostCommentMutation } from "@/hooks/usePostComment";
-import { PROFILE_QUERY_KEY } from "@/hooks/useProfile";
+import {
+  PROFILE_QUERY_KEY,
+  PROFILE_USER_POSTS_QUERY_KEY,
+  useProfilePostsByUser,
+} from "@/hooks/useProfile";
+import type { ProfilePostsListResponse } from "@/models/profile";
 
 export interface ProfilePostsSectionProps {
-  posts: Post[];
+  profileUserId: string;
+  initialPosts: ProfilePostsListResponse;
   /**
    * Quando false, o empty state não sugere que o visitante publique primeiro.
    * Default: true (ex.: /profile só mostra o próprio usuário).
@@ -20,11 +27,14 @@ export interface ProfilePostsSectionProps {
 }
 
 export function ProfilePostsSection({
-  posts,
+  profileUserId,
+  initialPosts,
   isOwnProfile = true,
 }: ProfilePostsSectionProps) {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useProfilePostsByUser(profileUserId, initialPosts);
   const { mutate } = usePostLikeMutation();
   const {
     mutate: commentMutate,
@@ -32,14 +42,23 @@ export function ProfilePostsSection({
     variables: commentVariables,
   } = usePostCommentMutation();
 
-  const invalidateProfile = () =>
-    queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
+  const posts = useMemo(
+    () => data?.pages.flatMap((page) => page.posts) ?? initialPosts.posts,
+    [data, initialPosts.posts],
+  );
+
+  const invalidateProfileData = () => {
+    void queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
+    void queryClient.invalidateQueries({
+      queryKey: PROFILE_USER_POSTS_QUERY_KEY(profileUserId),
+    });
+  };
 
   const onClickLike = (postId: string) => {
     if (user) {
       mutate(
         { postId, userId: user.id, userName: user.name },
-        { onSettled: invalidateProfile },
+        { onSettled: invalidateProfileData },
       );
     }
   };
@@ -53,7 +72,7 @@ export function ProfilePostsSection({
           userId: user.id,
           userName: user.name,
         },
-        { onSettled: invalidateProfile },
+        { onSettled: invalidateProfileData },
       );
     }
   };
@@ -97,6 +116,17 @@ export function ProfilePostsSection({
           />
         ))}
       </div>
+      {hasNextPage && (
+        <div className="mt-4 flex justify-center">
+          <Button
+            variant="outline"
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+          >
+            {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+          </Button>
+        </div>
+      )}
     </section>
   );
 }

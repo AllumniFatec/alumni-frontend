@@ -1,10 +1,27 @@
 "use client";
 
+import { useMemo } from "react";
 import { Calendar } from "lucide-react";
 import { EventSmallCard } from "@/components/EventSmallCard";
-import type { ProfileEventSummary } from "@/models/profile";
+import { Button } from "@/components/ui/button";
+import { useProfileEventsByUser } from "@/hooks/useProfile";
+import type { ProfileEventsListResponse } from "@/models/profile";
 
-export function ProfileEventsSection({ events }: { events: ProfileEventSummary[] }) {
+export function ProfileEventsSection({
+  profileUserId,
+  initialEvents,
+}: {
+  profileUserId: string;
+  initialEvents: ProfileEventsListResponse;
+}) {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useProfileEventsByUser(profileUserId, initialEvents);
+
+  const events = useMemo(
+    () => data?.pages.flatMap((page) => page.events) ?? initialEvents.events,
+    [data, initialEvents.events],
+  );
+
   if (events.length === 0) return null;
 
   return (
@@ -18,6 +35,17 @@ export function ProfileEventsSection({ events }: { events: ProfileEventSummary[]
           <EventSmallCard key={e.event_id} profileEvent={e} />
         ))}
       </div>
+      {hasNextPage && (
+        <div className="mt-4 flex justify-center">
+          <Button
+            variant="outline"
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+          >
+            {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+          </Button>
+        </div>
+      )}
     </section>
   );
 }

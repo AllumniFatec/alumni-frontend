@@ -13,7 +13,7 @@ export function ProfileSummarySection({ profile }: { profile: ProfileLite }) {
   const items = [
     {
       label: "Posts",
-      value: profile.posts?.length,
+      value: profile.posts?.pagination.totalItems ?? 0,
       icon: FileText,
     },
     {
@@ -23,12 +23,12 @@ export function ProfileSummarySection({ profile }: { profile: ProfileLite }) {
     },
     {
       label: "Vagas",
-      value: profile.jobs?.length ?? 0,
+      value: profile.jobs?.pagination.totalItems ?? 0,
       icon: Briefcase,
     },
     {
       label: "Eventos",
-      value: profile.events?.length ?? 0,
+      value: profile.events?.pagination.totalItems ?? 0,
       icon: Calendar,
     },
   ];

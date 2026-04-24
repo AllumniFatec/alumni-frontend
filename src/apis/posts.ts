@@ -2,6 +2,7 @@ import { apiBase } from "@/lib/axiosInstance";
 import type {
   CreatePostResponse,
   PostContentPayload,
+  PostsListResponse,
   UpdatePostResponse,
   Post,
 } from "@/models/posts";
@@ -39,6 +40,21 @@ export class PostsApi {
       return response.data;
     } catch (error) {
       console.error("Error fetching post by id:", error);
+      throw error;
+    }
+  }
+
+  static async getPostsByUserId(
+    userId: string,
+    page: number = 1,
+  ): Promise<PostsListResponse> {
+    try {
+      const response = await apiBase.get<PostsListResponse>(`/post/user/${userId}`, {
+        params: { page },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching posts by user:", error);
       throw error;
     }
   }

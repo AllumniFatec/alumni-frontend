@@ -1,9 +1,16 @@
 import { apiBase } from "@/lib/axiosInstance";
 import type {
   EventDetail,
+  EventPagination,
   EventWritePayload,
   EventsListResponse,
 } from "@/models/event";
+import type { ProfileEventSummary } from "@/models/profile";
+
+export interface EventsByUserResponse {
+  events: ProfileEventSummary[];
+  pagination: EventPagination;
+}
 
 export class EventApi {
   static async getEvents(page: number = 1): Promise<EventsListResponse> {
@@ -24,6 +31,24 @@ export class EventApi {
       return response.data;
     } catch (error) {
       console.error("Error fetching event:", error);
+      throw error;
+    }
+  }
+
+  static async getEventsByUserId(
+    userId: string,
+    page: number = 1,
+  ): Promise<EventsByUserResponse> {
+    try {
+      const response = await apiBase.get<EventsByUserResponse>(
+        `/event/user/${userId}`,
+        {
+          params: { page },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user events:", error);
       throw error;
     }
   }

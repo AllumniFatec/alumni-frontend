@@ -1,5 +1,6 @@
-import type { JobListItem } from "./job";
-import type { Post } from "./posts";
+import type { EventPagination } from "./event";
+import type { JobListItem, JobsPagination } from "./job";
+import type { Post, PostsPagination } from "./posts";
 import type { Skill } from "./skill";
 import type { SocialMediaType, UserGender, UserType } from "./users";
 
@@ -50,6 +51,22 @@ export interface ProfileEventSummary {
   title: string;
   event_id: string;
   status: string;
+  date_start: string;
+}
+
+export interface ProfileJobsListResponse {
+  jobs: JobListItem[];
+  pagination: JobsPagination;
+}
+
+export interface ProfileEventsListResponse {
+  events: ProfileEventSummary[];
+  pagination: EventPagination;
+}
+
+export interface ProfilePostsListResponse {
+  posts: Post[];
+  pagination: PostsPagination;
 }
 
 /**
@@ -66,11 +83,11 @@ export interface MyProfile {
   workplace_history: ProfileWorkplaceHistoryEntry[];
   social_media: ProfileSocialMedia[];
   skills: ProfileSkillEntry[];
-  events: ProfileEventSummary[];
-  /** Oportunidades publicadas na plataforma — mesmo shape que GET /job (listagem). */
-  jobs: JobListItem[];
-  /** Mesmo formato que GET /feed (`Post`). */
-  posts: Post[];
+  events: ProfileEventsListResponse;
+  /** Oportunidades publicadas na plataforma — mesmo shape de paginação da listagem por usuário. */
+  jobs: ProfileJobsListResponse;
+  /** Mesmo formato de paginação do endpoint de posts por usuário. */
+  posts: ProfilePostsListResponse;
   gender: UserGender | string;
   email: string;
   receive_notifications: boolean;

@@ -145,23 +145,35 @@ export const PostCard = ({
       <div className="size-80 max-h-10 max-w-80 flex items-center justify">
         <div className="size-10 rounded-full border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
           {post.user_perfil_photo ? (
-            <img
-              src={post.user_perfil_photo}
-              alt="Perfil"
-              className="size-full rounded-full object-cover shadow-sm"
-            />
+            <Link href={`/profile/${post.user_id}`}>
+              <img
+                src={post.user_perfil_photo}
+                alt="Perfil"
+                className="size-full rounded-full object-cover shadow-sm"
+              />
+            </Link>
           ) : (
             <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
-              <span className="text-sm font-semibold text-white">
-                {post.user_name?.[0]}
-              </span>
+              <Link
+                href={`/profile/${post.user_id}`}
+                className="hover:cursor-pointer"
+              >
+                <span className="text-sm font-semibold text-white">
+                  {post.user_name?.[0]}
+                </span>
+              </Link>
             </div>
           )}
         </div>
         <div className="flex flex-col">
-          <span className="text-sm text-black font-medium ml-3">
-            {authorLabel}
-          </span>
+          <Link
+            href={`/profile/${post.user_id}`}
+            className="hover:cursor-pointer hover:underline"
+          >
+            <span className="text-sm text-black font-medium ml-3">
+              {authorLabel}
+            </span>
+          </Link>
           <Link
             href={`/posts/${post.id}`}
             className="hover:cursor-pointer hover:underline decoration-gray-400"

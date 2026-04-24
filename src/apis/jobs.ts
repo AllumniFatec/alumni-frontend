@@ -14,6 +14,24 @@ export class JobApi {
     return response.data;
   }
 
+  static async getJobsByUserId(
+    userId: string,
+    page: number = 1,
+  ): Promise<JobsListResponse> {
+    try {
+      const response = await apiBase.get<JobsListResponse>(
+        `/job/user/${userId}`,
+        {
+          params: { page },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user jobs:", error);
+      throw error;
+    }
+  }
+
   static async createJob(data: JobPayload): Promise<{ message: string }> {
     try {
       const response = await apiBase.post<{ message: string }>("/job", data);

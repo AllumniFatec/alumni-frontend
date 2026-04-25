@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -263,6 +258,7 @@ export const ProfessionalHistoryFormDialog = forwardRef<
             Cancelar
           </Button>
           <Button
+            className="sm:ml-2"
             type="submit"
             form="professional-history-form"
             disabled={isPending}

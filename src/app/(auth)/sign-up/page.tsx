@@ -99,7 +99,8 @@ const SignUpPage = () => {
     onSuccess: () => {
       router.push("/sign-in");
       toast.success("Usuário registrado com sucesso", {
-        description: "Você já pode fazer login.",
+        description:
+          "Sua conta passará por aprovação. Verifique seu e-mail diariamente para acompanhar o processo.",
         duration: 5000,
         position: "top-right",
         className:

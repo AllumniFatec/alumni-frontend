@@ -19,6 +19,9 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: "Alumni FATEC Sorocaba",
   description: "Sistema de gerenciamento de ex-alunos da FATEC Sorocaba",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

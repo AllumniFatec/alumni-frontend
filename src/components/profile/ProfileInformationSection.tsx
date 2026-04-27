@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, FileText, Mail, User } from "lucide-react";
+import { BadgeInfo, Bell, FileText, Mail, User } from "lucide-react";
 import { type MyProfile, toProfileInformationEditable } from "@/models/profile";
 
 import { UserGender } from "@/models/users";
@@ -36,7 +36,10 @@ export function ProfileInformationSection({
   return (
     <section className="mt-6">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-foreground">Informações</h3>
+        <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <BadgeInfo className="h-4 w-4" />
+          Informações
+        </h3>
         {canManage && isAccountView && (
           <Button
             type="button"
@@ -64,15 +67,17 @@ export function ProfileInformationSection({
             {genderLabel[profile.gender] ?? profile.gender}
           </span>
         </div>
-        {!profile.biography?.trim() && (
-          <div className="flex items-center gap-3 text-sm">
-            <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
-            <span className="text-muted-foreground">Bio:</span>
-            <span className="text-muted-foreground italic">
-              Não informada
+        <div className="flex items-center gap-3 text-sm">
+          <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+          <span className="text-muted-foreground">Bio:</span>
+          {profile.biography?.trim() ? (
+            <span className="font-medium text-foreground">
+              {profile.biography}
             </span>
-          </div>
-        )}
+          ) : (
+            <span className="text-muted-foreground italic">Não informada</span>
+          )}
+        </div>
         {isAccountView && profile.receive_notifications !== undefined && (
           <div className="flex items-center gap-3 text-sm">
             <Bell className="h-4 w-4 shrink-0 text-muted-foreground" />

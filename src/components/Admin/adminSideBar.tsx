@@ -19,8 +19,7 @@ const nav = [
     href: "/admin",
     label: "Dashboard",
     icon: LayoutDashboard,
-    match: (path: string) =>
-      path === "/admin" || path === "/admin/",
+    match: (path: string) => path === "/admin" || path === "/admin/",
   },
   {
     href: "/admin/users",
@@ -54,7 +53,7 @@ export function AdminSideBar() {
             const Icon = item.icon;
             const active = item.match(pathname);
             return (
-              <SidebarMenuItem key={item.href}>
+              <SidebarMenuItem key={item.href} className="mb-1 sm:mb-0">
                 <SidebarMenuButton
                   asChild
                   isActive={active}
@@ -73,7 +72,6 @@ export function AdminSideBar() {
           })}
         </SidebarMenu>
       </SidebarContent>
-      
     </Sidebar>
   );
 }

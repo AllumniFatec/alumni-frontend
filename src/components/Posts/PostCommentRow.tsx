@@ -3,6 +3,7 @@
 import type { PostComment } from "@/models/posts";
 import { cn } from "@/lib/utils";
 import { PostCardActionsMenu } from "@/components/Posts/PostCardActionsMenu";
+import Link from "next/link";
 
 export interface PostCommentRowProps {
   comment: PostComment;
@@ -23,17 +24,27 @@ export function PostCommentRow({
     <div className="flex w-full min-w-0 items-start gap-3 mb-3">
       <div className="size-10 shrink-0 rounded-full border-primary/20 bg-primary/10 flex justify-center items-center text-primary font-bold text-sm">
         {c.user_perfil_photo ? (
-          <img
-            src={c.user_perfil_photo}
-            alt="Perfil"
-            className="size-full rounded-full object-cover shadow-sm"
-          />
+          <Link
+            href={`/profile/${c.user_id}`}
+            className="hover:cursor-pointer hover:underline"
+          >
+            <img
+              src={c.user_perfil_photo}
+              alt="Perfil"
+              className="size-full rounded-full object-cover shadow-sm"
+            />
+          </Link>
         ) : (
-          <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
-            <span className="text-sm font-semibold text-white">
-              {c.user_name?.[0]}
-            </span>
-          </div>
+          <Link
+            href={`/profile/${c.user_id}`}
+            className="hover:cursor-pointer hover:underline"
+          >
+            <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
+              <span className="text-sm font-semibold text-white">
+                {c.user_name?.[0]}
+              </span>
+            </div>
+          </Link>
         )}
       </div>
       <div
@@ -54,7 +65,12 @@ export function PostCommentRow({
             />
           </div>
         )}
-        <span className="font-medium text-gray-800">{c.user_name}</span>
+        <Link
+          href={`/profile/${c.user_id}`}
+          className="hover:cursor-pointer hover:underline"
+        >
+          <span className="font-medium text-gray-800">{c.user_name}</span>
+        </Link>
         <p className="text-gray-600 leading-snug break-words">{c.content}</p>
       </div>
     </div>

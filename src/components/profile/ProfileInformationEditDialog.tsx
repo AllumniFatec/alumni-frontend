@@ -197,7 +197,7 @@ export function ProfileInformationEditDialog({
                   htmlFor="pi-notifications"
                   className="cursor-pointer text-sm font-medium leading-none text-foreground"
                 >
-                  Receber notificações por e-mail
+                  Receber notificações
                 </label>
               </div>
             )}

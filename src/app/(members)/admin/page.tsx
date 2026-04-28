@@ -48,7 +48,9 @@ import { UserGender, UserType } from "@/models/users";
 
 function formatCourses(row: AdminPendingUserRow) {
   if (!row.courses?.length) return "—";
-  return row.courses.map((c) => c.course_name).join(", ");
+  return row.courses
+    .map((c) => `${c.course_name} - ${c.enrollmentYear}`)
+    .join(", ");
 }
 
 export default function AdminPage() {

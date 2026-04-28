@@ -50,7 +50,9 @@ function profilePhotoSrc(
 
 function formatCourses(user: PublicUserListItem) {
   if (!user.courses?.length) return "—";
-  return user.courses.map((c) => c.course_name).join(", ");
+  return user.courses
+    .map((c) => `${c.course_name} - ${c.enrollmentYear}`)
+    .join(", ");
 }
 
 export default function AdminUsersPage() {

@@ -41,13 +41,12 @@ const ForgotPasswordPage = () => {
     },
     onError: (error: any) => {
       toast.error("Algo deu errado", {
-        description: "Verique seus dados e tente novamente.",
+        description: error.response?.data?.error,
         duration: 5000,
         position: "top-right",
         className:
           "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
       });
-      console.error("Erro ao enviar e-mail:", error);
     },
   });
 

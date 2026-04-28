@@ -27,8 +27,9 @@ const PendingApprovalPage = () => {
       </p>
 
       <p className="text-gray-500 text-sm text-center max-w-md">
-        Assim que aprovado, você receberá acesso ao sistema. Caso tenha dúvidas,
-        entre em contato com a administração.
+        Assim que aprovado, você receberá um e-mail de confirmação e poderá
+        acessar o sistema. Caso tenha dúvidas, entre em contato com a
+        administração.
       </p>
 
       {/* Botões */}

@@ -25,15 +25,12 @@ export default function ProfileByUserIdPage() {
     enabled: isSelf === true,
   });
 
-  const otherProfileQuery = useUserById(
-    isSelf === false ? userId : undefined,
-  );
+  const otherProfileQuery = useUserById(isSelf === false ? userId : undefined);
 
   const { data, isLoading, isError, refetch, isFetching } =
     isSelf === true ? myProfileQuery : otherProfileQuery;
 
-  const pageLoading =
-    authLoading || isSelf === null || isLoading;
+  const pageLoading = authLoading || isSelf === null || isLoading;
 
   if (pageLoading) {
     return (
@@ -65,17 +62,13 @@ export default function ProfileByUserIdPage() {
     );
   }
 
-  const title = isSelf === true ? "Meu Perfil" : data.name;
-
   return (
     <div>
-      <Section title={title}>
-        <ProfilePageContent
-          profile={data}
-          viewerUserId={user?.id}
-          isFetching={isFetching}
-        />
-      </Section>
+      <ProfilePageContent
+        profile={data}
+        viewerUserId={user?.id}
+        isFetching={isFetching}
+      />
     </div>
   );
 }

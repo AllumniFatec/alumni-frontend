@@ -63,7 +63,8 @@ const ForgotPasswordPage = () => {
       <form onSubmit={handleSubmit(onSubmitForgotPassword)}>
         {/* Campo Email */}
         <div>
-          <Input
+          <Input 
+            required
             {...register("email")}
             type="email"
             placeholder="Informe seu email para recuperar a senha"

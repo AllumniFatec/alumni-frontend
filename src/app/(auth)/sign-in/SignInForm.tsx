@@ -71,7 +71,8 @@ export const SignInForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmitLogin)}>
-      <Input
+      <Input 
+        required
         {...register("email")}
         type="email"
         placeholder="E-mail"
@@ -80,7 +81,8 @@ export const SignInForm = () => {
       />
 
       <div className="mb-6">
-        <Input
+        <Input 
+          required
           {...register("password")}
           type="password"
           placeholder="Senha"

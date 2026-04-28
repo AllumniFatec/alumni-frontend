@@ -193,7 +193,7 @@ export default function NetworkPage() {
           </div>
         )}
 
-        {loadMoreQuery.hasNextPage && (
+        {loadMoreQuery?.hasNextPage ? (
           <div className="flex justify-center mt-8">
             <Button
               type="button"
@@ -206,7 +206,7 @@ export default function NetworkPage() {
                 : "Carregar mais"}
             </Button>
           </div>
-        )}
+        ) : null}
       </Section>
     </div>
   );

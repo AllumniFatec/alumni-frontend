@@ -12,12 +12,22 @@ interface SelectProps extends React.ComponentProps<
 > {
   error?: string;
   label?: string;
+  required?: boolean;
 }
 
-function Select({ error, label, children, ...props }: SelectProps) {
+function Select({ error, label, required, children, ...props }: SelectProps) {
   return (
     <div className="w-full">
-      {label && <BaseLabel>{label}</BaseLabel>}
+      {label && (
+        <BaseLabel className="flex items-center gap-1">
+          <span>{label}</span>
+          {required && (
+            <span className="text-destructive" aria-hidden="true">
+              *
+            </span>
+          )}
+        </BaseLabel>
+      )}
       <SelectPrimitive.Root data-slot="select" {...props}>
         {children}
       </SelectPrimitive.Root>

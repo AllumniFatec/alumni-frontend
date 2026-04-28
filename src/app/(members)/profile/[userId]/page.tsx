@@ -12,7 +12,7 @@ import { ProfilePageContent } from "@/components/profile/ProfilePageContent";
 
 export default function ProfileByUserIdPage() {
   const params = useParams();
-  const userId = typeof params.userId === "string" ? params.userId : undefined;
+  const userId = typeof params?.userId === "string" ? params?.userId : undefined;
   const { user, isLoading: authLoading } = useAuth();
 
   const isSelf = useMemo(() => {

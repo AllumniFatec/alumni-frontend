@@ -65,12 +65,6 @@ export function ProfilePageContent({
           <h2 className="text-xl font-bold text-slate-800">{profile.name}</h2>
           {/*<p className="text-sm text-slate-500 mb-1">{profile.user_type}</p>*/}
 
-          {profile.biography && (
-            <p className="text-sm text-slate-600 mt-3 leading-relaxed">
-              {profile.biography}
-            </p>
-          )}
-
           <ProfileSummarySection profile={profile} />
           <ProfileInformationSection profile={profile} variant={infoVariant} />
           <ProfileCoursesSection courses={profile.courses} />

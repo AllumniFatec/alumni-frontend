@@ -97,7 +97,7 @@ const SignUpPage = () => {
   const signUpMutation = useMutation({
     mutationFn: (userData: NewUser) => AuthApi.signUp(userData),
     onSuccess: () => {
-      router.push("/sign-in");
+      router.push("/pending-approval");
       toast.success("Usuário registrado com sucesso", {
         description:
           "Sua conta passará por aprovação. Verifique seu e-mail diariamente para acompanhar o processo.",

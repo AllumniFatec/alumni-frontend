@@ -65,8 +65,14 @@ export function ProfessionalHistoryDateField({
             selected={value}
             onSelect={onChange}
             defaultMonth={value ?? new Date()}
+            fixedWeeks
             locale={ptBR}
             className="bg-white dark:bg-slate-950"
+            classNames={{
+              outside:
+                "text-slate-400 opacity-80 aria-selected:text-slate-400 dark:text-slate-600 dark:aria-selected:text-slate-600",
+            }}
+            captionLayout="dropdown"
           />
         </PopoverContent>
       </Popover>

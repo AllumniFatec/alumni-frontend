@@ -39,6 +39,7 @@ const AUTH_ROUTES = [
   ApiRoutes.Register,
   ApiRoutes.Logout,
   ApiRoutes.Me,
+  ApiRoutes.Reactivate,
 ];
 
 apiBase.interceptors.response.use(

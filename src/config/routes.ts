@@ -11,6 +11,8 @@ export enum AuthRoutes {
   SuccessResetPassword = "/sucess-reset-send-password",
   PendingApproval = "/pending-approval",
   BannedUser = "/banned-user",
+  RefusedUser = "/refused-user",
+  SuspendedUser = "/suspended-user",
 }
 
 export enum MembersRoutes {
@@ -28,6 +30,7 @@ export enum ApiRoutes {
   Register = "/auth/register",
   Logout = "/auth/logout",
   Me = "/auth/me",
+  Reactivate = "/auth/reactivate",
   ConfirmCode = "/auth/confirm-code",
   ForgotPassword = "/password/forgot-password",
   ResetPassword = "/password/reset-password",

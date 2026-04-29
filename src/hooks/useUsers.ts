@@ -1,7 +1,10 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { UserApi } from "@/apis/users";
 
 export const usersQueryKeys = {
@@ -82,11 +85,34 @@ export function useUserSearch(search: string) {
 }
 
 export function useUserById(userId: string | undefined) {
-  const { data, isLoading, isError, refetch, isFetching } = useQuery({
+  const router = useRouter();
+  const hasHandledErrorRef = useRef(false);
+  const { data, isLoading, isError, refetch, isFetching, error } = useQuery({
     queryKey: usersQueryKeys.detail(userId ?? ""),
     queryFn: () => UserApi.getUserById(userId!),
     enabled: Boolean(userId),
+    retry: false,
   });
+
+  useEffect(() => {
+    if (!isError || hasHandledErrorRef.current) return;
+
+    hasHandledErrorRef.current = true;
+
+    const isAxiosRequestError = axios.isAxiosError(error);
+    const isNotFound = isAxiosRequestError && error.response?.status === 404;
+    const hasAnyRequestError = isAxiosRequestError || error instanceof Error;
+
+    if (isNotFound || hasAnyRequestError) {
+      toast.error("Usuário não encontrado", {
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+      router.back();
+    }
+  }, [error, isError, router]);
 
   const refetchUser = useCallback(() => {
     if (userId) refetch();

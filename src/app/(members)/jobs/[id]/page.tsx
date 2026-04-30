@@ -11,7 +11,6 @@ import {
   Clock,
   ArrowLeft,
   User,
-  MapPin,
   Briefcase,
   GraduationCap,
 } from "lucide-react";
@@ -48,7 +47,7 @@ function getStatusBadgeClass(status: string): string {
 export default function JobDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const id = params.id as string;
+  const id = params?.id as string;
 
   const { user } = useAuth();
   const { data: job, isLoading, isError, refetch } = useJobById(id);
@@ -61,9 +60,9 @@ export default function JobDetailPage() {
       await deleteJob(id);
       toast.success("Vaga excluída com sucesso!");
       router.push("/jobs");
-    } catch {
+    } catch(error: any) {
       toast.error("Erro ao excluir a vaga", {
-        description: "Tente novamente.",
+        description: error.response?.data?.error,
       });
     }
   }
@@ -73,9 +72,9 @@ export default function JobDetailPage() {
       await closeJob(id);
       toast.success("Vaga encerrada com sucesso!");
       router.push("/jobs");
-    } catch {
+    } catch(error: any) {
       toast.error("Erro ao encerrar a vaga", {
-        description: "Tente novamente.",
+        description: error.response?.data?.error,
       });
     }
   }

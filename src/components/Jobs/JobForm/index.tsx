@@ -43,7 +43,11 @@ const jobSchema = z.object({
   work_model: z.nativeEnum(WorkModel, {
     error: "Modelo de trabalho é obrigatório",
   }),
-  url: z.string().url("URL inválida").optional().or(z.literal("")),
+  url: z
+    .string()
+    .trim()
+    .optional()
+    .or(z.literal("")),
 });
 
 export type JobFormValues = z.infer<typeof jobSchema>;
@@ -73,6 +77,7 @@ export function JobForm({
     defaultValues: {
       country: "Brasil",
       ...defaultValues,
+      // url: defaultValues?.url ?? undefined,
     },
   });
 
@@ -113,12 +118,14 @@ export function JobForm({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
+          required
           label="Título da vaga"
           placeholder="Ex: Desenvolvedor Frontend"
           error={errors.title?.message}
           {...register("title")}
         />
         <Input
+          required
           label="Empresa"
           placeholder="Nome exato da empresa cadastrada no sistema"
           error={errors.workplace_name?.message}
@@ -129,7 +136,8 @@ export function JobForm({
       <div className="space-y-1">
         <BaseLabel>Descrição</BaseLabel>
         <textarea
-          className="w-full min-h-[140px] px-3 py-2 border-0 rounded-lg text-sm text-foreground bg-primary-foreground sm:bg-muted focus:outline-none focus:ring-2 focus:ring-primary resize-y"
+          required
+          className="w-full min-h-[140px] px-3 py-2 border-0 rounded-lg text-sm text-foreground bg-muted focus:outline-none focus:ring-2 focus:ring-primary resize-y"
           placeholder="Descreva a vaga, responsabilidades e requisitos..."
           maxLength={3500}
           {...register("description")}
@@ -159,6 +167,7 @@ export function JobForm({
           name="employment_type"
           render={({ field }) => (
             <Select
+              required
               value={field.value}
               onValueChange={field.onChange}
               label="Tipo de contratação"
@@ -183,6 +192,7 @@ export function JobForm({
           name="seniority_level"
           render={({ field }) => (
             <Select
+              required
               value={field.value}
               onValueChange={field.onChange}
               label="Nível de senioridade"
@@ -207,6 +217,7 @@ export function JobForm({
           name="work_model"
           render={({ field }) => (
             <Select
+              required
               value={field.value}
               onValueChange={field.onChange}
               label="Modelo de trabalho"
@@ -231,14 +242,15 @@ export function JobForm({
         <div className="space-y-1">
           <BaseLabel>CEP</BaseLabel>
           <div className="relative">
-            <input
+            <Input
+              tooltip="O CEP é preenchido automaticamente ao digitar o número. Caso não seja preenchido, é necessário digitar manualmente."
               type="text"
               inputMode="numeric"
               maxLength={9}
               value={cep.replace(/(\d{5})(\d{1,3})/, "$1-$2")}
               onChange={(e) => handleCepChange(e.target.value)}
               placeholder="00000-000"
-              className="w-full h-10 px-3 py-2 border-0 rounded-lg text-sm text-foreground bg-primary-foreground sm:bg-muted focus:outline-none focus:ring-2 focus:ring-primary pr-8"
+              className="w-full h-10 px-3 py-2 border-0 rounded-lg text-sm text-foreground bg-muted focus:outline-none focus:ring-2 focus:ring-primary pr-8"
             />
             {isFetchingCep && (
               <Spinner className="absolute right-2 top-1/2 -translate-y-1/2 size-4 text-primary" />
@@ -250,18 +262,21 @@ export function JobForm({
         </div>
 
         <Input
+          required
           label="Cidade"
           placeholder="Preenchido pelo CEP"
           error={errors.city?.message}
           {...register("city")}
         />
         <Input
+          required
           label="Estado"
           placeholder="UF"
           error={errors.state?.message}
           {...register("state")}
         />
         <Input
+          required
           label="País"
           error={errors.country?.message}
           {...register("country")}

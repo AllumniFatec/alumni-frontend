@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm, Controller, type Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -69,7 +68,7 @@ const eventFormSchema = z
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
 
-function FormDatePicker({
+function FormDateField({
   name,
   control,
   label,
@@ -80,8 +79,6 @@ function FormDatePicker({
   label: string;
   error?: string;
 }) {
-  const [open, setOpen] = useState(false);
-
   return (
     <Controller
       control={control}
@@ -91,13 +88,13 @@ function FormDatePicker({
         return (
           <div className="space-y-1">
             <BaseLabel>{label}</BaseLabel>
-            <Popover open={open} onOpenChange={setOpen}>
+            <Popover>
               <PopoverTrigger asChild>
                 <Button
                   type="button"
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal h-10 px-3 rounded-lg border-0 text-sm text-foreground bg-primary-foreground sm:bg-muted focus:outline-none focus:ring-2 focus:ring-primary",
+                    "w-full justify-start text-left font-normal h-10 px-3 rounded-lg border-0 text-sm text-foreground bg-muted focus:outline-none focus:ring-2 focus:ring-primary",
                     !field.value && "text-muted-foreground",
                   )}
                 >
@@ -107,15 +104,25 @@ function FormDatePicker({
                     : "Selecione a data"}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
+              <PopoverContent
+                className="w-auto p-0"
+                align="start"
+                onOpenAutoFocus={(e) => e.preventDefault()}
+              >
                 <Calendar
                   mode="single"
                   locale={ptBR}
-                  selected={selected}
+                  selected={selected ?? undefined}
                   defaultMonth={selected ?? new Date()}
+                  fixedWeeks
+                  captionLayout="dropdown"
                   onSelect={(d) => {
                     field.onChange(d ? format(d, "dd/MM/yyyy") : "");
-                    setOpen(false);
+                  }}
+                  className="bg-white dark:bg-slate-950"
+                  classNames={{
+                    outside:
+                      "text-slate-400 opacity-80 aria-selected:text-slate-400 dark:text-slate-600 dark:aria-selected:text-slate-600",
                   }}
                 />
               </PopoverContent>
@@ -149,6 +156,7 @@ function FormTimeField({
       name={name}
       render={({ field }) => (
         <Input
+          className="bg-muted"
           label={label}
           placeholder="00:00"
           inputMode="numeric"
@@ -225,7 +233,7 @@ export function EventForm({
       <div className="space-y-1">
         <BaseLabel>Descrição</BaseLabel>
         <textarea
-          className="w-full min-h-[140px] px-3 py-2 border-0 rounded-lg text-sm text-foreground bg-primary-foreground sm:bg-muted focus:outline-none focus:ring-2 focus:ring-primary resize-y"
+          className="w-full min-h-[140px] px-3 py-2 border-0 rounded-lg text-sm text-foreground bg-muted focus:outline-none focus:ring-2 focus:ring-primary resize-y"
           placeholder="Descreva o evento..."
           maxLength={3000}
           {...register("description")}
@@ -243,7 +251,7 @@ export function EventForm({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <FormDatePicker
+        <FormDateField
           name="date_start"
           control={control}
           label="Data de início"
@@ -255,7 +263,7 @@ export function EventForm({
           label="Hora de início"
           error={errors.time_start?.message}
         />
-        <FormDatePicker
+        <FormDateField
           name="date_end"
           control={control}
           label="Data de término"

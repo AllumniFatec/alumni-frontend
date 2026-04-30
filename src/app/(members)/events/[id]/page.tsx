@@ -30,7 +30,7 @@ function getStatusBadgeClass(status: string): string {
 export default function EventDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const id = params.id as string;
+  const id = params?.id as string;
 
   const { data: event, isLoading, isError, refetch } = useEventById(id);
   const { mutateAsync: deleteEvent, isPending: isDeleting } = useDeleteEvent();

@@ -41,13 +41,12 @@ const ForgotPasswordPage = () => {
     },
     onError: (error: any) => {
       toast.error("Algo deu errado", {
-        description: "Verique seus dados e tente novamente.",
+        description: error.response?.data?.error ?? "Verifique seus dados e tente novamente.",
         duration: 5000,
         position: "top-right",
         className:
           "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
       });
-      console.error("Erro ao enviar e-mail:", error);
     },
   });
 
@@ -64,7 +63,8 @@ const ForgotPasswordPage = () => {
       <form onSubmit={handleSubmit(onSubmitForgotPassword)}>
         {/* Campo Email */}
         <div>
-          <Input
+          <Input 
+            required
             {...register("email")}
             type="email"
             placeholder="Informe seu email para recuperar a senha"

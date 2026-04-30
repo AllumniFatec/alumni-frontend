@@ -47,13 +47,11 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <Section title="Meu Perfil">
-        <ProfilePageContent
-          profile={data}
-          viewerUserId={user.id}
-          isFetching={isFetching}
-        />
-      </Section>
+      <ProfilePageContent
+        profile={data}
+        viewerUserId={user.id}
+        isFetching={isFetching}
+      />
     </div>
   );
 }

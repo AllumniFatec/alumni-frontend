@@ -41,7 +41,7 @@ const ForgotPasswordPage = () => {
     },
     onError: (error: any) => {
       toast.error("Algo deu errado", {
-        description: error.response?.data?.error,
+        description: error.response?.data?.error ?? "Verifique seus dados e tente novamente.",
         duration: 5000,
         position: "top-right",
         className:

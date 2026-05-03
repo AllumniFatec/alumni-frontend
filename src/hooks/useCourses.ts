@@ -33,7 +33,7 @@ const toastErrorOpts = {
 export const COURSES_LIST_QUERY_KEY = ["courses", "list"] as const;
 
 export function useCourses() {
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: COURSES_LIST_QUERY_KEY,
     queryFn: () => CoursesApi.getCourses(),
   });
@@ -42,6 +42,7 @@ export function useCourses() {
     data,
     isLoading,
     isError,
+    error,
     refetch,
   };
 }

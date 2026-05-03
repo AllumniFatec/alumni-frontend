@@ -1,17 +1,14 @@
 "use client";
 
-import { AuthApi } from "@/apis/auth";
 import { Button } from "@/components/ui/button";
 import { AuthRoutes } from "@/config/routes";
-import { useMutation } from "@tanstack/react-query";
+import { useReactivateAccount } from "@/hooks/useUsers";
 import { UserRoundX } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { toast } from "sonner";
 
 const SuspendedUserContent = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const name = searchParams.get("name") ?? "usuário";
@@ -21,26 +18,7 @@ const SuspendedUserContent = () => {
     ? new Date(deletedAt).toLocaleString("pt-BR")
     : "uma data não informada";
 
-  const reactivateMutation = useMutation({
-    mutationFn: () => AuthApi.reactivate(),
-    onSuccess: () => {
-      toast.success("Conta reativada com sucesso", {
-        description: "Faça login novamente para acessar o sistema.",
-        duration: 5000,
-        position: "top-right",
-      });
-      router.replace(AuthRoutes.SignIn);
-    },
-    onError: () => {
-      toast.error("Algo deu errado", {
-        description: "Não foi possível reativar sua conta. Tente novamente mais tarde.",
-        duration: 5000,
-        position: "top-right",
-        className:
-          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
-      });
-    },
-  });
+  const reactivateAccountMutation = useReactivateAccount();
 
   return (
     <div className="w-full flex flex-col gap-6 px-4 sm:min-w-lg items-center">
@@ -61,7 +39,8 @@ const SuspendedUserContent = () => {
       </p>
 
       <p className="text-gray-500 text-sm text-center max-w-md">
-        Caso queira reutilizar nosso sistema, você poderá reativar sua conta no botão abaixo.
+        Caso queira reutilizar nosso sistema, você poderá reativar sua conta no
+        botão abaixo.
       </p>
 
       {/* Botões */}
@@ -71,10 +50,10 @@ const SuspendedUserContent = () => {
           variant="default"
           size="lg"
           className="w-full"
-          disabled={reactivateMutation.isPending}
-          onClick={() => reactivateMutation.mutate()}
+          disabled={reactivateAccountMutation.isPending}
+          onClick={() => reactivateAccountMutation.mutate()}
         >
-          {reactivateMutation.isPending
+          {reactivateAccountMutation.isPending
             ? "Reativando conta..."
             : "Reativar Conta"}
         </Button>

@@ -6,7 +6,7 @@ import { UserX } from "lucide-react";
 import { AuthRoutes } from "@/config/routes";
 import Link from "next/link";
 
-const PendingApprovalPage = () => {
+const RefusedUserPage = () => {
   const router = useRouter();
 
   return (
@@ -65,4 +65,4 @@ const PendingApprovalPage = () => {
   );
 };
 
-export default PendingApprovalPage;
+export default RefusedUserPage;

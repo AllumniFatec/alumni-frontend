@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { useDeleteMyProfile } from "@/hooks/useProfile";
 import { AppRoutes } from "@/config/routes";
 
-const SECURITY_PHRASE = "EXCLUIR CONTA";
+const SECURITY_PHRASE = "SUSPENDER CONTA";
 
 interface DeleteProfileDialogProps {
   open: boolean;
@@ -32,7 +32,7 @@ export function DeleteProfileDialog({
   const { mutateAsync: deleteMyProfile, isPending } = useDeleteMyProfile();
 
   const isConfirmationValid = useMemo(
-    () => confirmationText.trim() === SECURITY_PHRASE,
+    () => confirmationText.trim().toUpperCase() === SECURITY_PHRASE,
     [confirmationText],
   );
 
@@ -58,15 +58,16 @@ export function DeleteProfileDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Suspender conta</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-sm mt-2">
             Ao confirmar, sua conta será suspensa. Você poderá reativá-la a
-            qualquer momento fazendo login novamente no sistema.
+            qualquer momento fazendo login novamente no sistema. Para suspender
+            sua conta, digite a frase de segurança abaixo e clique em "Confirmar
+            suspensão".
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-3">
-          <p className="rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm font-semibold text-destructive">
-            Para excluir sua conta, digite a frase de segurança:{" "}
+          <p className="w-full text-center rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm font-semibold text-destructive">
             {SECURITY_PHRASE}
           </p>
 

@@ -220,7 +220,7 @@ const {
 
 ```typescript
 const onSubmit = (data: FormData) => {
-  console.log(data);
+  // Ex.: enviar `data` (já validado pelo Zod) para a API
 };
 
 <form onSubmit={handleSubmit(onSubmit)}>

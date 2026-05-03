@@ -25,20 +25,7 @@ export const validateConfig = (): void => {
   if (!config.api.baseUrl) {
     throw new Error("NEXT_PUBLIC_API_BASE_URL é obrigatória");
   }
-
-  if (!config.app.name) {
-    console.warn("NEXT_PUBLIC_APP_NAME não definida, usando padrão");
-  }
 };
-
-if (isDevelopment && typeof window !== "undefined") {
-  console.log("Alumni Config:", {
-    apiUrl: config.api.baseUrl,
-    appName: config.app.name,
-    version: config.app.version,
-    env: config.app.environment,
-  });
-}
 
 // ===== EXPORTS =====
 export default config;

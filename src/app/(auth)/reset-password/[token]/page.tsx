@@ -69,14 +69,19 @@ const ResetPasswordTokenPage = () => {
       });
       router.push("/sign-in");
     },
-    onError: (error: any) => {
-      console.error("Erro ao redefinir senha:", error);
+    onError: () => {
+      toast.error("Não foi possível redefinir a senha", {
+        description: "Verifique o link ou solicite um novo e-mail.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
     },
   });
 
   const onSubmitResetPassword = (data: ResetPasswordData) => {
     if (!token) {
-      console.error("Token não encontrado");
       router.push("/forgot-password");
       return;
     }

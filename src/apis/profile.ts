@@ -31,7 +31,6 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("updateMyProfile error", error);
       throw error;
     }
   }
@@ -46,7 +45,6 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("updateProfilePhoto error", error);
       throw error;
     }
   }
@@ -57,7 +55,6 @@ export class ProfileApi {
         await apiBase.delete<ProfileMutationMessage>("/my-profile");
       return response.data;
     } catch (error) {
-      console.error("deleteMyProfile error", error);
       throw error;
     }
   }
@@ -73,7 +70,6 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("addProfessionalHistory error", error);
       throw error;
     }
   }
@@ -89,7 +85,6 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("updateProfessionalHistory error", error);
       throw error;
     }
   }
@@ -105,7 +100,6 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("deleteProfessionalHistory error", error);
       throw error;
     }
   }
@@ -120,7 +114,6 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("addSkill error", error);
       throw error;
     }
   }
@@ -135,7 +128,6 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("deleteSkill error", error);
       throw error;
     }
   }
@@ -150,7 +142,6 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("addSocialMedia error", error);
       throw error;
     }
   }
@@ -165,7 +156,6 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("updateSocialMedia error", error);
       throw error;
     }
   }
@@ -180,7 +170,6 @@ export class ProfileApi {
       );
       return response.data;
     } catch (error) {
-      console.error("deleteSocialMedia error", error);
       throw error;
     }
   }

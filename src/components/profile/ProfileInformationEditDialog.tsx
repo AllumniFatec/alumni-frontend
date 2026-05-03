@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -12,8 +12,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { BaseLabel } from "@/components/BaseLabel";
+import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Select,
@@ -29,7 +29,6 @@ import {
   profileInformationFormSchema,
   type ProfileInformationFormValues,
 } from "@/components/profile/profileInformationFormSchema";
-import { cn } from "@/lib/utils";
 
 const genderOptions: { value: UserGender; label: string }[] = [
   { value: UserGender.MALE, label: "Masculino" },
@@ -70,6 +69,7 @@ export function ProfileInformationEditDialog({
   });
 
   const { reset } = form;
+  const biographyFieldId = useId();
 
   useEffect(() => {
     if (open) {
@@ -109,19 +109,17 @@ export function ProfileInformationEditDialog({
           id="profile-information-form"
         >
           <div className="space-y-1.5">
-            <BaseLabel htmlFor="pi-name">Nome</BaseLabel>
+            <BaseLabel htmlFor="pi-name" required>
+              Nome
+            </BaseLabel>
             <Input
+              required
               id="pi-name"
               {...form.register("name")}
               autoComplete="name"
               disabled={isPending}
-              className="w-full min-w-0 bg-slate-100 dark:bg-slate-800/80"
+              error={form.formState.errors.name?.message}
             />
-            {form.formState.errors.name && (
-              <p className="text-xs text-red-500">
-                {form.formState.errors.name.message}
-              </p>
-            )}
           </div>
 
           <Controller
@@ -129,19 +127,17 @@ export function ProfileInformationEditDialog({
             name="gender"
             render={({ field }) => (
               <div className="space-y-1.5">
-                <BaseLabel htmlFor="pi-gender">Gênero</BaseLabel>
+                <BaseLabel htmlFor="pi-gender" required>
+                  Gênero
+                </BaseLabel>
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                   disabled={isPending}
+                  error={form.formState.errors.gender?.message}
                 >
                   <SelectTrigger
                     id="pi-gender"
-                    className={cn(
-                      "w-full text-foreground shadow-sm",
-                      !form.formState.errors.gender &&
-                        "border border-slate-200/90 bg-slate-100 dark:border-slate-700 dark:bg-slate-800/80",
-                    )}
                     error={!!form.formState.errors.gender}
                   >
                     <SelectValue placeholder="Selecione" />
@@ -154,24 +150,21 @@ export function ProfileInformationEditDialog({
                     ))}
                   </SelectContent>
                 </Select>
-                {form.formState.errors.gender && (
-                  <p className="text-xs text-red-500">
-                    {form.formState.errors.gender.message}
-                  </p>
-                )}
               </div>
             )}
           />
 
           <div className="space-y-1.5">
-            <BaseLabel htmlFor="pi-bio">Biografia</BaseLabel>
+            <BaseLabel htmlFor={biographyFieldId} optional>
+              Biografia
+            </BaseLabel>
             <textarea
-              id="pi-bio"
+              id={biographyFieldId}
               {...form.register("biography")}
               rows={4}
-              placeholder="Opcional — conte um pouco sobre você"
+              placeholder="Conte um pouco sobre você"
               disabled={isPending}
-              className="flex min-h-[100px] w-full rounded-md border border-slate-200/90 bg-slate-100 px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800/80"
+              className="w-full min-h-[100px] resize-y rounded-lg border-0 bg-muted px-3 py-2 text-sm text-foreground placeholder:text-xs placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
             />
             {form.formState.errors.biography && (
               <p className="text-xs text-red-500">

@@ -95,6 +95,7 @@ export function CourseForm({
             message: "O nome pode ter no máximo 100 caracteres.",
           },
         })}
+        className="bg-foreground/10"
       />
       <Input
         label="Sigla"
@@ -112,6 +113,7 @@ export function CourseForm({
             message: "A sigla pode ter no máximo 10 caracteres.",
           },
         })}
+        className="bg-foreground/10"
       />
       <div className="flex justify-end gap-2 pt-2">
         <Button type="submit" disabled={pending}>
@@ -123,7 +125,7 @@ export function CourseForm({
           ) : mode === "create" ? (
             "Cadastrar"
           ) : (
-            "Guardar alterações"
+            "Salvar"
           )}
         </Button>
       </div>

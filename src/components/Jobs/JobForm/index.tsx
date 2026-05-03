@@ -3,7 +3,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
+import { useId, useState } from "react";
 import {
   EmploymentType,
   EmploymentTypeLabel,
@@ -12,6 +12,7 @@ import {
   WorkModel,
   WorkModelLabel,
 } from "@/models/job";
+import { BaseLabel } from "@/components/BaseLabel";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { BaseLabel } from "@/components/BaseLabel";
 import { Spinner } from "@/components/ui/spinner";
 
 const jobSchema = z.object({
@@ -82,6 +82,7 @@ export function JobForm({
   });
 
   const descriptionLength = watch("description")?.length ?? 0;
+  const descriptionFieldId = useId();
 
   const [cep, setCep] = useState("");
   const [isFetchingCep, setIsFetchingCep] = useState(false);
@@ -134,8 +135,11 @@ export function JobForm({
       </div>
 
       <div className="space-y-1">
-        <BaseLabel>Descrição</BaseLabel>
+        <BaseLabel htmlFor={descriptionFieldId} required>
+          Descrição
+        </BaseLabel>
         <textarea
+          id={descriptionFieldId}
           required
           className="w-full min-h-[140px] px-3 py-2 border-0 rounded-lg text-sm text-foreground bg-muted focus:outline-none focus:ring-2 focus:ring-primary resize-y"
           placeholder="Descreva a vaga, responsabilidades e requisitos..."

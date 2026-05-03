@@ -194,8 +194,9 @@ export function useDeleteMyProfile() {
     mutationFn: () => ProfileApi.deleteMyProfile(),
     onSuccess: () => {
       qc.removeQueries({ queryKey: PROFILE_QUERY_KEY });
-      toast.success("Conta excluída", {
-        description: "Seu perfil foi removido da plataforma.",
+      toast.success("Conta suspensa", {
+        description:
+          "Você pode reativar sua conta a qualquer momento fazendo login novamente.",
         duration: 5000,
         position: "top-right",
         className:

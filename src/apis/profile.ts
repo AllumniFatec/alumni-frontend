@@ -53,9 +53,8 @@ export class ProfileApi {
 
   static async deleteMyProfile(): Promise<ProfileMutationMessage> {
     try {
-      const response = await apiBase.delete<ProfileMutationMessage>(
-        "/my-profile",
-      );
+      const response =
+        await apiBase.delete<ProfileMutationMessage>("/my-profile");
       return response.data;
     } catch (error) {
       console.error("deleteMyProfile error", error);

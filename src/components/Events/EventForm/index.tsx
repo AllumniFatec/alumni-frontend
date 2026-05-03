@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { useForm, Controller, type Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -73,12 +74,15 @@ function FormDateField({
   control,
   label,
   error,
+  required = true,
 }: {
   name: "date_start" | "date_end";
   control: Control<EventFormValues>;
   label: string;
   error?: string;
+  required?: boolean;
 }) {
+  const fieldId = useId();
   return (
     <Controller
       control={control}
@@ -87,10 +91,13 @@ function FormDateField({
         const selected = parseEventFormDateBr(field.value);
         return (
           <div className="space-y-1">
-            <BaseLabel>{label}</BaseLabel>
+            <BaseLabel htmlFor={fieldId} required={required}>
+              {label}
+            </BaseLabel>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
+                  id={fieldId}
                   type="button"
                   variant="outline"
                   className={cn(
@@ -144,11 +151,13 @@ function FormTimeField({
   control,
   label,
   error,
+  required = true,
 }: {
   name: "time_start" | "time_end";
   control: Control<EventFormValues>;
   label: string;
   error?: string;
+  required?: boolean;
 }) {
   return (
     <Controller
@@ -156,7 +165,7 @@ function FormTimeField({
       name={name}
       render={({ field }) => (
         <Input
-          className="bg-muted"
+          required={required}
           label={label}
           placeholder="00:00"
           inputMode="numeric"
@@ -207,6 +216,7 @@ export function EventForm({
   });
 
   const descriptionLength = watch("description")?.length ?? 0;
+  const descriptionFieldId = useId();
 
   return (
     <form
@@ -217,12 +227,14 @@ export function EventForm({
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
+          required
           label="Título"
           placeholder="Nome do evento"
           error={errors.title?.message}
           {...register("title")}
         />
         <Input
+          required
           label="Local"
           placeholder="Ex.: Auditório 1 ou Online — Google Meet"
           error={errors.local?.message}
@@ -231,8 +243,12 @@ export function EventForm({
       </div>
 
       <div className="space-y-1">
-        <BaseLabel>Descrição</BaseLabel>
+        <BaseLabel htmlFor={descriptionFieldId} required>
+          Descrição
+        </BaseLabel>
         <textarea
+          id={descriptionFieldId}
+          required
           className="w-full min-h-[140px] px-3 py-2 border-0 rounded-lg text-sm text-foreground bg-muted focus:outline-none focus:ring-2 focus:ring-primary resize-y"
           placeholder="Descreva o evento..."
           maxLength={3000}

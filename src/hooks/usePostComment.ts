@@ -111,8 +111,7 @@ export function useUpdateCommentMutation() {
           "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
       });
     },
-    onError: (error) => {
-      console.error("Error updating comment:", error);
+    onError: () => {
       toast.error("Erro ao atualizar comentário", {
         description: "Tente novamente.",
         duration: 5000,
@@ -140,8 +139,7 @@ export function useDeleteCommentMutation() {
           "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
       });
     },
-    onError: (error) => {
-      console.error("Error deleting comment:", error);
+    onError: () => {
       toast.error("Erro ao excluir comentário", {
         description: "Tente novamente.",
         duration: 5000,

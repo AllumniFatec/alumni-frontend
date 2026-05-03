@@ -20,7 +20,6 @@ export class EventApi {
       });
       return response.data;
     } catch (error) {
-      console.error("Error fetching events:", error);
       throw error;
     }
   }
@@ -30,7 +29,6 @@ export class EventApi {
       const response = await apiBase.get<EventDetail>(`/event/${id}`);
       return response.data;
     } catch (error) {
-      console.error("Error fetching event:", error);
       throw error;
     }
   }
@@ -48,7 +46,6 @@ export class EventApi {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user events:", error);
       throw error;
     }
   }
@@ -57,11 +54,9 @@ export class EventApi {
     data: EventWritePayload,
   ): Promise<{ message: string }> {
     try {
-      console.log("Creating event:", data);
       const response = await apiBase.post<{ message: string }>("/event", data);
       return response.data;
     } catch (error) {
-      console.error("Error creating event:", error);
       throw error;
     }
   }
@@ -77,7 +72,6 @@ export class EventApi {
       );
       return response.data;
     } catch (error) {
-      console.error("Error updating event:", error);
       throw error;
     }
   }
@@ -89,7 +83,6 @@ export class EventApi {
       );
       return response.data;
     } catch (error) {
-      console.error("Error deleting event:", error);
       throw error;
     }
   }
@@ -101,7 +94,6 @@ export class EventApi {
       );
       return response.data;
     } catch (error) {
-      console.error("Error closing event:", error);
       throw error;
     }
   }

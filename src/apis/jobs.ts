@@ -27,7 +27,6 @@ export class JobApi {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching user jobs:", error);
       throw error;
     }
   }
@@ -37,7 +36,6 @@ export class JobApi {
       const response = await apiBase.post<{ message: string }>("/job", data);
       return response.data;
     } catch (error) {
-      console.error("Error creating job:", error);
       throw error;
     }
   }

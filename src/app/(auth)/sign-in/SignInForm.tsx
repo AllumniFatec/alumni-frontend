@@ -85,7 +85,6 @@ export const SignInForm = () => {
         className:
           "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
       });
-      console.error("Erro no login:", error);
     },
   });
 

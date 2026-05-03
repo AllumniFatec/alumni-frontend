@@ -17,7 +17,6 @@ export class AdminApi {
         await apiBase.get<AdminDashboardResponse>("/admin/dashboard");
       return response.data;
     } catch (error) {
-      console.error("Error fetching admin dashboard:", error);
       throw error;
     }
   }
@@ -60,7 +59,6 @@ export class AdminApi {
         },
       };
     } catch (error) {
-      console.error("Error listing users in analysis:", page, error);
       throw error;
     }
   }
@@ -72,7 +70,6 @@ export class AdminApi {
       );
       return response.data;
     } catch (error) {
-      console.error("Error approving user:", userId, error);
       throw error;
     }
   }
@@ -84,7 +81,6 @@ export class AdminApi {
       );
       return response.data;
     } catch (error) {
-      console.error("Error refusing user:", userId, error);
       throw error;
     }
   }
@@ -99,7 +95,6 @@ export class AdminApi {
       );
       return response.data;
     } catch (error) {
-      console.error("Error listing admin users:", page, error);
       throw error;
     }
   }
@@ -115,7 +110,6 @@ export class AdminApi {
       );
       return response.data;
     } catch (error) {
-      console.error("Error searching admin users:", params, error);
       throw error;
     }
   }
@@ -131,7 +125,6 @@ export class AdminApi {
       );
       return response.data;
     } catch (error) {
-      console.error("Error changing user type:", userId, type, error);
       throw error;
     }
   }
@@ -147,7 +140,6 @@ export class AdminApi {
       );
       return response.data;
     } catch (error) {
-      console.error("Error banning user:", userId, error);
       throw error;
     }
   }

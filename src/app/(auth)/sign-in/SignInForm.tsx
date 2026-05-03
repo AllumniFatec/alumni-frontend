@@ -44,13 +44,37 @@ export const SignInForm = () => {
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
-        const errorMsg = error.response?.data?.error;
-        if (errorMsg === "Usuário em análise") {
+        const statusCode =
+          error.response?.data?.statusCode ?? error.response?.status;
+        if (statusCode === 423) {
           router.replace(AuthRoutes.PendingApproval);
           return;
         }
-        if (errorMsg === "Usuário banido permanentemente") {
+        if (statusCode === 403) {
           router.replace(AuthRoutes.BannedUser);
+          return;
+        }
+        if (statusCode === 422) {
+          router.replace(AuthRoutes.RefusedUser);
+          return;
+        }
+        if (statusCode === 409) {
+          const suspendedName = error.response?.data?.name;
+          const deletedAt = error.response?.data?.deleted_at;
+          const params = new URLSearchParams();
+
+          if (suspendedName) {
+            params.set("name", String(suspendedName));
+          }
+          if (deletedAt) {
+            params.set("deleted_at", String(deletedAt));
+          }
+
+          const suspendedRoute = params.toString()
+            ? `${AuthRoutes.SuspendedUser}?${params.toString()}`
+            : AuthRoutes.SuspendedUser;
+
+          router.replace(suspendedRoute);
           return;
         }
       }
@@ -72,6 +96,7 @@ export const SignInForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmitLogin)}>
       <Input
+        required
         {...register("email")}
         type="email"
         placeholder="E-mail"
@@ -81,6 +106,7 @@ export const SignInForm = () => {
 
       <div className="mb-6">
         <Input
+          required
           {...register("password")}
           type="password"
           placeholder="Senha"

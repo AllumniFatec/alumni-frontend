@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
+import axios from "axios";
 import { useParams } from "next/navigation";
+import { EmptyState } from "@/components/EmptyState";
 import { Section } from "@/components/Section";
 import { ErrorState } from "@/components/ErrorState";
 import { Spinner } from "@/components/ui/spinner";
@@ -12,7 +14,7 @@ import { ProfilePageContent } from "@/components/profile/ProfilePageContent";
 
 export default function ProfileByUserIdPage() {
   const params = useParams();
-  const userId = typeof params.userId === "string" ? params.userId : undefined;
+  const userId = typeof params?.userId === "string" ? params?.userId : undefined;
   const { user, isLoading: authLoading } = useAuth();
 
   const isSelf = useMemo(() => {
@@ -29,6 +31,8 @@ export default function ProfileByUserIdPage() {
 
   const { data, isLoading, isError, refetch, isFetching } =
     isSelf === true ? myProfileQuery : otherProfileQuery;
+  const error = isSelf === true ? undefined : otherProfileQuery.error;
+  const isNotFoundError = axios.isAxiosError(error) && error.response?.status === 404;
 
   const pageLoading = authLoading || isSelf === null || isLoading;
 
@@ -46,6 +50,17 @@ export default function ProfileByUserIdPage() {
     return (
       <Section title="Perfil">
         <p className="text-sm text-slate-500">Usuário inválido.</p>
+      </Section>
+    );
+  }
+
+  if (isNotFoundError) {
+    return (
+      <Section title="Perfil">
+        <EmptyState
+          title="Usuário não encontrado"
+          description="Este perfil não existe ou não está mais disponível."
+        />
       </Section>
     );
   }

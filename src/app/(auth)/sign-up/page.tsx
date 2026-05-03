@@ -19,7 +19,7 @@ import { UserType, UserGender, NewUser } from "@/models/users";
 import { AuthApi } from "@/apis/auth";
 import { mapUserType, mapGender } from "@/hooks/mapUserType";
 import { toast } from "sonner";
-import { useCourses } from "@/hooks/useNetwork";
+import { useCourses } from "@/hooks/useCourses";
 
 // Funçao refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
 export const signUpSchema = z
@@ -34,7 +34,7 @@ export const signUpSchema = z
       .max(100, "A senha deve ter no máximo 100 caracteres")
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,
-        "Senha inválida",
+        "a senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial",
       ),
     confirmPassword: z.string(),
     userType: z.enum(
@@ -146,6 +146,7 @@ const SignUpPage = () => {
           {/* COLUNA ESQUERDA */}
           <div className="flex flex-col">
             <Input
+              required
               {...register("fullName")}
               label="Nome completo"
               placeholder="Nome completo"
@@ -159,6 +160,7 @@ const SignUpPage = () => {
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
+                  required
                   label="Gênero"
                   error={errors.gender?.message}
                 >
@@ -181,6 +183,7 @@ const SignUpPage = () => {
             />
 
             <Input
+              required
               {...register("enrollmentYear")}
               label="Ano de ingresso"
               placeholder="2020"
@@ -192,10 +195,12 @@ const SignUpPage = () => {
           {/* COLUNA DIREITA */}
           <div className="flex flex-col ">
             <Input
+              required
               {...register("email")}
               type="email"
               label="E-mail"
               placeholder="seu-email@exemplo.com"
+              tooltip="Use o seu melhor e-mail; não é necessário ser o da FATEC."
               error={errors.email?.message}
             />
 
@@ -261,6 +266,7 @@ const SignUpPage = () => {
               {...register("studentId")}
               label="RA do estudante"
               placeholder="Digite seu RA (opcional)"
+              tooltip="Caso você lembre seu RA, o preenchimento não é obrigatório, mas ajuda a equipe administrativa a validar o seu cadastro mais rapidamente."
               error={errors.studentId?.message}
             />
           </div>
@@ -269,14 +275,17 @@ const SignUpPage = () => {
         {/* SENHAS */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 ">
           <Input
+            required
             {...register("password")}
             type="password"
             label="Senha"
             placeholder="Digite sua senha"
+            tooltip="Mínimo 8 caracteres, contendo letra maiúscula, minúscula, número e caractere especial."
             error={errors.password?.message}
           />
 
           <Input
+            required
             {...register("confirmPassword")}
             type="password"
             label="Confirmar senha"

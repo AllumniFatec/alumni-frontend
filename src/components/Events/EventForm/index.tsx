@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId } from "react";
 import { useForm, Controller, type Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -69,19 +69,20 @@ const eventFormSchema = z
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
 
-function FormDatePicker({
+function FormDateField({
   name,
   control,
   label,
   error,
+  required = true,
 }: {
   name: "date_start" | "date_end";
   control: Control<EventFormValues>;
   label: string;
   error?: string;
+  required?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
-
+  const fieldId = useId();
   return (
     <Controller
       control={control}
@@ -90,14 +91,17 @@ function FormDatePicker({
         const selected = parseEventFormDateBr(field.value);
         return (
           <div className="space-y-1">
-            <BaseLabel>{label}</BaseLabel>
-            <Popover open={open} onOpenChange={setOpen}>
+            <BaseLabel htmlFor={fieldId} required={required}>
+              {label}
+            </BaseLabel>
+            <Popover>
               <PopoverTrigger asChild>
                 <Button
+                  id={fieldId}
                   type="button"
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal h-10 px-3 rounded-lg border-0 text-sm text-foreground bg-primary-foreground sm:bg-muted focus:outline-none focus:ring-2 focus:ring-primary",
+                    "w-full justify-start text-left font-normal h-10 px-3 rounded-lg border-0 text-sm text-foreground bg-muted focus:outline-none focus:ring-2 focus:ring-primary",
                     !field.value && "text-muted-foreground",
                   )}
                 >
@@ -107,15 +111,25 @@ function FormDatePicker({
                     : "Selecione a data"}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
+              <PopoverContent
+                className="w-auto p-0"
+                align="start"
+                onOpenAutoFocus={(e) => e.preventDefault()}
+              >
                 <Calendar
                   mode="single"
                   locale={ptBR}
-                  selected={selected}
+                  selected={selected ?? undefined}
                   defaultMonth={selected ?? new Date()}
+                  fixedWeeks
+                  captionLayout="dropdown"
                   onSelect={(d) => {
                     field.onChange(d ? format(d, "dd/MM/yyyy") : "");
-                    setOpen(false);
+                  }}
+                  className="bg-white dark:bg-slate-950"
+                  classNames={{
+                    outside:
+                      "text-slate-400 opacity-80 aria-selected:text-slate-400 dark:text-slate-600 dark:aria-selected:text-slate-600",
                   }}
                 />
               </PopoverContent>
@@ -137,11 +151,13 @@ function FormTimeField({
   control,
   label,
   error,
+  required = true,
 }: {
   name: "time_start" | "time_end";
   control: Control<EventFormValues>;
   label: string;
   error?: string;
+  required?: boolean;
 }) {
   return (
     <Controller
@@ -149,6 +165,7 @@ function FormTimeField({
       name={name}
       render={({ field }) => (
         <Input
+          required={required}
           label={label}
           placeholder="00:00"
           inputMode="numeric"
@@ -199,6 +216,7 @@ export function EventForm({
   });
 
   const descriptionLength = watch("description")?.length ?? 0;
+  const descriptionFieldId = useId();
 
   return (
     <form
@@ -209,12 +227,14 @@ export function EventForm({
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
+          required
           label="Título"
           placeholder="Nome do evento"
           error={errors.title?.message}
           {...register("title")}
         />
         <Input
+          required
           label="Local"
           placeholder="Ex.: Auditório 1 ou Online — Google Meet"
           error={errors.local?.message}
@@ -223,9 +243,13 @@ export function EventForm({
       </div>
 
       <div className="space-y-1">
-        <BaseLabel>Descrição</BaseLabel>
+        <BaseLabel htmlFor={descriptionFieldId} required>
+          Descrição
+        </BaseLabel>
         <textarea
-          className="w-full min-h-[140px] px-3 py-2 border-0 rounded-lg text-sm text-foreground bg-primary-foreground sm:bg-muted focus:outline-none focus:ring-2 focus:ring-primary resize-y"
+          id={descriptionFieldId}
+          required
+          className="w-full min-h-[140px] px-3 py-2 border-0 rounded-lg text-sm text-foreground bg-muted focus:outline-none focus:ring-2 focus:ring-primary resize-y"
           placeholder="Descreva o evento..."
           maxLength={3000}
           {...register("description")}
@@ -243,7 +267,7 @@ export function EventForm({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <FormDatePicker
+        <FormDateField
           name="date_start"
           control={control}
           label="Data de início"
@@ -255,7 +279,7 @@ export function EventForm({
           label="Hora de início"
           error={errors.time_start?.message}
         />
-        <FormDatePicker
+        <FormDateField
           name="date_end"
           control={control}
           label="Data de término"

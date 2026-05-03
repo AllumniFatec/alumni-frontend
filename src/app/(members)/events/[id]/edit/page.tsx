@@ -15,7 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function EventEditPage() {
   const params = useParams();
   const router = useRouter();
-  const id = params.id as string;
+  const id = params?.id as string;
 
   const { isLoading: authLoading } = useAuth();
   const { canManageEvents } = useCanManageEvents();

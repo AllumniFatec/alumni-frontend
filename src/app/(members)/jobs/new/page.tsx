@@ -15,9 +15,9 @@ export default function JobNewPage() {
       await createJob(data);
       toast.success("Vaga publicada com sucesso!");
       router.push("/jobs");
-    } catch {
+    } catch(error: any) {
       toast.error("Erro ao publicar a vaga", {
-        description: "Verifique os dados e tente novamente.",
+        description: error.response?.data?.error ?? "Verifique os dados e tente novamente.",
       });
     }
   }

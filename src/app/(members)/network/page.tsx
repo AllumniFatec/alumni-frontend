@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 import { NetworkToolbar } from "@/components/network/NetworkToolbar";
 import { ProfileCard } from "@/components/users/ProfileCard";
 import { useUsersList, useUserSearch, usersQueryKeys } from "@/hooks/useUsers";
-import { useCourses, useWorkplaces } from "@/hooks/useNetwork";
+import { useCourses } from "@/hooks/useCourses";
+import { useWorkplaces } from "@/hooks/useNetwork";
 
 const SEARCH_DEBOUNCE_MS = 320;
 
@@ -193,7 +194,7 @@ export default function NetworkPage() {
           </div>
         )}
 
-        {loadMoreQuery.hasNextPage && (
+        {loadMoreQuery?.hasNextPage ? (
           <div className="flex justify-center mt-8">
             <Button
               type="button"
@@ -206,7 +207,7 @@ export default function NetworkPage() {
                 : "Carregar mais"}
             </Button>
           </div>
-        )}
+        ) : null}
       </Section>
     </div>
   );

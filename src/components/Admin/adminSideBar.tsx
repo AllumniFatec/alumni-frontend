@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users } from "lucide-react";
+import { BookOpen, LayoutDashboard, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Sidebar,
@@ -27,10 +27,16 @@ const nav = [
     icon: Users,
     match: (path: string) => path.startsWith("/admin/users"),
   },
+  {
+    href: "/admin/courses",
+    label: "Cursos",
+    icon: BookOpen,
+    match: (path: string) => path.startsWith("/admin/courses"),
+  },
 ];
 
 export function AdminSideBar() {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
 
   return (
     <Sidebar

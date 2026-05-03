@@ -19,7 +19,7 @@ import { UserType, UserGender, NewUser } from "@/models/users";
 import { AuthApi } from "@/apis/auth";
 import { mapUserType, mapGender } from "@/hooks/mapUserType";
 import { toast } from "sonner";
-import { useCourses } from "@/hooks/useNetwork";
+import { useCourses } from "@/hooks/useCourses";
 
 // Funçao refine permite validações adicionais em campos específicos, como o campo de senha ser igual ao confirmar senha
 export const signUpSchema = z

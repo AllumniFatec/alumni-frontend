@@ -37,6 +37,8 @@ const eslintConfig = tseslint.config(
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-expressions": "error",
 
+      "no-console": "error",
+
       // Imports restritos (se quiser)
       "no-restricted-imports": [
         "error",

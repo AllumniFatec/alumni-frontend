@@ -9,7 +9,6 @@ export class FeedApi {
       });
       return response.data;
     } catch (error) {
-      console.error("getFeed error", error);
       throw error;
     }
   }

@@ -14,7 +14,6 @@ export class NotificationApi {
     try {
       await apiBase.patch(`/notification/${id}`);
     } catch (error) {
-      console.error("Error mark notification as read:", error);
       throw error;
     }
   }

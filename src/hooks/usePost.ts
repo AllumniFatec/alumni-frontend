@@ -133,8 +133,7 @@ export function useCreatePostMutation() {
           "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
       });
     },
-    onError: (error) => {
-      console.error("Error creating post:", error);
+    onError: () => {
       toast.error("Erro ao criar post", {
         description: "Verifique seus dados e tente novamente.",
         duration: 5000,
@@ -161,8 +160,7 @@ export function useUpdatePostMutation() {
           "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
       });
     },
-    onError: (error) => {
-      console.error("Error updating post:", error);
+    onError: () => {
       toast.error("Erro ao atualizar post", {
         description: "Verifique seus dados e tente novamente.",
         duration: 5000,
@@ -189,8 +187,7 @@ export function useDeletePostMutation() {
           "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
       });
     },
-    onError: (error) => {
-      console.error("Error deleting post:", error);
+    onError: () => {
       toast.error("Erro ao deletar post", {
         description: "Verifique seus dados e tente novamente.",
         duration: 5000,

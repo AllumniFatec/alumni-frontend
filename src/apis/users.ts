@@ -14,7 +14,6 @@ export class UserApi {
       });
       return response.data;
     } catch (error) {
-      console.error("UserApi.getUsersPage", error);
       throw error;
     }
   }
@@ -44,7 +43,6 @@ export class UserApi {
       });
       return response.data;
     } catch (error) {
-      console.error("UserApi.searchUsers", error);
       throw error;
     }
   }
@@ -57,7 +55,6 @@ export class UserApi {
       );
       return response.data;
     } catch (error) {
-      console.error("UserApi.getUserById", error);
       throw error;
     }
   }

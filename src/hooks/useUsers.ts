@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback } from "react";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { AuthApi } from "@/apis/auth";
+import { AuthRoutes } from "@/config/routes";
 import { UserApi } from "@/apis/users";
 
 export const usersQueryKeys = {
@@ -81,11 +85,38 @@ export function useUserSearch(search: string) {
   };
 }
 
+export function useReactivateAccount() {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: () => AuthApi.reactivate(),
+    onSuccess: () => {
+      toast.success("Conta reativada com sucesso", {
+        description: "Faça login novamente para acessar o sistema.",
+        duration: 5000,
+        position: "top-right",
+      });
+      router.replace(AuthRoutes.SignIn);
+    },
+    onError: () => {
+      toast.error("Algo deu errado", {
+        description:
+          "Não foi possível reativar sua conta. Tente novamente mais tarde.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    },
+  });
+}
+
 export function useUserById(userId: string | undefined) {
-  const { data, isLoading, isError, refetch, isFetching } = useQuery({
+  const { data, isLoading, isError, refetch, isFetching, error } = useQuery({
     queryKey: usersQueryKeys.detail(userId ?? ""),
     queryFn: () => UserApi.getUserById(userId!),
     enabled: Boolean(userId),
+    retry: false,
   });
 
   const refetchUser = useCallback(() => {
@@ -98,5 +129,6 @@ export function useUserById(userId: string | undefined) {
     isError,
     refetch: refetchUser,
     isFetching,
+    error,
   };
 }

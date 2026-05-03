@@ -35,16 +35,16 @@ export function PostCommentRow({
             />
           </Link>
         ) : (
-          <Link
-            href={`/profile/${c.user_id}`}
-            className="hover:cursor-pointer hover:underline"
-          >
-            <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
+          <div className="size-full rounded-full bg-gray-300 flex items-center justify-center">
+            <Link
+              href={`/profile/${c.user_id}`}
+              className="hover:cursor-pointer"
+            >
               <span className="text-sm font-semibold text-white">
                 {c.user_name?.[0]}
               </span>
-            </div>
-          </Link>
+            </Link>
+          </div>
         )}
       </div>
       <div

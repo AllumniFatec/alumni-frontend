@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MessageCircle, GraduationCap, LogOut, User } from "lucide-react";
+import { useState } from "react";
+import {
+  MessageCircle,
+  GraduationCap,
+  LogOut,
+  User,
+  Trash2,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import type { AuthUser } from "@/context/AuthContext";
@@ -16,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useLogout } from "@/hooks/useLogout";
 import Image from "next/image";
+import { DeleteProfileDialog } from "@/components/profile/delete-profile";
 
 interface NavItem {
   label: string;
@@ -38,6 +46,8 @@ const navItems: NavItem[] = [
 
 export function Header() {
   const pathname = usePathname();
+  const [isDeleteProfileDialogOpen, setIsDeleteProfileDialogOpen] =
+    useState(false);
 
   const { user } = useAuth();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
@@ -136,6 +146,14 @@ export function Header() {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
+                  className="cursor-pointer"
+                  onSelect={() => setIsDeleteProfileDialogOpen(true)}
+                >
+                  <Trash2 />
+                  Excluir Conta
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
                   variant="destructive"
                   disabled={isLoggingOut}
                   onSelect={(e) => {
@@ -148,6 +166,10 @@ export function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            <DeleteProfileDialog
+              open={isDeleteProfileDialogOpen}
+              onOpenChange={setIsDeleteProfileDialogOpen}
+            />
           </div>
         </div>
 

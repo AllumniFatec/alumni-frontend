@@ -1,5 +1,6 @@
 import { AuthResponse, LoginUser, NewUser } from "@/models/users";
 import { apiBase } from "@/lib/axiosInstance";
+import { ApiRoutes } from "@/config/routes";
 
 export class AuthApi {
   static async signIn(loginInUser: LoginUser): Promise<AuthResponse> {
@@ -81,10 +82,22 @@ export class AuthApi {
 
   static async logout(): Promise<{ message: string }> {
     try {
-      const response = await apiBase.post<{ message: string }>("/auth/logout");
+      const response = await apiBase.post<{ message: string }>(ApiRoutes.Logout);
       return response.data;
     } catch (error) {
       console.error("logout error", error);
+      throw error;
+    }
+  }
+
+  static async reactivate(): Promise<{ message: string }> {
+    try {
+      const response = await apiBase.post<{ message: string }>(
+        ApiRoutes.Reactivate,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("reactivate error", error);
       throw error;
     }
   }

@@ -5,10 +5,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
     // O segredo: min-h-screen no flex-col para o Footer sempre ficar no fim
     <div className="relative flex min-h-screen w-full flex-col bg-slate-900">
-      <div
-        className="pointer-events-none fixed inset-0 z-0"
-        aria-hidden
-      >
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
         <Image
           src="/fachada-fatec.png"
           alt=""

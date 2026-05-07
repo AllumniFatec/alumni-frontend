@@ -20,6 +20,8 @@ import {
   addSkillSchema,
   type AddSkillFormValues,
 } from "@/components/profile/skills/skillFormSchema";
+import { useSkills } from "@/hooks/useNetwork";
+import { DataList } from "@/models/datalist";
 
 export type ProfileSkillsManageDialogHandle = {
   open: () => void;
@@ -37,6 +39,16 @@ export const ProfileSkillsManageDialog = forwardRef<
     resolver: zodResolver(addSkillSchema),
     defaultValues: { skill: "" },
   });
+
+  const { data: skills } = useSkills();
+
+  const skillsList: DataList[] =
+    skills?.map(
+      (skill): DataList => ({
+        id: skill.skill_id,
+        name: skill.name,
+      }),
+    ) ?? [];
 
   useImperativeHandle(ref, () => ({
     open: () => setOpen(true),
@@ -79,6 +91,7 @@ export const ProfileSkillsManageDialog = forwardRef<
               placeholder="Ex.: Python"
               autoComplete="off"
               className="w-full min-w-0"
+              options={skillsList}
             />
             {form.formState.errors.skill && (
               <p className="text-xs text-red-500">

@@ -23,6 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import { useWorkplaces } from "@/hooks/useNetwork";
+import { DataList } from "@/models/datalist";
 
 const jobSchema = z.object({
   title: z.string().min(3, "Título deve ter pelo menos 3 caracteres"),
@@ -43,11 +45,7 @@ const jobSchema = z.object({
   work_model: z.nativeEnum(WorkModel, {
     error: "Modelo de trabalho é obrigatório",
   }),
-  url: z
-    .string()
-    .trim()
-    .optional()
-    .or(z.literal("")),
+  url: z.string().trim().optional().or(z.literal("")),
 });
 
 export type JobFormValues = z.infer<typeof jobSchema>;
@@ -115,6 +113,16 @@ export function JobForm({
     }
   }
 
+  const { data: workplaces } = useWorkplaces();
+
+  const workplacesList: DataList[] =
+    workplaces?.map(
+      (workplace): DataList => ({
+        id: workplace.workplace_id,
+        name: workplace.company,
+      }),
+    ) ?? [];
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -130,6 +138,7 @@ export function JobForm({
           label="Empresa"
           placeholder="Nome exato da empresa cadastrada no sistema"
           error={errors.workplace_name?.message}
+          options={workplacesList}
           {...register("workplace_name")}
         />
       </div>

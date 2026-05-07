@@ -29,6 +29,8 @@ import {
   parseProfileIsoDate,
 } from "@/components/profile/workplace-history/professionalHistoryDates";
 import { ProfessionalHistoryDateField } from "@/components/profile/workplace-history/ProfessionalHistoryDateField";
+import { useWorkplaces } from "@/hooks/useNetwork";
+import { DataList } from "@/models/datalist";
 
 const defaultValues: ProfessionalHistoryFormValues = {
   company_name: "",
@@ -62,6 +64,16 @@ export const ProfessionalHistoryFormDialog = forwardRef<
     resolver: zodResolver(professionalHistoryFormSchema),
     defaultValues,
   });
+
+  const { data: workplaces } = useWorkplaces();
+
+  const workplacesList: DataList[] =
+    workplaces?.map(
+      (workplace): DataList => ({
+        id: workplace.workplace_id,
+        name: workplace.company,
+      }),
+    ) ?? [];
 
   const isCurrent = form.watch("is_current");
 
@@ -152,6 +164,7 @@ export const ProfessionalHistoryFormDialog = forwardRef<
               placeholder="Ex.: ACME Ltda."
               autoComplete="organization"
               className="w-full min-w-0 bg-slate-100 dark:bg-slate-800/80"
+              options={workplacesList}
             />
             {form.formState.errors.company_name && (
               <p className="text-xs text-red-500">

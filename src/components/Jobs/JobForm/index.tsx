@@ -14,6 +14,7 @@ import {
 } from "@/models/job";
 import { BaseLabel } from "@/components/BaseLabel";
 import { Input } from "@/components/ui/input";
+import { DatalistInput } from "@/components/ui/datalist-input";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -133,13 +134,20 @@ export function JobForm({
           error={errors.title?.message}
           {...register("title")}
         />
-        <Input
-          required
-          label="Empresa"
-          placeholder="Nome exato da empresa cadastrada no sistema"
-          error={errors.workplace_name?.message}
-          options={workplacesList}
-          {...register("workplace_name")}
+        <Controller
+          name="workplace_name"
+          control={control}
+          render={({ field }) => (
+            <DatalistInput
+              required
+              label="Empresa"
+              value={field.value}
+              onChange={field.onChange}
+              datalist={workplacesList}
+              placeholder="Nome da empresa"
+              error={errors.workplace_name?.message}
+            />
+          )}
         />
       </div>
 

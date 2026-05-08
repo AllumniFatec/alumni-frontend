@@ -1,45 +1,62 @@
-import * as React from "react";
 import { useState, useId } from "react";
 
 import { cn } from "@/lib/utils";
 import { BaseLabel } from "@/components/BaseLabel";
-import { Eye, EyeOff, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-interface InputProps extends React.ComponentProps<"input"> {
+type InputDatalist = { id: string | number; name: string };
+
+interface DatalistInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  datalist?: InputDatalist[];
   error?: string;
   label?: string;
   tooltip?: string;
   description?: string;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  id?: string;
+  className?: string;
+  autoComplete?: string;
 }
 
-function Input({
-  className,
-  type,
+function DatalistInput({
+  value,
+  onChange,
+  datalist,
   error,
   label,
   tooltip,
   description,
+  placeholder,
+  required = false,
+  disabled = false,
   id,
-  ...props
-}: InputProps) {
+  className,
+  autoComplete = "off",
+}: DatalistInputProps) {
   const generatedId = useId();
   const inputId = id || `input-${generatedId}`;
-  const [showPassword, setShowPassword] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const isPassword = type === "password";
-  const inputType = isPassword && showPassword ? "text" : type;
+  const q = value.trim().toLowerCase();
+  const filtered = q
+    ? (datalist ?? []).filter((o) => o.name.toLowerCase().includes(q))
+    : (datalist ?? []);
 
   return (
     <div className="w-full">
       {label && (
         <BaseLabel htmlFor={inputId} className="flex items-center gap-1">
           <span>{label}</span>
-          {props.required && (
+          {required && (
             <span className="text-destructive" aria-hidden="true">
               *
             </span>
@@ -65,13 +82,22 @@ function Input({
       )}
       <div className="relative">
         <input
-          required={props.required ?? false}
+          required={required}
           id={inputId}
-          type={inputType}
+          type="text"
+          value={value}
+          onChange={(e) => {
+            onChange(e.target.value);
+            setIsOpen(true);
+          }}
+          onFocus={() => setIsOpen(true)}
+          onBlur={() => setTimeout(() => setIsOpen(false), 150)}
+          placeholder={placeholder}
+          disabled={disabled}
+          autoComplete={autoComplete}
           className={cn(
             "w-full h-10 px-3 py-2 border-0 rounded-lg text-sm text-foreground",
             "placeholder:text-xs placeholder:text-muted-foreground/60",
-            // AQUI ESTAVA O ERRO: mudamos de "bg-primary-foreground sm:bg-muted" para apenas "bg-muted"
             "bg-muted",
             "focus:outline-none focus:ring-2",
             "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
@@ -79,24 +105,25 @@ function Input({
             error
               ? "focus:ring-red-500 bg-red-50 border border-red-500"
               : "focus:ring-primary",
-            isPassword && "pr-10",
             className,
           )}
-          {...props}
         />
-        {isPassword && (
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-            tabIndex={-1}
-          >
-            {showPassword ? (
-              <Eye className="h-4 w-4" />
-            ) : (
-              <EyeOff className="h-4 w-4" />
-            )}
-          </button>
+        {isOpen && filtered.length > 0 && (
+          <ul className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-lg border bg-white dark:bg-zinc-900 shadow-lg">
+            {filtered.map((item) => (
+              <li
+                key={item.id}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  onChange(item.name);
+                  setIsOpen(false);
+                }}
+                className="cursor-pointer px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+              >
+                {item.name}
+              </li>
+            ))}
+          </ul>
         )}
       </div>
       {description && (
@@ -115,4 +142,4 @@ function Input({
   );
 }
 
-export { Input };
+export { DatalistInput };

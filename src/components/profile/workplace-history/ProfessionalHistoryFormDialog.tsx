@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatalistInput } from "@/components/ui/datalist-input";
 import { BaseLabel } from "@/components/BaseLabel";
 import { Spinner } from "@/components/ui/spinner";
 import {
@@ -156,22 +157,23 @@ export const ProfessionalHistoryFormDialog = forwardRef<
           className="space-y-3"
           id="professional-history-form"
         >
-          <div className="space-y-1.5">
-            <BaseLabel htmlFor="ph-company">Empresa</BaseLabel>
-            <Input
-              id="ph-company"
-              {...form.register("company_name")}
-              placeholder="Ex.: ACME Ltda."
-              autoComplete="organization"
-              className="w-full min-w-0 bg-slate-100 dark:bg-slate-800/80"
-              options={workplacesList}
-            />
-            {form.formState.errors.company_name && (
-              <p className="text-xs text-red-500">
-                {form.formState.errors.company_name.message}
-              </p>
+          <Controller
+            name="company_name"
+            control={form.control}
+            render={({ field }) => (
+              <DatalistInput
+                id="ph-company"
+                label="Empresa"
+                value={field.value}
+                onChange={field.onChange}
+                datalist={workplacesList}
+                placeholder="Ex.: ACME Ltda."
+                autoComplete="organization"
+                className="w-full min-w-0 bg-slate-100 dark:bg-slate-800/80"
+                error={form.formState.errors.company_name?.message}
+              />
             )}
-          </div>
+          />
 
           <div className="space-y-1.5">
             <BaseLabel htmlFor="ph-position">Cargo</BaseLabel>

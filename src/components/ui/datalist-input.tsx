@@ -46,7 +46,7 @@ function DatalistInput({
   const inputId = id || `input-${generatedId}`;
   const [isOpen, setIsOpen] = useState(false);
 
-  const q = value.trim().toLowerCase();
+  const q = (value ?? "").trim().toLowerCase();
   const filtered = q
     ? (datalist ?? []).filter((o) => o.name.toLowerCase().includes(q))
     : (datalist ?? []);

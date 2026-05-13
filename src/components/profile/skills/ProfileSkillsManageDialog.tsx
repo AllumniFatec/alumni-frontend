@@ -1,6 +1,12 @@
 "use client";
 
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+  useMemo,
+} from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAddProfileSkill } from "@/hooks/useProfile";
@@ -42,13 +48,16 @@ export const ProfileSkillsManageDialog = forwardRef<
 
   const { data: skills } = useSkills();
 
-  const skillsList: DataList[] =
-    skills?.map(
-      (skill): DataList => ({
-        id: skill.skill_id,
-        name: skill.name,
-      }),
-    ) ?? [];
+  const skillsList = useMemo<DataList[]>(
+    () =>
+      skills?.map(
+        (skill): DataList => ({
+          id: skill.skill_id,
+          name: skill.name,
+        }),
+      ) ?? [],
+    [skills],
+  );
 
   useImperativeHandle(ref, () => ({
     open: () => setOpen(true),

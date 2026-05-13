@@ -1,6 +1,12 @@
 "use client";
 
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+  useMemo,
+} from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -68,13 +74,16 @@ export const ProfessionalHistoryFormDialog = forwardRef<
 
   const { data: workplaces } = useWorkplaces();
 
-  const workplacesList: DataList[] =
-    workplaces?.map(
-      (workplace): DataList => ({
-        id: workplace.workplace_id,
-        name: workplace.company,
-      }),
-    ) ?? [];
+  const workplacesList = useMemo<DataList[]>(
+    () =>
+      workplaces?.map(
+        (workplace): DataList => ({
+          id: workplace.workplace_id,
+          name: workplace.company,
+        }),
+      ) ?? [],
+    [workplaces],
+  );
 
   const isCurrent = form.watch("is_current");
 
@@ -162,7 +171,7 @@ export const ProfessionalHistoryFormDialog = forwardRef<
             control={form.control}
             render={({ field }) => (
               <DatalistInput
-                id="ph-company"
+                id="professional-history-company-name"
                 label="Empresa"
                 value={field.value}
                 onChange={field.onChange}

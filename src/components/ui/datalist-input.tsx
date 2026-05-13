@@ -1,4 +1,4 @@
-import { useState, useId } from "react";
+import { useState, type MouseEvent } from "react";
 
 import { cn } from "@/lib/utils";
 import { BaseLabel } from "@/components/BaseLabel";
@@ -8,13 +8,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
-type InputDatalist = { id: string | number; name: string };
+import { DataList } from "@/models/datalist";
 
 interface DatalistInputProps {
   value: string;
   onChange: (value: string) => void;
-  datalist?: InputDatalist[];
+  datalist?: DataList[];
   error?: string;
   label?: string;
   tooltip?: string;
@@ -42,14 +41,22 @@ function DatalistInput({
   className,
   autoComplete = "off",
 }: DatalistInputProps) {
-  const generatedId = useId();
-  const inputId = id || `input-${generatedId}`;
+  const inputId = id;
   const [isOpen, setIsOpen] = useState(false);
 
-  const q = (value ?? "").trim().toLowerCase();
-  const filtered = q
-    ? (datalist ?? []).filter((o) => o.name.toLowerCase().includes(q))
+  const valueName = (value ?? "").trim().toLowerCase();
+  const filteredValue = valueName
+    ? (datalist ?? []).filter((o) => o.name.toLowerCase().includes(valueName))
     : (datalist ?? []);
+
+  function handleSelectDatalistItem(
+    e: MouseEvent<HTMLLIElement>,
+    item: DataList,
+  ) {
+    e.preventDefault();
+    onChange(item.name);
+    setIsOpen(false);
+  }
 
   return (
     <div className="w-full">
@@ -108,16 +115,12 @@ function DatalistInput({
             className,
           )}
         />
-        {isOpen && filtered.length > 0 && (
+        {isOpen && filteredValue.length > 0 && (
           <ul className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-lg border bg-white dark:bg-zinc-900 shadow-lg">
-            {filtered.map((item) => (
+            {filteredValue.map((item) => (
               <li
                 key={item.id}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  onChange(item.name);
-                  setIsOpen(false);
-                }}
+                onMouseDown={(e) => handleSelectDatalistItem(e, item)}
                 className="cursor-pointer px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
               >
                 {item.name}

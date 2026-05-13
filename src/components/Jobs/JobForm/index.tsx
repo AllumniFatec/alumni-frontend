@@ -3,7 +3,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useId, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import {
   EmploymentType,
   EmploymentTypeLabel,
@@ -116,13 +116,16 @@ export function JobForm({
 
   const { data: workplaces } = useWorkplaces();
 
-  const workplacesList: DataList[] =
-    workplaces?.map(
-      (workplace): DataList => ({
-        id: workplace.workplace_id,
-        name: workplace.company,
-      }),
-    ) ?? [];
+  const workplacesList = useMemo<DataList[]>(
+    () =>
+      workplaces?.map(
+        (workplace): DataList => ({
+          id: workplace.workplace_id,
+          name: workplace.company,
+        }),
+      ) ?? [],
+    [workplaces],
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -139,6 +142,7 @@ export function JobForm({
           control={control}
           render={({ field }) => (
             <DatalistInput
+              id="job-workplace-name"
               required
               label="Empresa"
               value={field.value}

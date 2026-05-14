@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useEffect, useState, useMemo, ComponentRef } from "react";
 import { usePathname } from "next/navigation";
 import { Search } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -23,8 +23,8 @@ export function ChatList() {
     isFetchingNextPage,
   } = useChats();
   const [search, setSearch] = useState("");
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const bottomAnchorRef = useRef<ComponentRef<"div">>(null);
+  const scrollContainerRef = useRef<ComponentRef<"div">>(null);
 
   const activeChatId = useMemo(() => {
     const match = pathname.match(/^\/messages\/(.+)$/);
@@ -44,7 +44,7 @@ export function ChatList() {
   }, [chats, search, user?.id]);
 
   useEffect(() => {
-    const sentinel = sentinelRef.current;
+    const sentinel = bottomAnchorRef.current;
     const container = scrollContainerRef.current;
     if (!sentinel || !container) return;
 
@@ -118,7 +118,7 @@ export function ChatList() {
                 <Spinner className="size-5 text-primary" />
               </div>
             )}
-            <div ref={sentinelRef} className="h-1" />
+            <div ref={bottomAnchorRef} className="h-1" />
           </>
         )}
       </div>

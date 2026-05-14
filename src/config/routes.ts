@@ -23,6 +23,7 @@ export enum MembersRoutes {
   JobNew = "/jobs/new",
   JobEdit = "/jobs/:id/edit",
   Profile = "/profile",
+  Messages = "/messages",
 }
 
 export enum ApiRoutes {

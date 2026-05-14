@@ -22,6 +22,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLogout } from "@/hooks/useLogout";
+import { useUnreadCount } from "@/hooks/useChat";
+import { MembersRoutes } from "@/config/routes";
 import Image from "next/image";
 import { DeleteProfileDialog } from "@/components/profile/delete-profile";
 
@@ -51,6 +53,7 @@ export function Header() {
 
   const { user } = useAuth();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
+  const { data: unreadMessages } = useUnreadCount(!!user);
 
   const navLinks = (
     <>
@@ -101,11 +104,18 @@ export function Header() {
           <div className="flex items-center gap-4">
             <NotificationBell />
 
-            {/* 
-            <button className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+            <Link
+              href={MembersRoutes.Messages}
+              aria-label="Abrir mensagens"
+              className="relative p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+            >
               <MessageCircle className="size-5" />
-            </button>
-            */}
+              {unreadMessages > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 flex min-w-[18px] h-[18px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+                  {unreadMessages > 99 ? "99+" : unreadMessages}
+                </span>
+              )}
+            </Link>
 
             <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
 

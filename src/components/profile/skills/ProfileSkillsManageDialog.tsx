@@ -1,7 +1,13 @@
 "use client";
 
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { useForm } from "react-hook-form";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+  useMemo,
+} from "react";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAddProfileSkill } from "@/hooks/useProfile";
 import {
@@ -13,13 +19,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { DatalistInput } from "@/components/ui/datalist-input";
 import { BaseLabel } from "@/components/BaseLabel";
 import { Spinner } from "@/components/ui/spinner";
 import {
   addSkillSchema,
   type AddSkillFormValues,
 } from "@/components/profile/skills/skillFormSchema";
+import { useSkills } from "@/hooks/useNetwork";
+import { DataList } from "@/models/datalist";
 
 export type ProfileSkillsManageDialogHandle = {
   open: () => void;
@@ -37,6 +45,19 @@ export const ProfileSkillsManageDialog = forwardRef<
     resolver: zodResolver(addSkillSchema),
     defaultValues: { skill: "" },
   });
+
+  const { data: skills } = useSkills();
+
+  const skillsList = useMemo<DataList[]>(
+    () =>
+      skills?.map(
+        (skill): DataList => ({
+          id: skill.skill_id,
+          name: skill.name,
+        }),
+      ) ?? [],
+    [skills],
+  );
 
   useImperativeHandle(ref, () => ({
     open: () => setOpen(true),
@@ -71,21 +92,23 @@ export const ProfileSkillsManageDialog = forwardRef<
           className="space-y-3"
           id="profile-skills-add-form"
         >
-          <div className="space-y-1.5">
-            <BaseLabel htmlFor="profile-skill-name">Skill</BaseLabel>
-            <Input
-              id="profile-skill-name"
-              {...form.register("skill")}
-              placeholder="Ex.: Python"
-              autoComplete="off"
-              className="w-full min-w-0"
-            />
-            {form.formState.errors.skill && (
-              <p className="text-xs text-red-500">
-                {form.formState.errors.skill.message}
-              </p>
+          <Controller
+            name="skill"
+            control={form.control}
+            render={({ field }) => (
+              <DatalistInput
+                id="profile-skill-name"
+                label="Skill"
+                value={field.value}
+                onChange={field.onChange}
+                datalist={skillsList}
+                placeholder="Ex.: Python"
+                autoComplete="off"
+                className="w-full min-w-0"
+                error={form.formState.errors.skill?.message}
+              />
             )}
-          </div>
+          />
         </form>
 
         <DialogFooter className="gap-2 sm:gap-0">

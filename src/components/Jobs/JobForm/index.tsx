@@ -3,7 +3,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useId, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import {
   EmploymentType,
   EmploymentTypeLabel,
@@ -14,6 +14,7 @@ import {
 } from "@/models/job";
 import { BaseLabel } from "@/components/BaseLabel";
 import { Input } from "@/components/ui/input";
+import { DatalistInput } from "@/components/ui/datalist-input";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -23,6 +24,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import { useWorkplaces } from "@/hooks/useNetwork";
+import { DataList } from "@/models/datalist";
 
 const jobSchema = z.object({
   title: z.string().min(3, "Título deve ter pelo menos 3 caracteres"),
@@ -43,11 +46,7 @@ const jobSchema = z.object({
   work_model: z.nativeEnum(WorkModel, {
     error: "Modelo de trabalho é obrigatório",
   }),
-  url: z
-    .string()
-    .trim()
-    .optional()
-    .or(z.literal("")),
+  url: z.string().trim().optional().or(z.literal("")),
 });
 
 export type JobFormValues = z.infer<typeof jobSchema>;
@@ -115,6 +114,19 @@ export function JobForm({
     }
   }
 
+  const { data: workplaces } = useWorkplaces();
+
+  const workplacesList = useMemo<DataList[]>(
+    () =>
+      workplaces?.map(
+        (workplace): DataList => ({
+          id: workplace.workplace_id,
+          name: workplace.company,
+        }),
+      ) ?? [],
+    [workplaces],
+  );
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -125,12 +137,21 @@ export function JobForm({
           error={errors.title?.message}
           {...register("title")}
         />
-        <Input
-          required
-          label="Empresa"
-          placeholder="Nome exato da empresa cadastrada no sistema"
-          error={errors.workplace_name?.message}
-          {...register("workplace_name")}
+        <Controller
+          name="workplace_name"
+          control={control}
+          render={({ field }) => (
+            <DatalistInput
+              id="job-workplace-name"
+              required
+              label="Empresa"
+              value={field.value}
+              onChange={field.onChange}
+              datalist={workplacesList}
+              placeholder="Nome da empresa"
+              error={errors.workplace_name?.message}
+            />
+          )}
         />
       </div>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { MessageCircle } from "lucide-react";
 import type { MyProfile } from "@/models/profile";
 import type { UserPublicProfileDetail } from "@/models/userPublic";
 import { ProfileSummarySection } from "@/components/profile/ProfileSummarySection";
@@ -13,6 +14,8 @@ import { ProfileJobsSection } from "@/components/profile/ProfileJobsSection";
 import { ProfileEventsSection } from "@/components/profile/ProfileEventsSection";
 import { ProfilePostsSection } from "@/components/profile/ProfilePostsSection";
 import { ProfilePhotoEditDialog } from "@/components/profile/ProfilePhotoEditDialog";
+import { Button } from "@/components/ui/button";
+import { useStartChat } from "@/hooks/useChat";
 import { getUserInitials } from "@/lib/utils";
 
 export type ProfilePageContentProps = {
@@ -31,6 +34,7 @@ export function ProfilePageContent({
   );
   const photoUrl = profile.perfil_photo?.url ?? null;
   const infoVariant = isOwnProfile ? "full" : "public";
+  const { mutate: startChat, isPending: isStartingChat } = useStartChat();
 
   return (
     <>
@@ -62,8 +66,19 @@ export function ProfilePageContent({
             </div>
           </div>
 
-          <h2 className="text-xl font-bold text-slate-800">{profile.name}</h2>
-          {/*<p className="text-sm text-slate-500 mb-1">{profile.user_type}</p>*/}
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <h2 className="text-xl font-bold text-slate-800">{profile.name}</h2>
+            {!isOwnProfile && viewerUserId && (
+              <Button
+                size="sm"
+                onClick={() => startChat(profile.user_id)}
+                disabled={isStartingChat}
+              >
+                <MessageCircle className="mr-1.5 h-4 w-4" />
+                {isStartingChat ? "Abrindo..." : "Enviar Mensagem"}
+              </Button>
+            )}
+          </div>
 
           <ProfileSummarySection profile={profile} />
           <ProfileInformationSection profile={profile} variant={infoVariant} />

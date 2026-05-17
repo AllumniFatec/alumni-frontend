@@ -42,7 +42,7 @@ export function AdminSideBar() {
     <Sidebar
       collapsible="none"
       className={cn(
-        "w-full shrink-0 border-b border-sidebar-border md:h-full md:w-64 md:border-r md:border-b-0",
+        "h-auto w-full shrink-0 border-b border-sidebar-border md:h-full md:w-64 md:border-r md:border-b-0",
       )}
     >
       <SidebarHeader className="gap-1 px-4 py-4">

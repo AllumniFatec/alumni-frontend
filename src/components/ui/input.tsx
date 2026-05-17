@@ -71,7 +71,6 @@ function Input({
           className={cn(
             "w-full h-10 px-3 py-2 border-0 rounded-lg text-sm text-foreground",
             "placeholder:text-xs placeholder:text-muted-foreground/60",
-            // AQUI ESTAVA O ERRO: mudamos de "bg-primary-foreground sm:bg-muted" para apenas "bg-muted"
             "bg-muted",
             "focus:outline-none focus:ring-2",
             "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",

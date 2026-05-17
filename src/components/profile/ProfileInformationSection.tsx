@@ -52,7 +52,7 @@ export function ProfileInformationSection({
         )}
       </div>
 
-      <div className="space-y-2 rounded-xl border border-border/60 bg-card/50 p-4">
+      <div className="space-y-2 rounded-xl border border-border/60 bg-card p-4">
         {isAccountView && profile.email != null && (
           <div className="flex items-center gap-3 text-sm">
             <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />

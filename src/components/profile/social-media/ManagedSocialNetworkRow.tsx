@@ -53,7 +53,7 @@ export function ManagedSocialNetworkRow({
   return (
     <li
       className={cn(
-        "rounded-lg border border-border/60 bg-muted/15 p-3 sm:p-4",
+        "rounded-lg border border-border/60 bg-card p-3 sm:p-4",
         "shadow-sm",
       )}
     >

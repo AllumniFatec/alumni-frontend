@@ -53,7 +53,9 @@ export function Header() {
 
   const { user } = useAuth();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
-  const { data: unreadMessages } = useUnreadCount(!!user);
+  const { data: unreadMessages = 0 } = useUnreadCount(!!user);
+
+  const isMessagesRoute = pathname.startsWith("/messages");
 
   const navLinks = (
     <>
@@ -183,10 +185,12 @@ export function Header() {
           </div>
         </div>
 
-        {/* Nav below — mobile only, horizontal scroll */}
-        <nav className="flex sm:hidden gap-6 overflow-x-auto py-2 -mx-1 px-1">
-          {navLinks}
-        </nav>
+        {/* Nav below — mobile only; hidden on messages to preserve chat height with keyboard */}
+        {!isMessagesRoute && (
+          <nav className="flex sm:hidden gap-6 overflow-x-auto py-2 -mx-1 px-1">
+            {navLinks}
+          </nav>
+        )}
       </div>
     </header>
   );

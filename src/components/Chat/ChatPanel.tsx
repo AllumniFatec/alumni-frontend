@@ -111,6 +111,26 @@ export function ChatPanel({ chatId }: ChatPanelProps) {
     }
   }, [messages]);
 
+  // Rola ao fundo quando o teclado mobile abre (visualViewport encolhe)
+  useEffect(() => {
+    const vp = window.visualViewport;
+    if (!vp) return;
+
+    let prevHeight = vp.height;
+
+    const handleResize = () => {
+      const currentHeight = vp.height;
+      if (currentHeight < prevHeight) {
+        const container = scrollContainerRef.current;
+        if (container) container.scrollTop = container.scrollHeight;
+      }
+      prevHeight = currentHeight;
+    };
+
+    vp.addEventListener("resize", handleResize);
+    return () => vp.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     const anchor = topAnchorRef.current;
     const container = scrollContainerRef.current;
@@ -184,7 +204,7 @@ export function ChatPanel({ chatId }: ChatPanelProps) {
 
       <div
         ref={scrollContainerRef}
-        className="flex-1 overflow-y-auto px-4 py-3 space-y-1 scrollbar-none"
+        className="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-1 scrollbar-none"
       >
         <div ref={topAnchorRef} className="h-1" />
 

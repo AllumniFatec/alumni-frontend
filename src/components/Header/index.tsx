@@ -55,7 +55,7 @@ export function Header() {
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const { data: unreadMessages = 0 } = useUnreadCount(!!user);
 
-  const isMessagesRoute = pathname.startsWith("/messages");
+  const isMessagesRoute = pathname.startsWith(MembersRoutes.Messages);
 
   const navLinks = (
     <>

@@ -42,7 +42,7 @@ export interface AdminPendingUserRow {
 
 /** Resposta de `GET /admin/dashboard`. */
 export interface AdminDashboardResponse {
-  usersInAnalysis?: AdminPendingUserRow[];
+  usersInAnalysis?: AdminPendingUsersResponse[];
   countUsersInAnalysis?: number;
   countUsersActive?: number;
   countJobsActive?: number;
@@ -63,10 +63,10 @@ export interface AdminPendingUsersResponse {
 }
 
 export interface AdminPendingUsersApiRawResponse {
-  users?: AdminPendingUserRow[];
-  usersInAnalysis?: AdminPendingUserRow[];
-  pagination?: AdminPendingUsersPagination;
+  usersInAnalysis?: AdminPendingUsersResponse[];
   countUsersInAnalysis?: number;
+  countUsersActive?: number;
+  countJobsActive?: number;
 }
 
 /** Resposta de `POST /admin/approve/:userId` e `POST /admin/refuse/:userId`. */

@@ -33,9 +33,9 @@ export class AdminApi {
       );
 
       const raw = response.data;
-      const users = raw.users ?? raw.usersInAnalysis ?? [];
-      //const rawPagination = raw.pagination;
-      const pagination = raw.pagination;
+      const pageData = raw.usersInAnalysis?.[0];
+      const users = pageData?.users ?? [];
+      const pagination = pageData?.pagination;
       if (pagination) {
         return {
           users,

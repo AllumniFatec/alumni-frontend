@@ -38,7 +38,7 @@ export function ProfileSummarySection({ profile }: { profile: ProfileLite }) {
       {items.map(({ label, value, icon: Icon }) => (
         <div
           key={label}
-          className="flex items-center gap-3 rounded-xl border border-border/60 bg-card/50 p-4"
+          className="flex items-center gap-3 rounded-xl border border-border/60 bg-card p-4"
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
             <Icon className="h-5 w-5 text-primary" />

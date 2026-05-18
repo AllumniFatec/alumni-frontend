@@ -16,7 +16,7 @@ export function ProfileCoursesSection({ courses }: { courses: ProfileCourse[] })
         {courses.map((c, i) => (
           <div
             key={`${c.course_name}-${c.enrollmentYear}-${i}`}
-            className="rounded-xl border border-border/60 bg-card/50 p-4"
+            className="rounded-xl border border-border/60 bg-card p-4"
           >
             <p className="font-medium text-foreground">{c.course_name}</p>
             <p className="text-sm text-muted-foreground">

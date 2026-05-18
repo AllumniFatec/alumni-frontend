@@ -16,7 +16,7 @@ export function ProfileWorkplaceHistoryCard({
   onEdit,
 }: ProfileWorkplaceHistoryCardProps) {
   return (
-    <div className="relative group rounded-xl border border-border/60 bg-card/50 p-4 border-l-2 border-l-primary/30">
+    <div className="relative group rounded-xl border border-border/60 bg-card p-4 border-l-2 border-l-primary/30">
       <div className="pr-10">
         <p className="font-medium text-foreground">{entry.position}</p>
         <p className="text-sm text-muted-foreground">

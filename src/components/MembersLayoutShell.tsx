@@ -14,10 +14,18 @@ export function MembersLayoutShell({
   const isFullWidth = isAdmin || isMessages;
 
   return (
-    <div className={isFullWidth ? "flex h-dvh flex-col overflow-hidden" : "flex min-h-screen flex-col"}>
+    <div
+      className={
+        isFullWidth
+          ? "flex h-dvh max-h-dvh flex-col overflow-hidden"
+          : "flex min-h-screen flex-col"
+      }
+    >
       <Header />
       {isFullWidth ? (
-        <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">{children}</div>
+        <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
+          {children}
+        </div>
       ) : (
         <div className="flex min-h-0 w-full flex-1 justify-center">
           <div className="w-full max-w-5xl px-4 py-6">{children}</div>

@@ -114,7 +114,7 @@ export function useUnreadCount(enabled = true) {
   return useQuery<number>({
     queryKey: chatQueryKeys.unread,
     queryFn: () => ChatApi.getUnreadCount(),
-    initialData: 0,
+    placeholderData: 0,
     enabled,
     staleTime: 30_000,
   });

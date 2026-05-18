@@ -25,7 +25,9 @@ export function useNotificationSocket(enabled: boolean) {
       transports: ["websocket"],
     });
 
-    socket.emit("register-user");
+    socket.on("connect", () => {
+      socket.emit("register-user");
+    });
 
     socket.on("new_notification", () => {
       queryClient.invalidateQueries({ queryKey: NOTIFICATIONS_QUERY_KEY });

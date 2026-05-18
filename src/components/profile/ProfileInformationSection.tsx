@@ -52,7 +52,7 @@ export function ProfileInformationSection({
         )}
       </div>
 
-      <div className="space-y-2 rounded-xl border border-border/60 bg-card/50 p-4">
+      <div className="space-y-2 rounded-xl border border-border/60 bg-card p-4">
         {isAccountView && profile.email != null && (
           <div className="flex items-center gap-3 text-sm">
             <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -67,11 +67,11 @@ export function ProfileInformationSection({
             {genderLabel[profile.gender] ?? profile.gender}
           </span>
         </div>
-        <div className="flex items-center gap-3 text-sm">
-          <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
-          <span className="text-muted-foreground">Bio:</span>
+        <div className="flex items-start gap-3 text-sm">
+          <FileText className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+          <span className="shrink-0 text-muted-foreground">Bio:</span>
           {profile.biography?.trim() ? (
-            <span className="font-medium text-foreground">
+            <span className="min-w-0 flex-1 break-words font-medium text-foreground">
               {profile.biography}
             </span>
           ) : (

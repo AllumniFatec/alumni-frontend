@@ -4,6 +4,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import type { AxiosError } from "axios";
 import { JobApi } from "@/apis/jobs";
 import { JobPayload } from "@/models/job";
 import { PROFILE_QUERY_KEY } from "@/hooks/useProfile";
@@ -43,6 +44,11 @@ export function useJobById(id: string) {
     queryKey: ["jobs", "detail", id],
     queryFn: () => JobApi.getJobById(id),
     enabled: !!id,
+    retry: (failureCount, error) => {
+      const statusCode = (error as AxiosError)?.response?.status;
+      if (statusCode === 404) return false;
+      return failureCount < 1;
+    },
   });
 
   return { data, isLoading, isError, refetch };

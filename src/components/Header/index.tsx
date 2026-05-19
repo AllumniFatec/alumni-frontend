@@ -151,14 +151,13 @@ export function Header() {
 
               <DropdownMenuContent align="end" className="w-44">
                 <DropdownMenuItem asChild>
-                  <Link href="/profile" className="cursor-pointer">
+                  <Link href="/profile">
                     <User />
                     Perfil
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  className="cursor-pointer"
                   onSelect={() => setIsDeleteProfileDialogOpen(true)}
                 >
                   <Trash2 />

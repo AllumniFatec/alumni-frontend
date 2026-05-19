@@ -20,7 +20,6 @@ export default function PostPage() {
   useEffect(() => {
     if (!isLoadingPost && !postData) {
       toast.error("Postagem nao encontrada", {
-        description: "Voce foi redirecionado para o feed.",
         duration: 5000,
         position: "top-right",
         className:

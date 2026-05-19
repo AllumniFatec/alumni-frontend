@@ -29,6 +29,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { SocialMediaPublicLinkCard } from "@/components/profile/social-media/SocialMediaPublicLinkCard";
 import { SocialMediaType } from "@/models/users";
+import { useEffect } from "react";
 
 import { DeleteJobConfirmationDialog } from "@/components/Jobs/DeleteJobConfirmationDialog";
 import { CloseJobConfirmationDialog } from "@/components/Jobs/CloseJobConfirmationDialog";
@@ -60,7 +61,7 @@ export default function JobDetailPage() {
       await deleteJob(id);
       toast.success("Vaga excluída com sucesso!");
       router.push("/jobs");
-    } catch(error: any) {
+    } catch (error: any) {
       toast.error("Erro ao excluir a vaga", {
         description: error.response?.data?.error,
       });
@@ -72,12 +73,24 @@ export default function JobDetailPage() {
       await closeJob(id);
       toast.success("Vaga encerrada com sucesso!");
       router.push("/jobs");
-    } catch(error: any) {
+    } catch (error: any) {
       toast.error("Erro ao encerrar a vaga", {
         description: error.response?.data?.error,
       });
     }
   }
+
+  useEffect(() => {
+    if (!isLoading && !job) {
+      toast.error("Vaga nao encontrada", {
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+      router.replace("/jobs");
+    }
+  }, [isLoading, job, router]);
 
   return (
     <div>
@@ -91,7 +104,12 @@ export default function JobDetailPage() {
             Voltar para vagas
           </Link>
 
-          {isError && <ErrorState onRetry={refetch} />}
+          {isError && (
+            <ErrorState
+              onRetry={refetch}
+              description="Não foi possível carregar esta vaga."
+            />
+          )}
 
           {isLoading && (
             <div className="space-y-6">

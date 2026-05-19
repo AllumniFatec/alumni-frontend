@@ -4,6 +4,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import { EventApi } from "@/apis/events";
 import type { EventWritePayload } from "@/models/event";
@@ -66,6 +67,11 @@ export function useEventById(id: string) {
     queryKey: ["events", "detail", id],
     queryFn: () => EventApi.getEventById(id),
     enabled: !!id,
+    retry: (failureCount, error) => {
+      const statusCode = (error as AxiosError)?.response?.status;
+      if (statusCode === 404) return false;
+      return failureCount < 1;
+    },
   });
 
   return { data, isLoading, isError, refetch, error };

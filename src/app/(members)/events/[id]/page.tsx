@@ -15,6 +15,8 @@ import { useCanManageEvents } from "@/hooks/useCanManageEvents";
 import { DeleteEventConfirmationDialog } from "@/components/Events/DeleteEventConfirmationDialog";
 import { EventStatus, EventStatusLabel } from "@/models/event";
 import { CloseEventConfirmationDialog } from "@/components/Events/CloseEventConfirmationDialog";
+import { toast } from "sonner";
+import { useEffect } from "react";
 
 function getStatusBadgeClass(status: string): string {
   switch (status) {
@@ -60,6 +62,18 @@ export default function EventDetailPage() {
     event &&
     event.date_end &&
     format(new Date(event.date_end), "HH:mm", { locale: ptBR });
+
+  useEffect(() => {
+    if (!isLoading && !event) {
+      toast.error("Evento nao encontrado", {
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+      router.replace("/events");
+    }
+  }, [isError, event, router]);
 
   return (
     <div>

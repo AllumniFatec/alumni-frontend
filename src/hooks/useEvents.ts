@@ -42,8 +42,7 @@ export function useEvents() {
     isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: EVENTS_LIST_QUERY_KEY,
-    queryFn: ({ pageParam = 1 }) =>
-      EventApi.getEvents(pageParam as number),
+    queryFn: ({ pageParam = 1 }) => EventApi.getEvents(pageParam as number),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.pagination.hasNextPage
@@ -125,10 +124,6 @@ export function useDeleteEvent() {
     onSuccess: (_, eventId) => {
       qc.removeQueries({ queryKey: ["events", "detail", eventId] });
       invalidateEventCaches(qc);
-      toastSuccess("Evento excluído", "O evento foi removido da plataforma.");
-    },
-    onError: () => {
-      toastError("Tente novamente.");
     },
   });
 
@@ -142,10 +137,6 @@ export function useCloseEvent(id: string) {
     onSuccess: () => {
       invalidateEventCaches(qc);
       void qc.invalidateQueries({ queryKey: ["events", "detail", id] });
-      toastSuccess("Evento encerrado", "O evento foi marcado como encerrado.");
-    },
-    onError: () => {
-      toastError("Tente novamente.");
     },
   });
 

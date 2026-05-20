@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Section } from "@/components/Section";
 import { ErrorState } from "@/components/ErrorState"; // mantido para isError do query
@@ -7,6 +8,7 @@ import { JobForm, JobFormValues } from "@/components/Jobs/JobForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useJobById, useUpdateJob } from "@/hooks/useJobs";
 import { EmploymentType, SeniorityLevel, WorkModel } from "@/models/job";
+import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
 export default function JobEditPage() {
@@ -14,17 +16,32 @@ export default function JobEditPage() {
   const router = useRouter();
   const id = params.id as string;
 
+  const { user } = useAuth();
   const { data: job, isLoading, isError, refetch } = useJobById(id);
   const { mutateAsync: updateJob, isPending: isUpdatingJob } = useUpdateJob(id);
+
+  useEffect(() => {
+    if (!isLoading && job && user && job.author_id !== user.id) {
+      router.replace(`/jobs/${id}`);
+    }
+  }, [isLoading, job, user, id, router]);
 
   async function handleSubmit(data: JobFormValues) {
     try {
       await updateJob(data);
-      toast.success("Vaga atualizada com sucesso!");
+      toast.success("Vaga atualizada com sucesso!", {
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
       router.push(`/jobs/${id}`);
     } catch {
       toast.error("Erro ao salvar a vaga", {
-        description: "Verifique os dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
       });
     }
   }
@@ -41,7 +58,7 @@ export default function JobEditPage() {
         seniority_level: (job.seniority_level ??
           SeniorityLevel.Junior) as SeniorityLevel,
         work_model: job.work_model as WorkModel,
-        url: job.url,
+        url: job.url ?? undefined,
       }
     : undefined;
 
@@ -64,7 +81,7 @@ export default function JobEditPage() {
             </div>
           )}
 
-          {!isLoading && !isError && job && (
+          {!isLoading && !isError && job && user?.id === job.author_id && (
             <>
               <JobForm
                 defaultValues={defaultValues}

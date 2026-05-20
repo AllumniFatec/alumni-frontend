@@ -17,7 +17,7 @@ export default function EventEditPage() {
   const router = useRouter();
   const id = params?.id as string;
 
-  const { isLoading: authLoading } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const { canManageEvents } = useCanManageEvents();
   const { data: event, isLoading, isError, refetch } = useEventById(id);
   const { mutateAsync: updateEvent, isPending: isUpdating } = useUpdateEvent(id);
@@ -26,8 +26,12 @@ export default function EventEditPage() {
     if (authLoading) return;
     if (!canManageEvents) {
       router.replace("/events");
+      return;
     }
-  }, [authLoading, canManageEvents, router]);
+    if (!isLoading && event && user && event.author_id !== user.id) {
+      router.replace(`/events/${id}`);
+    }
+  }, [authLoading, canManageEvents, isLoading, event, user, id, router]);
 
   async function handleSubmit(data: EventWritePayload) {
     await updateEvent(data);
@@ -70,7 +74,7 @@ export default function EventEditPage() {
             </div>
           )}
 
-          {!isLoading && !isError && event && (
+          {!isLoading && !isError && event && event.author_id === user?.id && (
             <EventForm
               defaultValues={defaultValues}
               onSubmit={handleSubmit}

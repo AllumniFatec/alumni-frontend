@@ -59,11 +59,19 @@ export default function JobDetailPage() {
   async function confirmDelete() {
     try {
       await deleteJob(id);
-      toast.success("Vaga excluída com sucesso!");
+      toast.success("Vaga excluída com sucesso!", {
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
       router.push("/jobs");
     } catch (error: any) {
       toast.error("Erro ao excluir a vaga", {
-        description: error.response?.data?.error,
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
       });
     }
   }
@@ -71,11 +79,19 @@ export default function JobDetailPage() {
   async function confirmClose() {
     try {
       await closeJob(id);
-      toast.success("Vaga encerrada com sucesso!");
+      toast.success("Vaga encerrada com sucesso!", {
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
       router.push("/jobs");
     } catch (error: any) {
       toast.error("Erro ao encerrar a vaga", {
-        description: error.response?.data?.error,
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
       });
     }
   }
@@ -233,7 +249,7 @@ export default function JobDetailPage() {
                   </div>
                 )}
 
-                {isAuthor && (
+                {isAuthor && job.status === JobStatus.Active && (
                   <div className="flex gap-3 pt-4 border-t border-slate-200">
                     <Link href={`/jobs/${id}/edit`}>
                       <Button variant="outline">Editar</Button>

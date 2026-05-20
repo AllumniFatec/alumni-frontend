@@ -13,11 +13,19 @@ export default function JobNewPage() {
   async function handleSubmit(data: JobFormValues) {
     try {
       await createJob(data);
-      toast.success("Vaga publicada com sucesso!");
+      toast.success("Vaga publicada com sucesso!", {
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
       router.push("/jobs");
-    } catch(error: any) {
+    } catch (error: any) {
       toast.error("Erro ao publicar a vaga", {
-        description: error.response?.data?.error ?? "Verifique os dados e tente novamente.",
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
       });
     }
   }

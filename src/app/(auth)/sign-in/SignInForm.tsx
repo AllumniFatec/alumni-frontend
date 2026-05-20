@@ -78,8 +78,14 @@ export const SignInForm = () => {
           return;
         }
       }
+      const apiData = axios.isAxiosError(error)
+        ? (error.response?.data as { error?: string; message?: string } | undefined)
+        : undefined;
+      const apiMessage = apiData?.error ?? apiData?.message;
+
       toast.error("Algo deu errado", {
-        description: "Verique seus dados e tente novamente.",
+        description:
+          apiMessage ?? "Verifique seus dados e tente novamente.",
         duration: 5000,
         position: "top-right",
         className:

@@ -42,13 +42,43 @@ export default function EventDetailPage() {
   const isActive = event?.status === EventStatus.ACTIVE;
 
   async function confirmDelete() {
-    await deleteEvent(id);
-    router.push("/events");
+    try {
+      await deleteEvent(id);
+      toast.success("Evento excluído com sucesso!", {
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+      router.push("/events");
+    } catch (error: any) {
+      toast.error("Erro ao excluir o evento", {
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    }
   }
 
   async function confirmClose() {
-    await closeEvent();
-    router.push("/events");
+    try {
+      await closeEvent();
+      toast.success("Evento encerrado com sucesso!", {
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-green-500 !text-white !border-green-600 [&_[data-description]]:!text-white",
+      });
+      router.push("/events");
+    } catch (error: any) {
+      toast.error("Erro ao encerrar o evento", {
+        duration: 5000,
+        position: "top-right",
+        className:
+          "!bg-red-500 !text-white !border-red-600 [&_[data-description]]:!text-white",
+      });
+    }
   }
 
   const formattedDate =

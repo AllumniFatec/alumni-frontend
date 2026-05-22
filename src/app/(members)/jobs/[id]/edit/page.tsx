@@ -7,7 +7,7 @@ import { ErrorState } from "@/components/ErrorState"; // mantido para isError do
 import { JobForm, JobFormValues } from "@/components/Jobs/JobForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useJobById, useUpdateJob } from "@/hooks/useJobs";
-import { EmploymentType, SeniorityLevel, WorkModel } from "@/models/job";
+import { EmploymentType, JobStatus, SeniorityLevel, WorkModel } from "@/models/job";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
@@ -21,7 +21,16 @@ export default function JobEditPage() {
   const { mutateAsync: updateJob, isPending: isUpdatingJob } = useUpdateJob(id);
 
   useEffect(() => {
-    if (!isLoading && job && user && job.author_id !== user.id) {
+    if (isLoading || !job || !user) return;
+
+    const isOwner = job.author_id === user.id;
+    const isAdmin = user.admin === true;
+    const isActive = job.status === JobStatus.Active;
+
+    // Admin pode editar qualquer vaga ativa; usuário comum só pode editar sua própria vaga ativa
+    const canEdit = isActive && (isAdmin || isOwner);
+
+    if (!canEdit) {
       router.replace(`/jobs/${id}`);
     }
   }, [isLoading, job, user, id, router]);
@@ -81,7 +90,9 @@ export default function JobEditPage() {
             </div>
           )}
 
-          {!isLoading && !isError && job && user?.id === job.author_id && (
+          {!isLoading && !isError && job &&
+            job.status === JobStatus.Active &&
+            (user?.id === job.author_id || user?.admin === true) && (
             <>
               <JobForm
                 defaultValues={defaultValues}

@@ -12,6 +12,8 @@ import {
   type SortingState,
   type Updater,
 } from "@tanstack/react-table";
+import { format, isValid } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { Loader2, Search } from "lucide-react";
 import Image from "next/image";
 import {
@@ -53,6 +55,12 @@ function formatCourses(user: PublicUserListItem) {
   return user.courses
     .map((c) => `${c.course_name} - ${c.enrollmentYear}`)
     .join(", ");
+}
+
+function formatCreateDate(iso: string): string {
+  const d = new Date(iso);
+  if (!isValid(d)) return "—";
+  return format(d, "dd/MM/yyyy", { locale: ptBR });
 }
 
 export default function AdminUsersPage() {
@@ -114,7 +122,7 @@ export default function AdminUsersPage() {
       {
         accessorKey: "name",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Utilizador" />
+          <DataTableColumnHeader column={column} title="Usuário" />
         ),
         cell: ({ row }) => {
           const user = row.original;
@@ -171,6 +179,20 @@ export default function AdminUsersPage() {
           </span>
         ),
         sortingFn: "alphanumeric",
+      },
+      {
+        accessorKey: "create_date",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Data de Cadastro" />
+        ),
+        cell: ({ row }) => (
+          <span className="text-sm text-foreground">
+            {row.original.create_date
+              ? formatCreateDate(row.original.create_date)
+              : "—"}
+          </span>
+        ),
+        sortingFn: "datetime",
       },
       {
         id: "changeType",
@@ -300,7 +322,7 @@ export default function AdminUsersPage() {
           <TableBody>
             {isLoading && (
               <TableRow>
-                <TableCell colSpan={5} className="px-4 py-12 text-center">
+                <TableCell colSpan={6} className="px-4 py-12 text-center">
                   <span className="inline-flex items-center gap-2 text-muted-foreground">
                     <Loader2 className="size-5 animate-spin" />A carregar…
                   </span>
@@ -310,12 +332,12 @@ export default function AdminUsersPage() {
             {!isLoading && users.length === 0 && !isError && (
               <TableRow>
                 <TableCell
-                  colSpan={5}
+                  colSpan={6}
                   className="px-4 py-12 text-center text-muted-foreground"
                 >
                   {isSearchMode
                     ? "Nenhum resultado para essa busca."
-                    : "Nenhum utilizador encontrado."}
+                    : "Nenhum usuário encontrado."}
                 </TableCell>
               </TableRow>
             )}

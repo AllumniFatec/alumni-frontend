@@ -56,6 +56,11 @@ export default function JobDetailPage() {
   const { mutateAsync: closeJob, isPending: isClosingJob } = useCloseJob();
   const isAuthor = !!job && !!user && job.author_id === user.id;
 
+  const canManageJob =
+    job?.status === JobStatus.Active &&
+    !!user &&
+    (user.admin === true || job.author_id === user.id);
+
   async function confirmDelete() {
     try {
       await deleteJob(id);
@@ -249,7 +254,7 @@ export default function JobDetailPage() {
                   </div>
                 )}
 
-                {isAuthor && job.status === JobStatus.Active && (
+                {canManageJob && (
                   <div className="flex gap-3 pt-4 border-t border-slate-200">
                     <Link href={`/jobs/${id}/edit`}>
                       <Button variant="outline">Editar</Button>

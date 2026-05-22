@@ -18,6 +18,7 @@ export interface PublicUserListItem {
   courses: ProfileCourse[];
   perfil_photo: ProfilePhoto | null;
   user_type: UserType | string;
+  create_date?: string;
   workplace_history: ProfileWorkplaceHistoryEntry[];
   skills?: ProfileSkillEntry[];
   gender?: UserGender | string;

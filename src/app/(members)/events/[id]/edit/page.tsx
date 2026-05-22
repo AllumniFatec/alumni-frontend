@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Section } from "@/components/Section";
 import { ErrorState } from "@/components/ErrorState";
 import { EventForm } from "@/components/Events/EventForm";
-import type { EventWritePayload } from "@/models/event";
+import { EventStatus, type EventWritePayload } from "@/models/event";
 import { useEventById, useUpdateEvent } from "@/hooks/useEvents";
 import { useCanManageEvents } from "@/hooks/useCanManageEvents";
 import { useAuth } from "@/context/AuthContext";
@@ -23,12 +23,21 @@ export default function EventEditPage() {
   const { mutateAsync: updateEvent, isPending: isUpdating } = useUpdateEvent(id);
 
   useEffect(() => {
-    if (authLoading) return;
+    if (authLoading || isLoading || !event || !user) return;
+
     if (!canManageEvents) {
       router.replace("/events");
       return;
     }
-    if (!isLoading && event && user && event.author_id !== user.id) {
+
+    const isOwner = event.author_id === user.id;
+    const isAdmin = user.admin === true;
+    const isActive = event.status === EventStatus.ACTIVE;
+
+    // Admin pode editar qualquer evento ativo; demais gestores só podem editar seus próprios eventos ativos
+    const canEdit = isActive && (isAdmin || isOwner);
+
+    if (!canEdit) {
       router.replace(`/events/${id}`);
     }
   }, [authLoading, canManageEvents, isLoading, event, user, id, router]);
@@ -74,7 +83,9 @@ export default function EventEditPage() {
             </div>
           )}
 
-          {!isLoading && !isError && event && event.author_id === user?.id && (
+          {!isLoading && !isError && event &&
+            event.status === EventStatus.ACTIVE &&
+            (event.author_id === user?.id || user?.admin === true) && (
             <EventForm
               defaultValues={defaultValues}
               onSubmit={handleSubmit}
